@@ -1,4 +1,11 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+var builder = WebApplication.CreateBuilder(args);
+
+
+builder.Services.AddCors(options => options.AddPolicy("AllowAll", builder => builder.AllowAnyOrigin()
+                                                                                   .AllowAnyMethod()
+                                                                                   .AllowAnyHeader()));
+
 
 // Add services to the container.
 
@@ -10,13 +17,15 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+/*if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
+ 
+}*/
+app.UseSwagger();
+app.UseSwaggerUI();
 app.UseHttpsRedirection();
+app.UseRouting();
+app.UseCors("AllowAll");
 
 app.UseAuthorization();
 
