@@ -59,9 +59,9 @@ namespace RockyConnectBackend.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult ResendOTP([FromBody] string email )
+        public IActionResult ResendOTP([FromBody] Email email )
         {
-            Response response = UserService.ResendOTP(email);
+            Response response = UserService.ResendOTP(email.UserEmail);
             return Ok(response);
 
 
@@ -92,15 +92,49 @@ namespace RockyConnectBackend.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult VerifyAccount([FromBody] string email)
+        public IActionResult VerifyAccount([FromBody] Email email)
         {
 
-            if (!UtilityService.IsValidEmail(email))
+            if (!UtilityService.IsValidEmail(email.UserEmail))
             {
                 return BadRequest("phone number and email invalid");
             }
             
-            Response response = UserService.ValidateAccount(email);
+            Response response = UserService.ValidateAccount(email.UserEmail);
+            return Ok(response);
+
+        }
+        [HttpPut]
+        [Route("UpdateAccount")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult UpdateAccount([FromBody] UserUpdateRequest request)
+        {
+
+            if (!UtilityService.IsValidEmail(request.Email))
+            {
+                return BadRequest("phone number and email invalid");
+            }
+
+            Response response = UserService.UpdateAccount(request);
+            return Ok(response);
+
+        }
+        [HttpDelete]
+        [Route("DeleteAccount")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult DeleteAccount([FromBody] Email email)
+        {
+
+            if (!UtilityService.IsValidEmail(email.UserEmail))
+            {
+                return BadRequest("phone number and email invalid");
+            }
+
+            Response response = UserService.DeleteAccount(email.UserEmail);
             return Ok(response);
 
         }

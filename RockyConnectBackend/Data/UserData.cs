@@ -96,7 +96,7 @@ namespace RockyConnectBackend.Data
             {
                 DateTime date = DateTime.Now;
                 DateTime defaultVerified = new DateTime(1900, 01, 01);
-                SqlCommand cmd = new SqlCommand($"INSERT INTO [dbo].[Customer] ([Email],[UserID],[FirstName],[Role],[LastName],[Password],[PhoneNumber],[DateCreated],[DateUpdated],[DateVerified]) VALUES (@Email, @UserID,@FirstName,@Role,@LastName,@Password,@PhoneNumber,@DateCreated,@DateUpdated,@DateVerified)", connection);
+                SqlCommand cmd = new SqlCommand($"INSERT INTO [dbo].[Customer] ([Email],[UserID],[FirstName],[Role],[LastName],[Password],[PhoneNumber],[DateCreated],[DateUpdated],[DateVerified],[IsAccountActive]) VALUES (@Email, @UserID,@FirstName,@Role,@LastName,@Password,@PhoneNumber,@DateCreated,@DateUpdated,@DateVerified,@IsAccountActive)", connection);
 
                 cmd.Parameters.AddWithValue("@UserID", customer.UserID);
                 cmd.Parameters.AddWithValue("@Password", customer.Password.ToLower());
@@ -104,11 +104,13 @@ namespace RockyConnectBackend.Data
                 cmd.Parameters.AddWithValue("@Role", (int)customer.Role);
                 cmd.Parameters.AddWithValue("@LastName", customer.LastName);
                 cmd.Parameters.AddWithValue("@PhoneNumber", customer.PhoneNumber);
+                cmd.Parameters.AddWithValue("@IsAccountActive", customer.IsAccountActive);
                 cmd.Parameters.AddWithValue("@Email", customer.Email.ToLower());
                 cmd.Parameters.AddWithValue("@DateCreated", customer.Date_Created).Value = date;
                 cmd.Parameters.AddWithValue("@DateUpdated", customer.Date_Updated).Value = date;
-                cmd.Parameters.AddWithValue("@DateVerified", customer.Date_Verified).Value = defaultVerified;
-                ret = cmd.ExecuteNonQuery();
+                cmd.Parameters.AddWithValue("@DateVerified", customer.Date_Verified).Value = defaultVerified;       
+
+        ret = cmd.ExecuteNonQuery();
                 if (ret == 1)
                 {
                     result = "00";
@@ -348,10 +350,11 @@ namespace RockyConnectBackend.Data
             {
                 DateTime date = DateTime.Now;
 
-                SqlCommand cmd = new SqlCommand($"Update [dbo].[LoginCred] set [UserName]=@UserName,[Password]=@Password, where  UserID={customer.UserID}", connection);
-
-                cmd.Parameters.AddWithValue("@Password", customer.Password.ToLower());
-                cmd.Parameters.AddWithValue("@UserName", customer.Email.ToLower());
+                SqlCommand cmd = new SqlCommand($"Update [dbo].[Customer] set [FirstName]=@FirstName, [LastName] = @LastName,[PhoneNumber]=@PhoneNumber,[Password]=@Password where  Email='{customer.Email}'", connection);
+                cmd.Parameters.AddWithValue("@FirstName", customer.FirstName);
+                cmd.Parameters.AddWithValue("@LastName", customer.LastName);
+                cmd.Parameters.AddWithValue("@PhoneNumber", customer.PhoneNumber);
+                cmd.Parameters.AddWithValue("@Password", customer.Password);
                 ret = cmd.ExecuteNonQuery();
                 if (ret == 1)
                 {
@@ -528,6 +531,62 @@ namespace RockyConnectBackend.Data
                 SqlCommand cmd = new SqlCommand($"Update [dbo].[OTPVerify] set [Status]=@Status where  Email='{email}' and Code={code}", connection);
 
                 cmd.Parameters.AddWithValue("@Status", status);
+                ret = cmd.ExecuteNonQuery();
+                if (ret == 1)
+                {
+                    result = "00";
+                }
+
+
+
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+
+                }
+            }
+
+            //Console.WriteLine("\nDone. Press enter.");
+            //Console.ReadLine();
+
+
+
+            return result;
+        }
+
+        internal static string DeleteAccount(User user)
+        {
+            string result = "01";
+
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+
+            builder.DataSource = "rosabeldbserver.database.windows.net";
+            builder.UserID = "rosabelDB";
+            builder.Password = "Mololuwa@14";
+            builder.InitialCatalog = "RockyConnectDB";
+
+            SqlConnection connection = new SqlConnection(builder.ConnectionString);
+
+            Console.WriteLine("\nQuery data example:");
+            Console.WriteLine("=========================================\n");
+            int ret = 6;
+            connection.Open();
+            try
+            {
+                DateTime date = DateTime.Now;
+                string email = user.Email;
+                SqlCommand cmd = new SqlCommand($"Update [dbo].[Customer] set [IsAccountActive]=@IsAccountActive, [DateUpdated] =@Date_Updated where  [Email]='{email}'", connection);
+                cmd.Parameters.AddWithValue("@IsAccountActive", user.IsAccountActive);
+                cmd.Parameters.AddWithValue("@Date_Updated", user.Date_Updated);
+
+
                 ret = cmd.ExecuteNonQuery();
                 if (ret == 1)
                 {
