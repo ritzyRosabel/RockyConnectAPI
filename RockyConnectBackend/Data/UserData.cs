@@ -350,11 +350,13 @@ namespace RockyConnectBackend.Data
             {
                 DateTime date = DateTime.Now;
 
-                SqlCommand cmd = new SqlCommand($"Update [dbo].[Customer] set [FirstName]=@FirstName, [LastName] = @LastName,[PhoneNumber]=@PhoneNumber,[Password]=@Password where  Email='{customer.Email}'", connection);
+                SqlCommand cmd = new SqlCommand($"Update [dbo].[Customer] set [FirstName]=@FirstName, [LastName] = @LastName,[PhoneNumber]=@PhoneNumber,[Password]=@Password,[DateUpdated] = @DateUpdated where  Email='{customer.Email}'", connection);
                 cmd.Parameters.AddWithValue("@FirstName", customer.FirstName);
                 cmd.Parameters.AddWithValue("@LastName", customer.LastName);
                 cmd.Parameters.AddWithValue("@PhoneNumber", customer.PhoneNumber);
                 cmd.Parameters.AddWithValue("@Password", customer.Password);
+                cmd.Parameters.AddWithValue("@DateUpdated", customer.Date_Updated).Value = date;
+
                 ret = cmd.ExecuteNonQuery();
                 if (ret == 1)
                 {
@@ -386,7 +388,7 @@ namespace RockyConnectBackend.Data
         }
 
 
-        internal static OTP GetUserOtp(EmailVerification email)
+        internal static OTP GetUserOtp(string code,string email)
         {
             var res = new OTP();
 
@@ -407,7 +409,7 @@ namespace RockyConnectBackend.Data
             try
             {
 
-                using (SqlCommand command = new SqlCommand($"  SELECT  ID, Code, Email, Status, DateCreated FROM OTPVerify  where Email = '{email.Email}' and Code='{email.Code}'", connection))
+                using (SqlCommand command = new SqlCommand($"  SELECT  ID, Code, Email, Status, DateCreated FROM OTPVerify  where Email = '{email}' and Code='{code}'", connection))
                 {
                     using (SqlDataReader reader = command.ExecuteReader())
                     {

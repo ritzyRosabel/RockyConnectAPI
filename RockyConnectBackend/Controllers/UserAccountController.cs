@@ -61,7 +61,7 @@ namespace RockyConnectBackend.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult ResendOTP([FromBody] Email email )
         {
-            Response response = UserService.ResendOTP(email.UserEmail);
+            Response response = UserService.ResendOTP(email);
             return Ok(response);
 
 
@@ -83,7 +83,7 @@ namespace RockyConnectBackend.Controllers
                 return BadRequest("Verification code is a six digit number");
 
             }
-            Response response = UserService.ValidateEmail(cred);
+            Response response = UserService.ValidateOTP(cred.Code,cred.Email);
             return Ok(response);
 
         }
@@ -136,6 +136,19 @@ namespace RockyConnectBackend.Controllers
 
             Response response = UserService.DeleteAccount(email.UserEmail);
             return Ok(response);
+
+        }
+        [HttpPost]
+        [Route("ForgotPassword")]
+
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult ForgotPassword([FromBody] PasswordResetRequest request)
+        {
+            Response response = UserService.ForgotPassword(request);
+            return Ok(response);
+
 
         }
         /*

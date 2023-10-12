@@ -86,7 +86,7 @@ namespace RockyConnectBackend.Controllers
                 string result2 = UserData.CreateLoginData(user);
                 if (result2 == "00")
                 {
-                    SendEmailVerifyOTP(user);
+                    SendOTP(user, "Email Verification");
 
                     response.statusCode = "00";
                     response.status = "OTP sent to email";
@@ -94,7 +94,7 @@ namespace RockyConnectBackend.Controllers
                 }
                 else
                 {
-                    SendEmailVerifyOTP(user);
+                    SendOTP(user, "Email Verification");
 
                     response.statusCode = "02";
                     response.status = "Successfull created, OTP sent | but couldnt generate LoginID";
@@ -109,7 +109,7 @@ namespace RockyConnectBackend.Controllers
             return response;
         }
 
-        private static string SendEmailVerifyOTP(User user)
+        private static string SendOTP(User user, string subject)
         {
             string send = "01";
             string code = UtilityService.RandomOTPGenerator();
@@ -128,7 +128,7 @@ namespace RockyConnectBackend.Controllers
             }
             try
             {
-                send = UtilityService.SendEmail(messageBody, user.Email, "OTP Verification");
+                send = UtilityService.SendEmail(messageBody, user.Email, subject);
             }
             catch (Exception e)
             {
@@ -206,10 +206,10 @@ namespace RockyConnectBackend.Controllers
             return response;
         }
 
-        internal static Response ValidateEmail(EmailVerification email)
+        internal static Response ValidateOTP(string code,string email)
         {
             Response response = new Response();
-            OTP result = UserData.GetUserOtp(email);
+            OTP result = UserData.GetUserOtp(code,email);
             {
                 if (result.ID != 0)
                 {
@@ -255,24 +255,43 @@ namespace RockyConnectBackend.Controllers
             return response;
         }
 
-        internal static Response ResendOTP(string email)
+        internal static Response ResendOTP(Email email)
         {
             Response response = new Response();
             User user = new User();
-            user.Email = email;
-            string result = SendEmailVerifyOTP(user);
-            if (result == "00")
+            user.Email = email.UserEmail;
+            if (email.Otptype == 1)
             {
-                response.statusCode = "00";
-                response.status = "OTP sent to email";
-                response.data = email;
+                string result = SendOTP(user, "Password Reset");
+                if (result == "00")
+                {
+                    response.statusCode = "00";
+                    response.status = "OTP sent to email";
+                    response.data = email;
+                }
+                else
+                {
+                    response.statusCode = "01";
+                    response.status = "OTP failed to send";
+                    response.data = email;
+                }
             }
-            else
-            {
-                response.statusCode = "01";
-                response.status = "OTP failed to send";
-                response.data = email;
+            else {
+                string result = SendOTP(user, "Email Verification");
+                if (result == "00")
+                {
+                    response.statusCode = "00";
+                    response.status = "OTP sent to email";
+                    response.data = email;
+                }
+                else
+                {
+                    response.statusCode = "01";
+                    response.status = "OTP failed to send";
+                    response.data = email;
+                }
             }
+
             return response;
         }
 
@@ -334,7 +353,6 @@ namespace RockyConnectBackend.Controllers
                 user.FirstName = customer.FirstName;
                 user.LastName = customer.LastName;
                 user.PhoneNumber = customer.PhoneNumber;
-                user.Password = customer.Password;
             
             result = UserData.UpdateData(user);
             if (result == "00")
@@ -356,6 +374,44 @@ namespace RockyConnectBackend.Controllers
             return response;
         
             }
-        
+
+        internal static Response ForgotPassword(PasswordResetRequest request)
+        {
+            Response response = new Response();
+           // User user = new User();
+            string result;
+            response = ValidateOTP(request.Code, request.Email);
+            if (response.statusCode == "00")
+            {
+                User user = UserData.GetUserUsingEmail(request.Email);
+                if (user.Email is not null)
+                {
+                    user.Password = request.Password;
+
+                    result = UserData.UpdateData(user);
+                    if (result == "00")
+                    {
+                        response.statusCode = "00";
+                        response.status = "Password Reset Successful";
+
+                    }
+                    else
+                    {
+                        response.statusCode = "01";
+                        response.status = "Password Reset Failed was ";
+                    }
+                }
+                else
+                {
+                    response.statusCode = "01";
+                    response.status = "User account not found";
+                }
+            }
+           
+            return response;
+
+        }
+
+
     }
 }

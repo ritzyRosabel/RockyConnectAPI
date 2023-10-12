@@ -67,8 +67,14 @@ namespace RockyConnectBackend.Model
     public class Email
     {
         public string UserEmail { get; set; }
+        public int? Otptype  { get; set; }
     }
-  
+    public class PasswordResetRequest
+    {
+        public string Password { get; set; }
+        public string Code { get; set; }
+        public string Email { get; set; }
+    }
     public enum Role
     {
         rider = 1,
