@@ -17,13 +17,26 @@ namespace RockyConnectBackend.Model
 		public string CardAlias  { get; set; }
 		public string CardType { get; set; }
 		public string Code { get; set; }
-		public string CVV { get; set; }
 		public string FullName { get; set; }
 		public DateTime ExpiryDate { get; set; }
-		
+        public DateTime Date_Created { get; set; }
+        public DateTime Date_Updated { get; set; }
 
-	}
-	public class Transaction
+    }
+    public class CardUpdate
+    {
+        public string Email { get; set; }
+        public string CardAlias { get; set; }
+        public string OldCardAlias { get; set; }
+        public string CardType { get; set; }
+        public string Code { get; set; }
+        public string FullName { get; set; }
+        public DateTime ExpiryDate { get; set; }
+        public DateTime Date_Created { get; set; }
+        public DateTime Date_Updated { get; set; }
+
+    }
+    public class Transaction
 	{
 		public int ID { get; set; }
 		public User Driver { get; set; }

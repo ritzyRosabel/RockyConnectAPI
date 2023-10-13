@@ -1,4 +1,6 @@
 ﻿using System;
+using RockyConnectBackend.Model;
+
 namespace RockyConnectBackend.Services
 {
 	public class PaymentService
@@ -6,6 +8,11 @@ namespace RockyConnectBackend.Services
 		public PaymentService()
 		{
 		}
-	}
+
+        internal static Response CreateCard(PaymentCard customer)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
 

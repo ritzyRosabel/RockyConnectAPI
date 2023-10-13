@@ -380,34 +380,30 @@ namespace RockyConnectBackend.Controllers
             Response response = new Response();
            // User user = new User();
             string result;
-            response = ValidateOTP(request.Code, request.Email);
-            if (response.statusCode == "00")
-            {
+           
                 User user = UserData.GetUserUsingEmail(request.Email);
-                if (user.Email is not null)
+            if (user.Email is not null)
+            {
+                user.Password = request.Password;
+
+                result = UserData.UpdateData(user);
+                if (result == "00")
                 {
-                    user.Password = request.Password;
+                    response.statusCode = "00";
+                    response.status = "Password Reset Successful";
 
-                    result = UserData.UpdateData(user);
-                    if (result == "00")
-                    {
-                        response.statusCode = "00";
-                        response.status = "Password Reset Successful";
-
-                    }
-                    else
-                    {
-                        response.statusCode = "01";
-                        response.status = "Password Reset Failed was ";
-                    }
                 }
                 else
                 {
                     response.statusCode = "01";
-                    response.status = "User account not found";
+                    response.status = "Password Reset Failed was ";
                 }
             }
-           
+            else
+            {
+                response.statusCode = "01";
+                response.status = "User account not found";
+            }
             return response;
 
         }
