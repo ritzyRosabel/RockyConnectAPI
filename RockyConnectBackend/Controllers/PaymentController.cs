@@ -57,23 +57,23 @@ public IActionResult CreateCard([FromBody] PaymentCard customer)
     Response response = PaymentService.CreateCard(customer);
     return Ok(response);
 
-}
-        //        [HttpGet]
-        //        [Route("PaymentCardList")]
-        //        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
-        //        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        //        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //        public IActionResult SavedPaymentCard([FromBody] UserRequest customer)
-        //        {
+        }
+        [HttpGet]
+        [Route("PaymentCardList")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult SavedPaymentCard([FromBody] UserRequest customer)
+        {
 
-        //            if (!UtilityService.IsPhoneNbr(customer.PhoneNumber) && !UtilityService.IsValidEmail(customer.Email))
-        //            {
-        //                return BadRequest("phone number and email invalid");
-        //            }
-        //            Response response = UserService.Create(customer);
-        //            return Ok(response);
+            if (!UtilityService.IsPhoneNbr(customer.PhoneNumber) && !UtilityService.IsValidEmail(customer.Email))
+            {
+                return BadRequest("phone number and email invalid");
+            }
+            Response response = UserService.Create(customer);
+            return Ok(response);
 
-        //        }
+        }
         //        [HttpGet]
         //        [Route("TransactionRecord")]
         //        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
