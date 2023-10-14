@@ -13,47 +13,19 @@ namespace RockyConnectBackend.Controllers
     [Route("/")]
     public class PaymentController : Controller
     {
-        //        // GET: api/values
-        //        [HttpGet]
-        //        public IEnumerable<string> Get()
-        //        {
-        //            return new string[] { "value1", "value2" };
-        //        }
 
-        //        // GET api/values/5
-        //        [HttpGet("{id}")]
-        //        public string Get(int id)
-        //        {
-        //            return "value";
-        //        }
-        //        [HttpPut]
-        //        [Route("EditCardDetails")]
-        //        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
-        //        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        //        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //        public IActionResult SavedPaymentCard([FromBody] UserRequest customer)
-        //        {
-
-        //            if (!UtilityService.IsPhoneNbr(customer.PhoneNumber) && !UtilityService.IsValidEmail(customer.Email))
-        //            {
-        //                return BadRequest("phone number and email invalid");
-        //            }
-        //            Response response = UserService.Create(customer);
-        //            return Ok(response);
-
-        //        }
         [HttpPost]
-[Route("AddNewCard")]
-[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
-[ProducesResponseType(StatusCodes.Status404NotFound)]
-[ProducesResponseType(StatusCodes.Status400BadRequest)]
-public IActionResult CreateCard([FromBody] PaymentCard customer)
-{
+        [Route("AddNewCard")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult CreateCard([FromBody] PaymentCard customer)
+        {
 
-    if (!UtilityService.IsValidEmail(customer.Email))
-    {
-        return BadRequest("email invalid");
-    }
+            if (!UtilityService.IsValidEmail(customer.Email))
+            {
+                return BadRequest("email invalid");
+            }
             try
             {
                 Response response = PaymentService.CreateCard(customer);
@@ -78,7 +50,127 @@ public IActionResult CreateCard([FromBody] PaymentCard customer)
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult SavedPaymentCard([FromBody] UserRequest customer)
+        public IActionResult SavedPaymentCard([FromBody] SavedCardsRequest customer)
+        {
+
+            if (!UtilityService.IsValidEmail(customer.Email))
+            {
+                return BadRequest("phone number and email invalid");
+            }
+            try
+            {
+                Response response = PaymentService.GetPaymentCardList(customer);
+                if (response.statusCode == "00")
+                {
+                    return Ok(response);
+                }
+                else
+                {
+                    return StatusCode(500, response);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+
+        }
+        [HttpGet]
+        [Route("GetPaymentCard")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult GetPaymentCard([FromBody] SavedCardRequest customer)
+        {
+
+            if (!UtilityService.IsValidEmail(customer.Email))
+            {
+                return BadRequest("email invalid");
+            }
+            try
+            {
+                Response response = PaymentService.GetPaymentCard(customer);
+                if (response.statusCode == "00")
+                {
+                    return Ok(response);
+                }
+                else
+                {
+                    return StatusCode(500, response);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+
+        }
+        [HttpPut]
+        [Route("UpdatePaymentCard")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult UpdatePaymentCard([FromBody] CardUpdate customer)
+        {
+
+            if (!UtilityService.IsValidEmail(customer.Email))
+            {
+                return BadRequest("email invalid");
+            }
+            try
+            {
+                Response response = PaymentService.UpdatePaymentCard(customer);
+                if (response.statusCode == "00")
+                {
+                    return Ok(response);
+                }
+                else
+                {
+                    return StatusCode(500, response);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+
+        }
+        [HttpDelete]
+        [Route("DeletePaymentCard")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult DeletePaymentCard([FromBody] SavedCardRequest customer)
+        {
+
+            if (!UtilityService.IsValidEmail(customer.Email))
+            {
+                return BadRequest("email invalid");
+            }
+            try
+            {
+                Response response = PaymentService.DeletePaymentCard(customer);
+                if (response.statusCode == "00")
+                {
+                    return Ok(response);
+                }
+                else
+                {
+                    return StatusCode(404, response);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+
+        }
+        [HttpGet]
+        [Route("MakePayment")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult MakePayment([FromBody] UserRequest customer)
         {
 
             if (!UtilityService.IsPhoneNbr(customer.PhoneNumber) && !UtilityService.IsValidEmail(customer.Email))
@@ -89,23 +181,7 @@ public IActionResult CreateCard([FromBody] PaymentCard customer)
             return Ok(response);
 
         }
-        //        [HttpGet]
-        //        [Route("TransactionRecord")]
-        //        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
-        //        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        //        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //        public IActionResult MakePayment([FromBody] UserRequest customer)
-        //        {
-
-        //            if (!UtilityService.IsPhoneNbr(customer.PhoneNumber) && !UtilityService.IsValidEmail(customer.Email))
-        //            {
-        //                return BadRequest("phone number and email invalid");
-        //            }
-        //            Response response = UserService.Create(customer);
-        //            return Ok(response);
-
-        //        }
-        //        [HttpGet]
+       // [HttpGet]
         //        [Route("GetTransactionRecordListCustomer")]
         //        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
         //        [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -166,5 +242,5 @@ public IActionResult CreateCard([FromBody] PaymentCard customer)
         //        {
         //        }
     }
-}
 
+}

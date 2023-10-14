@@ -6,8 +6,9 @@ namespace RockyConnectBackend.Model
 		public string DrivOwnEmail { get; set; }
 		public string RidRentEmail { get; set; }
 		public PaymentCard card { get; set; }
-		public string bill { get; set; }
-		public string tripID { get; set; }
+		public string Bill { get; set; }
+        public string? CardAlias { get; set; }
+        public string tripID { get; set; }
 
 	}
 
@@ -23,6 +24,18 @@ namespace RockyConnectBackend.Model
         public DateTime Date_Updated { get; set; }
 
     }
+    public class SavedCardsRequest
+    {
+        public string Email { get; set; }
+
+    }
+    public class SavedCardRequest
+    {
+        public string Email { get; set; }
+        public string CardAlias { get; set; }
+
+    }
+   
     public class CardUpdate
     {
         public string Email { get; set; }
