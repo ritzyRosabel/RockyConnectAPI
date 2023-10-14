@@ -54,8 +54,23 @@ public IActionResult CreateCard([FromBody] PaymentCard customer)
     {
         return BadRequest("email invalid");
     }
-    Response response = PaymentService.CreateCard(customer);
-    return Ok(response);
+            try
+            {
+                Response response = PaymentService.CreateCard(customer);
+                if (response.statusCode == "00")
+                {
+                    return Ok(response);
+                }
+                else
+                {
+                    return StatusCode(500, response);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+
 
         }
         [HttpGet]
