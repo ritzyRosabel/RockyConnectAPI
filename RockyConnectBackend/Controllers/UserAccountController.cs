@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Mvc;
 using RockyConnectBackend.Model;
 using RockyConnectBackend.Services;
 
@@ -31,13 +32,28 @@ namespace RockyConnectBackend.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Create([FromBody] UserRequest customer)
         {
+           
 
             if (!UtilityService.IsPhoneNbr(customer.PhoneNumber) && !UtilityService.IsValidEmail(customer.Email))
             {
                 return BadRequest("phone number and email invalid");
             }
+            try
+            {
             Response response = UserService.Create(customer);
-            return Ok(response);
+                if (response.statusCode == "00")
+                {
+                    return Ok(response);
+                }
+                else
+                {
+                    return StatusCode(500, response);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
 
         }
         [HttpPost]
@@ -48,8 +64,22 @@ namespace RockyConnectBackend.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Login([FromBody] LoginUserRequest cred)
         {
-            Response response = UserService.Login(cred);
-            return Ok(response);
+            try
+            {
+                Response response = UserService.Login(cred);
+                if (response.statusCode == "00")
+                {
+                    return Ok(response);
+                }
+                else
+                {
+                    return StatusCode(500, response);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
 
 
         }
@@ -61,9 +91,22 @@ namespace RockyConnectBackend.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult ResendOTP([FromBody] Email email )
         {
-            Response response = UserService.ResendOTP(email);
-            return Ok(response);
-
+            try
+            {
+                Response response = UserService.ResendOTP(email);
+                if (response.statusCode == "00")
+                {
+                    return Ok(response);
+                }
+                else
+                {
+                    return StatusCode(500, response);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
 
         }
         [HttpPost]
@@ -83,8 +126,22 @@ namespace RockyConnectBackend.Controllers
                 return BadRequest("Verification code is a six digit number");
 
             }
-            Response response = UserService.ValidateOTP(cred.Code,cred.Email);
-            return Ok(response);
+            try
+            {
+                Response response = UserService.ValidateOTP(cred.Code, cred.Email);
+                if (response.statusCode == "00")
+                {
+                    return Ok(response);
+                }
+                else
+                {
+                    return StatusCode(500, response);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
 
         }
         [HttpPost]
@@ -99,9 +156,22 @@ namespace RockyConnectBackend.Controllers
             {
                 return BadRequest("phone number and email invalid");
             }
-            
-            Response response = UserService.ValidateAccount(email.UserEmail);
-            return Ok(response);
+            try
+            {
+                Response response = UserService.ValidateAccount(email.UserEmail);
+                if (response.statusCode == "00")
+                {
+                    return Ok(response);
+                }
+                else
+                {
+                    return StatusCode(500, response);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
 
         }
         [HttpPut]
@@ -117,8 +187,23 @@ namespace RockyConnectBackend.Controllers
                 return BadRequest("phone number and email invalid");
             }
 
-            Response response = UserService.UpdateAccount(request);
-            return Ok(response);
+            try
+            {
+                Response response = UserService.UpdateAccount(request);
+                if (response.statusCode == "00")
+                {
+                    return Ok(response);
+                }
+                else
+                {
+                    return StatusCode(500, response);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+
 
         }
         [HttpDelete]
@@ -134,8 +219,22 @@ namespace RockyConnectBackend.Controllers
                 return BadRequest("phone number and email invalid");
             }
 
-            Response response = UserService.DeleteAccount(email.UserEmail);
-            return Ok(response);
+            try
+            {
+                Response response = UserService.DeleteAccount(email.UserEmail);
+                if (response.statusCode == "00")
+                {
+                    return Ok(response);
+                }
+                else
+                {
+                    return StatusCode(500, response);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
 
         }
         [HttpPost]
@@ -146,9 +245,22 @@ namespace RockyConnectBackend.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult ForgotPassword([FromBody] PasswordResetRequest request)
         {
-            Response response = UserService.ForgotPassword(request);
-            return Ok(response);
-
+            try
+            {
+                Response response = UserService.ForgotPassword(request);
+                if (response.statusCode == "00")
+                {
+                    return Ok(response);
+                }
+                else
+                {
+                    return StatusCode(500, response);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
 
         }
         /*
