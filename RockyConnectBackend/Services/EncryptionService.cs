@@ -72,7 +72,7 @@ namespace RockyConnectBackend.Services
 
             // Declare the string used to hold
             // the decrypted text.
-            string plaintext = null;
+            string plaintext = string.Empty;
 
             // Create an Aes object
             // with the specified key and IV.

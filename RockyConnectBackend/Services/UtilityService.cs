@@ -65,6 +65,7 @@ namespace RockyConnectBackend.Services
             }
             catch(Exception e)
             {
+                Console.WriteLine(e.Message);
                 response = "01";
             }
             return response;

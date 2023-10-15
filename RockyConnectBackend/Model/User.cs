@@ -4,11 +4,11 @@ namespace RockyConnectBackend.Model
 	public class User
 	{
         public int UserID { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string PhoneNumber{ get; set; }
-        public string Password { get; set; }
-        public string Email { get; set; }
+        public  string? FirstName { get; set; }
+        public  string? LastName { get; set; }
+        public  string? PhoneNumber{ get; set; }
+        public  string? Password { get; set; }
+        public  string? Email { get; set; }
         public Role Role { get; set; }
         public int AccountVerified { get; set; }
         public bool IsAccountActive { get; set; }
@@ -21,11 +21,11 @@ namespace RockyConnectBackend.Model
     }
     public class UserRequest
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string PhoneNumber { get; set; }
-        public string Password { get; set; }
-        public string Email { get; set; }
+        public required string FirstName { get; set; }
+        public required string LastName { get; set; }
+        public required string PhoneNumber { get; set; }
+        public required string Password { get; set; }
+        public required string Email { get; set; }
         public Role Role { get; set; }
 
         // public int AccountVerified { get; set; }
@@ -34,17 +34,17 @@ namespace RockyConnectBackend.Model
     }
     public class UserUpdateRequest
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string PhoneNumber { get; set; }
-        public string Password { get; set; }
-        public string Email { get; set; }
+        public required string FirstName { get; set; }
+        public required string LastName { get; set; }
+        public required string PhoneNumber { get; set; }
+        public required string Password { get; set; }
+        public required string Email { get; set; }
     }
         public class LoginUser
     {
-        public string Email { get; set; }
-        public string FirstName { get; set; }
-        public string Password { get; set; }
+        public  string? Email { get; set; }
+        public  string? FirstName { get; set; }
+        public  string? Password { get; set; }
         public Role Role { get; set; }
        
     }
@@ -55,24 +55,24 @@ namespace RockyConnectBackend.Model
     }
     public class LoginUserRequest
     {
-        public string Email { get; set; }
-        public string Password { get; set; }
+        public required string Email { get; set; }
+        public required string Password { get; set; }
     }
     public class CreateUserResponse
     {
-        public string Status { get; set; }
+        public required string Status { get; set; }
         public int StatusCode { get; set; }
         public int CustomerID { get; set; }
     }
     public class Email
     {
-        public string UserEmail { get; set; }
+        public required string UserEmail { get; set; }
         public int? Otptype  { get; set; }
     }
     public class PasswordResetRequest
     {
-        public string Password { get; set; }
-        public string Email { get; set; }
+        public required string Password { get; set; }
+        public required string Email { get; set; }
     }
     public enum Role
     {

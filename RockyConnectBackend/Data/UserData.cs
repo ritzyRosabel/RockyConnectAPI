@@ -291,8 +291,7 @@ namespace RockyConnectBackend.Data
             try
             {
                 DateTime date = DateTime.Now;
-                string email = user.Email;
-                SqlCommand cmd = new SqlCommand($"Update [dbo].[Customer] set [AccountVerified]=@AccountVerified, [DateVerified] =@DateVerify where  [Email]='{email}'", connection);
+                SqlCommand cmd = new SqlCommand($"Update [dbo].[Customer] set [AccountVerified]=@AccountVerified, [DateVerified] =@DateVerify where  [Email]='{user.Email}'", connection);
                 cmd.Parameters.AddWithValue("@AccountVerified", user.AccountVerified);
                 cmd.Parameters.AddWithValue("@DateVerify", user.Date_Verified);
 
@@ -583,8 +582,7 @@ namespace RockyConnectBackend.Data
             try
             {
                 DateTime date = DateTime.Now;
-                string email = user.Email;
-                SqlCommand cmd = new SqlCommand($"Update [dbo].[Customer] set [IsAccountActive]=@IsAccountActive, [DateUpdated] =@Date_Updated where  [Email]='{email}'", connection);
+                SqlCommand cmd = new SqlCommand($"Update [dbo].[Customer] set [IsAccountActive]=@IsAccountActive, [DateUpdated] =@Date_Updated where  [Email]='{user.Email}'", connection);
                 cmd.Parameters.AddWithValue("@IsAccountActive", user.IsAccountActive);
                 cmd.Parameters.AddWithValue("@Date_Updated", user.Date_Updated);
 

@@ -8,9 +8,9 @@ namespace RockyConnectBackend.Model
     public class Response
     {
 
-            public string status { get; set; }
-            public string statusCode { get; set; }
-            public Object data { get; set; }
+            public string? status { get; set; }
+            public string? statusCode { get; set; }
+            public Object? data { get; set; }
         }
     
 }

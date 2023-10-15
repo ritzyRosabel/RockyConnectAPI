@@ -21,7 +21,7 @@ namespace RockyConnectBackend.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult CreateCard([FromBody] PaymentCard customer)
         {
-
+            if(customer.Email is not null)
             if (!UtilityService.IsValidEmail(customer.Email))
             {
                 return BadRequest("email invalid");
@@ -82,8 +82,8 @@ namespace RockyConnectBackend.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult GetPaymentCard([FromBody] SavedCardRequest customer)
         {
-
-            if (!UtilityService.IsValidEmail(customer.Email))
+            if (customer.Email is not null)
+                if (!UtilityService.IsValidEmail(customer.Email))
             {
                 return BadRequest("email invalid");
             }
@@ -142,11 +142,11 @@ namespace RockyConnectBackend.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult DeletePaymentCard([FromBody] SavedCardRequest customer)
         {
-
-            if (!UtilityService.IsValidEmail(customer.Email))
-            {
+            if (customer.Email is not null)
+                if (!UtilityService.IsValidEmail(customer.Email))
+                 {
                 return BadRequest("email invalid");
-            }
+                 }
             try
             {
                 Response response = PaymentService.DeletePaymentCard(customer);

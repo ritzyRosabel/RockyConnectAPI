@@ -21,22 +21,24 @@ namespace RockyConnectBackend.Controllers
                         status.status = "User Account Doesnt exist";
                     }
                     else
-                    {
-                        if (result2.Password.Trim().ToLower() == cred.Password.ToLower())
+                    { if (result2.Password is not null)
                         {
-                            string result3 = UserData.CreateLoginData(result2);
-                            result.Password = "";
-                            status.statusCode = "00";
-                            status.status = "Successfull";
-                            status.data = result3;
+                            if (result2.Password.Trim().ToLower() == cred.Password.ToLower())
+                            {
+                                string result3 = UserData.CreateLoginData(result2);
+                                result.Password = "";
+                                status.statusCode = "00";
+                                status.status = "Successfull";
+                                status.data = result3;
 
-                        }
-                        else
-                        {
-                            status.statusCode = "01";
-                            status.status = "Invalid Username and Password Match";
-                            status.data = 0;
+                            }
+                            else
+                            {
+                                status.statusCode = "01";
+                                status.status = "Invalid Username and Password Match";
+                                status.data = 0;
 
+                            }
                         }
                     }
 
@@ -44,6 +46,7 @@ namespace RockyConnectBackend.Controllers
                 else
                 {
                     // Regex.Replace(result.UserName, @"\s+", "");
+                    if(result.Password is not null)
                     if (result.Password.Trim().ToLower() == cred.Password.ToLower())
                     {
                         result.Password = "";
@@ -211,12 +214,13 @@ namespace RockyConnectBackend.Controllers
             Response response = new Response();
             OTP result = UserData.GetUserOtp(code,email);
             {
-                if (result.ID != 0)
+                if (result.ID != 0 )
                 {
                     TimeSpan time = DateTime.Now - result.DateCreated;
                     if (time.TotalMinutes >= 5)
                     {
                         result.Status = "Expired";
+
                         string result2 = UserData.UpdateOTP(result.Email, result.Code, result.Status);
 
                         response.statusCode = "01";

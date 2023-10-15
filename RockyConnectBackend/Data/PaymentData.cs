@@ -196,7 +196,6 @@ namespace RockyConnectBackend.Data
 
                 Console.WriteLine("\nQuery data example:");
                 Console.WriteLine("=========================================\n");
-                int ret = 6;
                 connection.Open();
                 try
                 {
@@ -261,7 +260,6 @@ namespace RockyConnectBackend.Data
 
             Console.WriteLine("\nQuery data example:");
             Console.WriteLine("=========================================\n");
-            int ret = 6;
             connection.Open();
             try
             {
