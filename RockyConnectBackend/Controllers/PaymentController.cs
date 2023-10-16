@@ -165,7 +165,7 @@ namespace RockyConnectBackend.Controllers
             }
 
         }
-        [HttpGet]
+        [HttpPost]
         [Route("MakePayment")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

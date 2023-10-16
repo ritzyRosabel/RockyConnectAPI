@@ -46,7 +46,7 @@ namespace RockyConnectBackend.Controllers
 
 
         }
-        [HttpPost]
+        [HttpPut]
         [Route("UpdateATrip")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -76,7 +76,7 @@ namespace RockyConnectBackend.Controllers
             }
 
         }
-        [HttpPost]
+        [HttpGet]
         [Route("SelectATrip")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -105,7 +105,7 @@ namespace RockyConnectBackend.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-        [HttpPost]
+        [HttpGet]
         [Route("SelectTripHistory")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -136,7 +136,7 @@ namespace RockyConnectBackend.Controllers
         }
 
 
-        [HttpPost]
+        [HttpDelete]
         [Route("DeleteATrip")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
