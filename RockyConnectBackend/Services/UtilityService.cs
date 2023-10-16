@@ -81,9 +81,10 @@ namespace RockyConnectBackend.Services
 
         }
 
-        internal static string SendPhone(string messageBody, string phoneNumber)
+        internal static string UniqueIDGenerator()
         {
-            throw new NotImplementedException();
+                return Guid.NewGuid().ToString("N");
+            
         }
     }
 }

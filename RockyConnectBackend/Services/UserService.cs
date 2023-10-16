@@ -187,27 +187,27 @@ namespace RockyConnectBackend.Controllers
             return response;
         }
 
-        internal static Response VerifyPhone(PhoneVerification number)
-        {
-            Response response = new Response();
-            string MessageBody = "<p> Hi, </p> <p> Your account has been successfully verified. No further action is neededfrome your end.</p>";
-            string result = UtilityService.SendPhone(MessageBody, number.PhoneNumber);
-            if (result == "00")
-            {
-                response.status = "Account Successfully Verified";
-                response.statusCode = "00";
+        //internal static Response VerifyPhone(PhoneVerification number)
+        //{
+        //    Response response = new Response();
+        //    string MessageBody = "<p> Hi, </p> <p> Your account has been successfully verified. No further action is neededfrome your end.</p>";
+        //    string result = UtilityService.SendPhone(MessageBody, number.PhoneNumber);
+        //    if (result == "00")
+        //    {
+        //        response.status = "Account Successfully Verified";
+        //        response.statusCode = "00";
 
 
-            }
-            else
-            {
-                response.status = "Account verification was unsuccessfull, try again later. ";
-                response.statusCode = "01";
+        //    }
+        //    else
+        //    {
+        //        response.status = "Account verification was unsuccessfull, try again later. ";
+        //        response.statusCode = "01";
 
 
-            }
-            return response;
-        }
+        //    }
+        //    return response;
+        //}
 
         internal static Response ValidateOTP(string code,string email)
         {
