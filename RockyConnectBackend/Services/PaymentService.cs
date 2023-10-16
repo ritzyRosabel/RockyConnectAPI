@@ -126,6 +126,79 @@ namespace RockyConnectBackend.Services
             }
             return status;
         }
+
+        internal static Response MakePayment(PaymentRequest card)
+        {                string result;
+
+            var status = new Response();
+            Payment pay = new Payment()
+            {
+                ID = UtilityService.UniqueIDGenerator(),
+                DriOwnEmail = card.DrivOwnEmail,
+                RidRentEmail = card.RidRentEmail,
+                Bill = card.Bill,
+                TripID = card.TripID,
+
+            };
+
+            if (card.CardAlias == string.Empty)
+            {
+                pay.PaymentType = "Card";
+                string pan = card.Card.Pan;
+                char[] panC = pan.ToCharArray();
+               
+                if (panC[0]==3 & panC[15] == 1)
+                {
+                    pay.PaymentStatus = "Completed";
+                     result = PaymentData.MakePayment(pay);
+                
+                        status.statusCode = "00";
+                        status.status = "Payment Successfull";
+                    
+                     
+                }
+                else
+                {
+
+                    status.statusCode = "01";
+                    status.status = "Payment Failure";
+                }
+            }
+            else
+            {
+                SavedCardRequest savedCard = new SavedCardRequest()
+                {
+                    Email = card.RidRentEmail,
+                    CardAlias = card.CardAlias
+                };
+                var res = PaymentService.GetPaymentCard(savedCard);
+                if (res.data != null) {
+
+                    PaymentCard card1 = new PaymentCard();
+
+                    card1 = (PaymentCard)res.data;
+                    string pan = card1.Pan;
+                    char[] panC = pan.ToCharArray();
+
+                    if (panC[0] == 3 & panC[15] == 1)
+                    {
+                        pay.PaymentStatus = "Completed";
+                        result = PaymentData.MakePayment(pay);
+                        status.statusCode = "00";
+                        status.status = "Payment Successfull";
+                    }
+                    else
+                    {
+
+                        status.statusCode = "01";
+                        status.status = "Payment Failure";
+                    }
+                }
+
+
+            }
+            return status;
+        }
     }
 
 }

@@ -170,18 +170,18 @@ namespace RockyConnectBackend.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult MakePayment([FromBody] UserRequest customer)
+        public IActionResult MakePayment([FromBody] PaymentRequest card)
         {
 
-            if (!UtilityService.IsPhoneNbr(customer.PhoneNumber) && !UtilityService.IsValidEmail(customer.Email))
+            if (!!UtilityService.IsValidEmail(card.DrivOwnEmail) && !UtilityService.IsValidEmail(card.RidRentEmail))
             {
                 return BadRequest("phone number and email invalid");
             }
-            Response response = UserService.Create(customer);
+            Response response = PaymentService.MakePayment(card);
             return Ok(response);
 
         }
-       // [HttpGet]
+        // [HttpGet]
         //        [Route("GetTransactionRecordListCustomer")]
         //        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
         //        [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -213,23 +213,23 @@ namespace RockyConnectBackend.Controllers
         //            return Ok(response);
 
         //        }
-        //        // POST api/values
-        //        [HttpPost]
-        //        [Route("MakePayment")]
-        //        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
-        //        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        //        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //        public IActionResult MakePayment([FromBody] UserRequest customer)
-        //        {
+        //// POST api/values
+        //[HttpPost]
+        //[Route("MakePayment")]
+        //[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
+        //[ProducesResponseType(StatusCodes.Status404NotFound)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //public IActionResult MakePayment([FromBody] UserRequest customer)
+        //{
 
-        //            if (!UtilityService.IsPhoneNbr(customer.PhoneNumber) && !UtilityService.IsValidEmail(customer.Email))
-        //            {
-        //                return BadRequest("phone number and email invalid");
-        //            }
-        //            Response response = UserService.Create(customer);
-        //            return Ok(response);
+        //    if (!UtilityService.IsPhoneNbr(customer.PhoneNumber) && !UtilityService.IsValidEmail(customer.Email))
+        //    {
+        //        return BadRequest("phone number and email invalid");
+        //    }
+        //    Response response = UserService.Create(customer);
+        //    return Ok(response);
 
-        //        }
+        //}
         //        // PUT api/values/5
         //        [HttpPut("{id}")]
         //        public void Put(int id, [FromBody]string value)

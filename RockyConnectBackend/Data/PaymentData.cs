@@ -2,6 +2,8 @@
 using Microsoft.Data.SqlClient;
 using RockyConnectBackend.Model;
 using System.Data;
+using RockyConnectBackend.Data;
+using System.Collections.Generic;
 
 namespace RockyConnectBackend.Data
 {
@@ -300,13 +302,71 @@ namespace RockyConnectBackend.Data
                 if (connection.State != ConnectionState.Closed)
                 {
                     connection.Close();
-
                 }
             }
             return res;
-
         }
+        internal static string MakePayment(Payment pay)
+        {
+            //  var result = new User   ();
+            string result = "01";
 
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+
+            builder.DataSource = "rosabeldbserver.database.windows.net";
+            builder.UserID = "rosabelDB";
+            builder.Password = "Mololuwa@14";
+            builder.InitialCatalog = "RockyConnectDB";
+
+            SqlConnection connection = new SqlConnection(builder.ConnectionString);
+
+            Console.WriteLine("\nQuery data example:");
+            Console.WriteLine("=========================================\n");
+            int ret = 6;
+            connection.Open();
+            try
+            {
+                DateTime date = DateTime.Now;
+                DateTime defaultVerified = new DateTime(1900, 01, 01);
+                SqlCommand cmd = new SqlCommand($"insert into[dbo].[Payment] ( [ID],[TripID],[Bill],[RidRentEmail],[DriOwnEmail],[PaymentStatus],[PaymentType],[PaymentDate])\n  values(@ID, @TripID, @Bill, @RidRentEmail, @DriOwnEmail, @PaymentStatus, @PaymentType, @PaymentDate)", connection);
+
+                cmd.Parameters.AddWithValue("@ID", pay.ID);
+                cmd.Parameters.AddWithValue("@TripID", pay.TripID);
+                cmd.Parameters.AddWithValue("@Bill", pay.Bill);
+                cmd.Parameters.AddWithValue("@RidRentEmail", pay.RidRentEmail);
+                cmd.Parameters.AddWithValue("@DriOwnEmail", pay.DriOwnEmail);
+                cmd.Parameters.AddWithValue("@PaymentStatus", pay.PaymentStatus);
+                cmd.Parameters.AddWithValue("@PaymentType", pay.PaymentType);
+                cmd.Parameters.AddWithValue("@PaymentDate", pay.PaymentDate).Value = date;
+
+                ret = cmd.ExecuteNonQuery();
+                if (ret == 1)
+                {
+                    result = "00";
+                }
+
+
+
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+
+                }
+            }
+
+            //Console.WriteLine("\nDone. Press enter.");
+            //Console.ReadLine();
+
+
+
+            return result;
+        }
     }
 }
-

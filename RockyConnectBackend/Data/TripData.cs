@@ -41,6 +41,7 @@ namespace RockyConnectBackend.Data
                 cmd.Parameters.AddWithValue("@DestinationLat", trip.DestinationLat);
                 cmd.Parameters.AddWithValue("@DestinationLong", trip.DestinationLong);
                 cmd.Parameters.AddWithValue("@SourceLongitude", trip.Destination);
+                cmd.Parameters.AddWithValue("@TripDate", trip.TripDate);
                 cmd.Parameters.AddWithValue("@DateCreated", trip.Date_Created).Value = date;
                 cmd.Parameters.AddWithValue("@DateUpdated", trip.Date_Updated).Value = date;
 
@@ -95,7 +96,7 @@ namespace RockyConnectBackend.Data
             {
                 DateTime date = DateTime.Now;
                 DateTime defaultVerified = new DateTime(1900, 01, 01);
-                SqlCommand cmd = new SqlCommand($"Update [dbo].[TripRequest] set [TripDistance]=@TripDistance,[TripType] = @TripType,[SourceLatitude]=@SourceLatitude,[SourceLocation]= @SourceLocation,[DateCreated]=@DateCreated,[DateUpdated]=@DateUpdated,[SourceLongitude]=@SourceLongitude,[DestinationLat]=@DestinationLat,[DestinationLong]=@DestinationLong, where ID ={trip.ID}", connection);
+                SqlCommand cmd = new SqlCommand($"Update [dbo].[TripRequest] set [TripDistance]=@TripDistance,[TripType] = @TripType,[SourceLatitude]=@SourceLatitude,[SourceLocation]= @SourceLocation,[DateCreated]=@DateCreated,[DateUpdated]=@DateUpdated,[SourceLongitude]=@SourceLongitude,[DestinationLat]=@DestinationLat,[DestinationLong]=@DestinationLong,[TripDate]=@TripDate where ID ={trip.ID}", connection);
 
                 cmd.Parameters.AddWithValue("@TripDistance", trip.TripDistance); ;
                 cmd.Parameters.AddWithValue("@TripType", trip.TripType);
@@ -106,6 +107,7 @@ namespace RockyConnectBackend.Data
                 cmd.Parameters.AddWithValue("@DestinationLat", trip.DestinationLat);
                 cmd.Parameters.AddWithValue("@DestinationLong", trip.DestinationLong);
                 cmd.Parameters.AddWithValue("@SourceLongitude", trip.Destination);
+                cmd.Parameters.AddWithValue("@TripDate", trip.TripDate).Value = date;
                 cmd.Parameters.AddWithValue("@DateCreated", trip.Date_Created).Value = date;
                 cmd.Parameters.AddWithValue("@DateUpdated", trip.Date_Updated).Value = date;
 
@@ -135,7 +137,7 @@ namespace RockyConnectBackend.Data
 
             return result;
         }
-        internal static string DeleteTripData(Trip trip)
+        internal static string DeleteTripData(string trip)
         {
             //  var result = new User   ();
             string result = "01";
@@ -157,7 +159,7 @@ namespace RockyConnectBackend.Data
             {
                 DateTime date = DateTime.Now;
                 DateTime defaultVerified = new DateTime(1900, 01, 01);
-                SqlCommand cmd = new SqlCommand($"Delete * from [dbo].[TripRequest] Where  ID ={trip.ID}", connection);
+                SqlCommand cmd = new SqlCommand($"Delete * from [dbo].[TripRequest] Where  ID ={trip}", connection);
 
 
                 ret = cmd.ExecuteNonQuery();
@@ -190,7 +192,7 @@ namespace RockyConnectBackend.Data
 
             return result;
         }
-        internal static TripDataInfo SelectTripData(Trip trip)
+        internal static TripDataInfo SelectTripData(TripRequest trip)
         {
             //  var result = new User   ();
             var result = new TripDataInfo();
@@ -229,6 +231,7 @@ namespace RockyConnectBackend.Data
                             result.SourceLocation = reader["DestinationLat"].ToString().Trim();
                             result.SourceLatitude = reader["DestinationLong"].ToString().Trim();
                             result.SourceLongitude = reader["Destination"].ToString().Trim();
+                            result.TripDate = Convert.ToDateTime(reader.GetDateTime("TripDate"));
                             result.Date_Created = Convert.ToDateTime(reader.GetDateTime("DateCreated"));
                             result.Date_Updated = Convert.ToDateTime(reader.GetDateTime("DateUpdated"));
 
@@ -256,7 +259,7 @@ namespace RockyConnectBackend.Data
 
         }
 
-        internal static List<TripDataInfo> SelectEmailCards(string email)
+        internal static List<TripDataInfo> SelectEmailTrips(string email)
         {
             var result = new TripDataInfo();
             var res = new List<TripDataInfo>();
@@ -277,7 +280,7 @@ namespace RockyConnectBackend.Data
             {
                 DateTime date = DateTime.Now;
                 DateTime defaultVerified = new DateTime(1900, 01, 01);
-                using (SqlCommand cmd = new SqlCommand($"Select * from [dbo].[CRockyconnect] Where  Email ={email}", connection))
+                using (SqlCommand cmd = new SqlCommand($"Select * from [dbo].[TripRequest] inner join [dbo].[AcceptedTrip] using(ID) Where  Email ={email} and Status='Completed'", connection))
                 {
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
@@ -295,6 +298,7 @@ namespace RockyConnectBackend.Data
                             result.SourceLocation = reader["DestinationLat"].ToString().Trim();
                             result.SourceLatitude = reader["DestinationLong"].ToString().Trim();
                             result.SourceLongitude = reader["Destination"].ToString().Trim();
+                            result.TripDate = Convert.ToDateTime(reader.GetDateTime("TripDate"));
                             result.Date_Created = Convert.ToDateTime(reader.GetDateTime("DateCreated"));
                             result.Date_Updated = Convert.ToDateTime(reader.GetDateTime("DateUpdated"));
                             res.Add(result);
