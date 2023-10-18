@@ -184,7 +184,7 @@ namespace RockyConnectBackend.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult GetUserAccount([FromBody] string email)
+        public IActionResult GetUserAccount( string email)
         {
 
             if (!UtilityService.IsValidEmail(email))

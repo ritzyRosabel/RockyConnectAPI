@@ -164,8 +164,12 @@ namespace RockyConnectBackend.Data
             try
             {
 
-                using (SqlCommand command = new SqlCommand($"SELECT * FROM [dbo].[Customer] where Email = '{email}'", connection))
+                using (SqlCommand command = new SqlCommand($"SelectUserUsingEmail", connection))
                 {
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.Parameters.AddWithValue("@email", email);
+
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
                         if (reader != null)

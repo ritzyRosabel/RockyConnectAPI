@@ -48,9 +48,9 @@ namespace RockyConnectBackend.Model
         public Role Role { get; set; }
        
     }
-    public class LoginUserResponse
+    public class GetUserRequest
     {
-        public int UserID { get; set; }
+        public string Email { get; set; }
 
     }
     public class LoginUserRequest
