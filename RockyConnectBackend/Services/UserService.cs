@@ -24,22 +24,22 @@ namespace RockyConnectBackend.Controllers
                 {
 
                     // Regex.Replace(result.UserName, @"\s+", "");
-                    if(result.Password is not null)
-                    if (result.Password.Trim().ToLower() == cred.Password.ToLower())
-                    {
-                        result.Password = "";
-                        status.statusCode = "00";
-                        status.status = "Successfull";
-                        status.data = result;
+                    if (result.Password is not null)
+                        if (result.Password.Trim().ToLower() == cred.Password.ToLower())
+                        {
+                            result.Password = "";
+                            status.statusCode = "00";
+                            status.status = "Successfull";
+                            status.data = result;
 
-                    }
-                    else
-                    {
-                        status.statusCode = "01";
-                        status.status = "Invalid Username and Password Match";
-                        status.data = null;
+                        }
+                        else
+                        {
+                            status.statusCode = "01";
+                            status.status = "Invalid Username and Password Match";
+                            status.data = null;
 
-                    }
+                        }
 
                 }
             }
@@ -187,12 +187,12 @@ namespace RockyConnectBackend.Controllers
         //    return response;
         //}
 
-        internal static Response ValidateOTP(string code,string email)
+        internal static Response ValidateOTP(string code, string email)
         {
             Response response = new Response();
-            OTP result = UserData.GetUserOtp(code,email);
+            OTP result = UserData.GetUserOtp(code, email);
             {
-                if (result.ID != 0 )
+                if (result.ID != 0)
                 {
                     TimeSpan time = DateTime.Now - result.DateCreated;
                     if (time.TotalMinutes >= 5)
@@ -335,35 +335,35 @@ namespace RockyConnectBackend.Controllers
                 user.FirstName = customer.FirstName;
                 user.LastName = customer.LastName;
                 user.PhoneNumber = customer.PhoneNumber;
-            
-            result = UserData.UpdateData(user);
-            if (result == "00")
-            {
-                response.statusCode = "00";
-                response.status = "Profile was Successfully Updated";
 
+                result = UserData.UpdateData(user);
+                if (result == "00")
+                {
+                    response.statusCode = "00";
+                    response.status = "Profile was Successfully Updated";
+
+                }
+                else
+                {
+                    response.statusCode = "01";
+                    response.status = "Profile update was  unsuccessful";
+                }
             }
-            else
-            {
-                response.statusCode = "01";
-                response.status = "Profile update was  unsuccessful";
-            }
-            }
-            else{
+            else {
                 response.statusCode = "01";
                 response.status = "User account not found";
             }
             return response;
-        
-            }
+
+        }
 
         internal static Response ForgotPassword(PasswordForgotRequest request)
         {
             Response response = new Response();
-           // User user = new User();
+            // User user = new User();
             string result;
-           
-                User user = UserData.GetUserUsingEmail(request.Email);
+
+            User user = UserData.GetUserUsingEmail(request.Email);
             if (user.Email is not null)
             {
                 user.Password = request.Password;
@@ -390,6 +390,27 @@ namespace RockyConnectBackend.Controllers
 
         }
 
+        internal static Response GetUserAccount(string email)
+        {
+            var status = new Response();
 
+            User result = UserData.GetUserUsingEmail(email);
+            if (result.Email is not null) {
+                status.statusCode = "00";
+                status.status = "Successfull";
+                result.Password = "";
+                status.data = result;
+            }
+            else
+            {
+
+                status.statusCode = "00";
+                status.status = "Successfull";
+                status.data = null;
+            }
+            return status;
+        }
+
+    
     }
-}
+    }

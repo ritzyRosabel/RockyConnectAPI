@@ -175,6 +175,36 @@ namespace RockyConnectBackend.Controllers
             }
 
         }
+        [HttpGet]
+        [Route("GetUserAccount")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult GetUserAccount([FromBody] string email)
+        {
+
+            if (!UtilityService.IsValidEmail(email))
+            {
+                return BadRequest("phone number and email invalid");
+            }
+            try
+            {
+                Response response = UserService.GetUserAccount(email);
+                if (response.statusCode == "00")
+                {
+                    return Ok(response);
+                }
+                else
+                {
+                    return StatusCode(500, response);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+
+        }
         [HttpPut]
         [Route("UpdateAccount")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
