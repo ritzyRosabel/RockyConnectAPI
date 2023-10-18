@@ -365,7 +365,7 @@ namespace RockyConnectBackend.Data
             {
                 DateTime date = DateTime.Now;
 
-                SqlCommand cmd = new SqlCommand($"INSERT INTO [dbo].[OTPVerify] ([Email],[Code],[DateCreate],[Status]) VALUES (@Email,@Code,@DateCreated,@Status)", connection);
+                SqlCommand cmd = new SqlCommand($"INSERT INTO [dbo].[OTPVerify] ([Email],[Code],[DateCreate],[Status]) VALUES (@Email,@Code,@DateCreate,@Status)", connection);
 
                 cmd.Parameters.AddWithValue("@Email", email);
                 cmd.Parameters.AddWithValue("@Code", otp);
