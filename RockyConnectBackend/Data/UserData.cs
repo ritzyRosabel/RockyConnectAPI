@@ -245,7 +245,7 @@ namespace RockyConnectBackend.Data
                 cmd.Parameters.AddWithValue("@DateUpdated", customer.Date_Updated).Value = date;
 
                 ret = cmd.ExecuteNonQuery();
-                if (ret == 1)
+                if (ret == -1)
                 {
                     result = "00";
                 }
