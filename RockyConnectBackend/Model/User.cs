@@ -71,6 +71,13 @@ namespace RockyConnectBackend.Model
     }
     public class PasswordResetRequest
     {
+        public required string Email { get; set; }
+        public required string OldPassword { get; set; }
+        public required string NewPassword { get; set; }
+
+    }
+    public class PasswordForgotRequest
+    {
         public required string Password { get; set; }
         public required string Email { get; set; }
     }

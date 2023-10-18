@@ -12,9 +12,10 @@ namespace RockyConnectBackend.Controllers
             if (cred.Email != null)
             {
                 LoginUser result = UserData.LoginData(cred.Email);
+                 User result2 = UserData.GetUserUsingEmail(cred.Email);
+
                 if (result.Email == null)
                 {
-                    User result2 = UserData.GetUserUsingEmail(cred.Email);
                     if (result2.Email == null)
                     {
                         status.statusCode = "02";
@@ -29,7 +30,8 @@ namespace RockyConnectBackend.Controllers
                                 result.Password = "";
                                 status.statusCode = "00";
                                 status.status = "Successfull";
-                                status.data = result3;
+                                result2.Password = "";
+                                status.data = result2;
 
                             }
                             else
@@ -45,6 +47,7 @@ namespace RockyConnectBackend.Controllers
                 }
                 else
                 {
+
                     // Regex.Replace(result.UserName, @"\s+", "");
                     if(result.Password is not null)
                     if (result.Password.Trim().ToLower() == cred.Password.ToLower())
@@ -52,7 +55,8 @@ namespace RockyConnectBackend.Controllers
                         result.Password = "";
                         status.statusCode = "00";
                         status.status = "Successfull";
-                        status.data = result;
+                        result2.Password = "";
+                        status.data = result2;
 
                     }
                     else
@@ -379,7 +383,7 @@ namespace RockyConnectBackend.Controllers
         
             }
 
-        internal static Response ForgotPassword(PasswordResetRequest request)
+        internal static Response ForgotPassword(PasswordForgotRequest request)
         {
             Response response = new Response();
            // User user = new User();

@@ -6,10 +6,12 @@ namespace RockyConnectBackend.Services
 {
 	public class TripService
 	{
-        internal static Response CreateTrip(TripDataInfo trip)
+        internal static Response CreateTrip(CreateTripRequest trip)
         {
             var status = new Response();
-            string result = TripData.CreateTripData(trip);
+           string id = UtilityService.UniqueIDGenerator();
+
+            string result = TripData.CreateTripData(id,trip);
             if (result == "00")
             {
                 status.statusCode = "00";
@@ -24,15 +26,16 @@ namespace RockyConnectBackend.Services
             return status;
         }
 
-        internal static Response GetTripHistory(TripRequest trip)
+        internal static Response GetTripHistory(TripsRequest trip)
         {
             var status = new Response();
-            List<TripDataInfo> result = TripData.SelectEmailTrips(trip.Email);
+            List<Trip> result = TripData.SelectEmailTrips(trip.Email);
 
             if (result.Count >= 1)
             {
                 status.statusCode = "00";
                 status.status = "Successfull";
+                status.data = result;
             }
             else
             {
@@ -45,7 +48,7 @@ namespace RockyConnectBackend.Services
         internal static Response GetTrip(TripRequest trip)
         {
             var status = new Response();
-            TripDataInfo result = TripData.SelectTripData(trip);
+            Trip result = TripData.SelectTripData(trip);
             if (result.ID is not null)
             {
                 status.statusCode = "00";

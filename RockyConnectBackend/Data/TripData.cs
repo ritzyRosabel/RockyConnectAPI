@@ -8,7 +8,7 @@ namespace RockyConnectBackend.Data
 {
     public class TripData
     {
-        internal static string CreateTripData(TripDataInfo trip)
+        internal static string CreateTripData(string id, CreateTripRequest trip)
         {
             //  var result = new User   ();
             string result = "01";
@@ -31,7 +31,7 @@ namespace RockyConnectBackend.Data
                 DateTime date = DateTime.Now;
                 DateTime defaultVerified = new DateTime(1900, 01, 01);
                 SqlCommand cmd = new SqlCommand($"INSERT INTO [dbo].[TripRequest] ([ID],[TripDistance],[TripType],[SourceLocation],[SourceLatitude],[Email],[DateCreated],[DateUpdated],[SourceLongitude],[DestinationLat],[DestinationLong],[Destination]) VALUES (@ID,@TripDistance, @TripType,@SourceLocation,@SourceLatitude,@Email,@DateCreated,@DateUpdated,@SourceLongitude,@DestinationLat,@DestinationLong,@Destination)", connection);
-                cmd.Parameters.AddWithValue("@ID", trip.ID); ;
+                cmd.Parameters.AddWithValue("@ID", id); ;
                 cmd.Parameters.AddWithValue("@TripDistance", trip.TripDistance); ;
                 cmd.Parameters.AddWithValue("@TripType", trip.TripType);
                 cmd.Parameters.AddWithValue("@SourceLocation", trip.SourceLocation);
@@ -42,8 +42,8 @@ namespace RockyConnectBackend.Data
                 cmd.Parameters.AddWithValue("@DestinationLong", trip.DestinationLong);
                 cmd.Parameters.AddWithValue("@SourceLongitude", trip.Destination);
                 cmd.Parameters.AddWithValue("@TripDate", trip.TripDate);
-                cmd.Parameters.AddWithValue("@DateCreated", trip.Date_Created).Value = date;
-                cmd.Parameters.AddWithValue("@DateUpdated", trip.Date_Updated).Value = date;
+                cmd.Parameters.AddWithValue("@DateCreated", date);
+                cmd.Parameters.AddWithValue("@DateUpdated", date);
 
                 ret = cmd.ExecuteNonQuery();
                 if (ret == 1)
@@ -192,10 +192,10 @@ namespace RockyConnectBackend.Data
 
             return result;
         }
-        internal static TripDataInfo SelectTripData(TripRequest trip)
+        internal static Trip SelectTripData(TripRequest trip)
         {
             //  var result = new User   ();
-            var result = new TripDataInfo();
+            var result = new Trip();
 
             SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
 
@@ -213,7 +213,7 @@ namespace RockyConnectBackend.Data
             {
 
 
-                using (SqlCommand cmd = new SqlCommand($"Select * from [dbo].[CRockyconnect] Where  ID ={trip.ID}", connection))
+                using (SqlCommand cmd = new SqlCommand($"Select * from [dbo].[TripRequest] Where  ID ={trip.ID}", connection))
                 {
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
@@ -259,10 +259,10 @@ namespace RockyConnectBackend.Data
 
         }
 
-        internal static List<TripDataInfo> SelectEmailTrips(string email)
+        internal static List<Trip> SelectEmailTrips(string email)
         {
-            var result = new TripDataInfo();
-            var res = new List<TripDataInfo>();
+            var result = new Trip();
+            var res = new List<Trip>();
 
             SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
 

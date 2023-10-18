@@ -1,4 +1,5 @@
-﻿using Azure.Core;
+﻿//using Azure;
+using Azure.Core;
 using Microsoft.AspNetCore.Mvc;
 using RockyConnectBackend.Model;
 using RockyConnectBackend.Services;
@@ -243,7 +244,7 @@ namespace RockyConnectBackend.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult ForgotPassword([FromBody] PasswordResetRequest request)
+        public IActionResult ForgotPassword([FromBody] PasswordForgotRequest request)
         {
             try
             {
@@ -255,6 +256,45 @@ namespace RockyConnectBackend.Controllers
                 else
                 {
                     return StatusCode(500, response);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+
+        }
+        [HttpPost]
+        [Route("ResetPassword")]
+
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult ResetPassword([FromBody] PasswordResetRequest request)
+        {
+            try
+            {
+                LoginUserRequest user = new LoginUserRequest() { Email = request.Email, Password = request.OldPassword };
+                Response response1 = UserService.Login(user);
+                if (response1.statusCode == "00")
+                {
+                    PasswordForgotRequest somePass = new PasswordForgotRequest() { Email=request.Email, Password=request.NewPassword};
+                    Response response = UserService.ForgotPassword(somePass);
+                    if (response.statusCode == "00")
+                    {
+                        return Ok(response);
+                    }
+                    else
+                    {
+                        return StatusCode(500, response);
+                    }
+                }
+                else
+                {
+                    response1.status = "Invalid Old Password";
+                    response1.statusCode = "01";
+                    return StatusCode(500, response1);
+
                 }
             }
             catch (Exception ex)

@@ -20,16 +20,16 @@ namespace RockyConnectBackend.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult CreateTrip([FromBody] UserRequest customer)
+        public IActionResult CreateTrip([FromBody] CreateTripRequest customer)
         {
 
-            if (!UtilityService.IsPhoneNbr(customer.PhoneNumber) && !UtilityService.IsValidEmail(customer.Email))
+            if ( !UtilityService.IsValidEmail(customer.Email))
             {
                 return BadRequest("phone number and email invalid");
             }
             try
             {
-                Response response = UserService.Create(customer);
+                Response response = TripService.CreateTrip(customer);
                 if (response.statusCode == "00")
                 {
                     return Ok(response);
@@ -51,16 +51,16 @@ namespace RockyConnectBackend.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult UpdateTrip([FromBody] UserRequest customer)
+        public IActionResult UpdateTrip([FromBody] TripDataInfo trip)
         {
 
-            if (!UtilityService.IsPhoneNbr(customer.PhoneNumber) && !UtilityService.IsValidEmail(customer.Email))
+            if (!UtilityService.IsValidEmail(trip.Email))
             {
                 return BadRequest("phone number and email invalid");
             }
             try
             {
-                Response response = UserService.Create(customer);
+                Response response = TripService.UpdateTrip(trip);
                 if (response.statusCode == "00")
                 {
                     return Ok(response);
@@ -110,7 +110,7 @@ namespace RockyConnectBackend.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult TripHistory([FromBody] TripRequest trip)
+        public IActionResult TripHistory([FromBody] TripsRequest trip)
         {
 
             if (!UtilityService.IsValidEmail(trip.Email))
@@ -141,16 +141,16 @@ namespace RockyConnectBackend.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult DeleteTrip([FromBody] UserRequest customer)
+        public IActionResult DeleteTrip([FromBody] TripRequest customer)
         {
 
-            if (!UtilityService.IsPhoneNbr(customer.PhoneNumber) && !UtilityService.IsValidEmail(customer.Email))
+            if (!UtilityService.IsValidEmail(customer.Email))
             {
                 return BadRequest("phone number and email invalid");
             }
             try
             {
-                Response response = UserService.Create(customer);
+                Response response = TripService.DeleteTrip(customer);
                 if (response.statusCode == "00")
                 {
                     return Ok(response);
