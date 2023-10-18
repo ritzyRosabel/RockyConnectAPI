@@ -11,38 +11,13 @@ namespace RockyConnectBackend.Controllers
             var status = new Response();
             if (cred.Email != null)
             {
-                LoginUser result = UserData.LoginData(cred.Email);
-                 User result2 = UserData.GetUserUsingEmail(cred.Email);
+                User result = UserData.GetUserUsingEmail(cred.Email);
 
                 if (result.Email == null)
                 {
-                    if (result2.Email == null)
-                    {
-                        status.statusCode = "02";
-                        status.status = "User Account Doesnt exist";
-                    }
-                    else
-                    { if (result2.Password is not null)
-                        {
-                            if (result2.Password.Trim().ToLower() == cred.Password.ToLower())
-                            {
-                                string result3 = UserData.CreateLoginData(result2);
-                                result.Password = "";
-                                status.statusCode = "00";
-                                status.status = "Successfull";
-                                result2.Password = "";
-                                status.data = result2;
-
-                            }
-                            else
-                            {
-                                status.statusCode = "01";
-                                status.status = "Invalid Username and Password Match";
-                                status.data = 0;
-
-                            }
-                        }
-                    }
+                    status.statusCode = "01";
+                    status.status = "Invalid Username and Password Match";
+                    status.data = null;
 
                 }
                 else
@@ -55,15 +30,14 @@ namespace RockyConnectBackend.Controllers
                         result.Password = "";
                         status.statusCode = "00";
                         status.status = "Successfull";
-                        result2.Password = "";
-                        status.data = result2;
+                        status.data = result;
 
                     }
                     else
                     {
                         status.statusCode = "01";
                         status.status = "Invalid Username and Password Match";
-                        status.data = 0;
+                        status.data = null;
 
                     }
 

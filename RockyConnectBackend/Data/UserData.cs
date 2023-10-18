@@ -616,5 +616,63 @@ namespace RockyConnectBackend.Data
 
             return result;
         }
+
+        //internal static object UpdateLogin(User user)
+        //{
+        //    string result = "01";
+
+        //    SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+
+        //    builder.DataSource = "rosabeldbserver.database.windows.net";
+        //    builder.UserID = "rosabelDB";
+        //    builder.Password = "Mololuwa@14";
+        //    builder.InitialCatalog = "RockyConnectDB";
+
+        //    SqlConnection connection = new SqlConnection(builder.ConnectionString);
+
+        //    Console.WriteLine("\nQuery data example:");
+        //    Console.WriteLine("=========================================\n");
+        //    int ret = 6;
+        //    connection.Open();
+        //    try
+        //    {
+        //        DateTime date = DateTime.Now;
+
+        //        SqlCommand cmd = new SqlCommand($"Update [dbo].[LoginInfo] set [FirstName]=@FirstName, [LastName] = @LastName,[PhoneNumber]=@PhoneNumber,[Password]=@Password,[DateUpdated] = @DateUpdated where  Email='{customer.Email}'", connection);
+        //        cmd.Parameters.AddWithValue("@FirstName", customer.FirstName);
+        //        cmd.Parameters.AddWithValue("@LastName", customer.LastName);
+        //        cmd.Parameters.AddWithValue("@PhoneNumber", customer.PhoneNumber);
+        //        cmd.Parameters.AddWithValue("@Password", customer.Password);
+        //        cmd.Parameters.AddWithValue("@DateUpdated", customer.Date_Updated).Value = date;
+
+        //        ret = cmd.ExecuteNonQuery();
+        //        if (ret == 1)
+        //        {
+        //            result = "00";
+        //        }
+
+
+
+        //    }
+        //    catch (SqlException e)
+        //    {
+        //        Console.WriteLine(e.ToString());
+        //    }
+        //    finally
+        //    {
+        //        if (connection.State != ConnectionState.Closed)
+        //        {
+        //            connection.Close();
+
+        //        }
+        //    }
+
+        //    //Console.WriteLine("\nDone. Press enter.");
+        //    //Console.ReadLine();
+
+
+
+        //    return result;
+        //}
     }
 }
