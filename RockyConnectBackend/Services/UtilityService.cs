@@ -21,13 +21,24 @@ namespace RockyConnectBackend.Services
             }
             try
             {
+
                 var addr = new System.Net.Mail.MailAddress(email);
+
+                string regex = @"^[a-zA-Z0-9._%+-]+(@wiu\.edu)$";
+
+               bool val =  Regex.IsMatch(email, regex, RegexOptions.IgnoreCase);
+                //if (!val)
+                //{
+                //    return false;
+
+                //}
                 return addr.Address == trimmedEmail;
             }
             catch
             {
                 return false;
             }
+
         }
 
         public static bool IsPhoneNbr(string number)

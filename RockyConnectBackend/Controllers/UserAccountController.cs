@@ -65,6 +65,10 @@ namespace RockyConnectBackend.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Login([FromBody] LoginUserRequest cred)
         {
+            if (  !UtilityService.IsValidEmail(cred.Email))
+            {
+                return BadRequest("phone number and email invalid");
+            }
             try
             {
                 Response response = UserService.Login(cred);

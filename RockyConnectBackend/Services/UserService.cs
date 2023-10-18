@@ -64,22 +64,12 @@ namespace RockyConnectBackend.Controllers
             if (result == "00")
             {
 
-                string result2 = UserData.CreateLoginData(user);
-                if (result2 == "00")
-                {
                     SendOTP(user, "Email Verification");
 
                     response.statusCode = "00";
                     response.status = "OTP sent to email";
 
-                }
-                else
-                {
-                    SendOTP(user, "Email Verification");
-
-                    response.statusCode = "02";
-                    response.status = "Successfull created, OTP sent | but couldnt generate LoginID";
-                }
+              
 
             }
             else

@@ -96,7 +96,9 @@ namespace RockyConnectBackend.Data
             {
                 DateTime date = DateTime.Now;
                 DateTime defaultVerified = new DateTime(1900, 01, 01);
-                SqlCommand cmd = new SqlCommand($"INSERT INTO [dbo].[Customer] ([Email],[UserID],[FirstName],[Role],[LastName],[Password],[PhoneNumber],[DateCreated],[DateUpdated],[DateVerified],[IsAccountActive]) VALUES (@Email, @UserID,@FirstName,@Role,@LastName,@Password,@PhoneNumber,@DateCreated,@DateUpdated,@DateVerified,@IsAccountActive)", connection);
+
+                SqlCommand cmd = new SqlCommand($"dbo.CreateCustomer", connection);
+                cmd.CommandType = CommandType.StoredProcedure;
 
                 cmd.Parameters.AddWithValue("@UserID", customer.UserID);
                 cmd.Parameters.AddWithValue("@Password", customer.Password.ToLower());
@@ -111,7 +113,7 @@ namespace RockyConnectBackend.Data
                 cmd.Parameters.AddWithValue("@DateVerified", customer.Date_Verified).Value = defaultVerified;       
 
         ret = cmd.ExecuteNonQuery();
-                if (ret == 1)
+                if (ret == -1)
                 {
                     result = "00";
                 }
@@ -140,65 +142,7 @@ namespace RockyConnectBackend.Data
             return result;
         }
 
-        internal static string CreateLoginData(User customer)
-        {
-            //  var result = new User   ();
-            string result = "01";
-
-            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
-
-            builder.DataSource = "rosabeldbserver.database.windows.net";
-            builder.UserID = "rosabelDB";
-            builder.Password = "Mololuwa@14";
-            builder.InitialCatalog = "RockyConnectDB";
-
-            SqlConnection connection = new SqlConnection(builder.ConnectionString);
-
-            Console.WriteLine("\nQuery data example:");
-            Console.WriteLine("=========================================\n");
-            int ret = 6;
-            connection.Open();
-            try
-            {
-                DateTime date = DateTime.Now;
-
-                SqlCommand cmd = new SqlCommand($"INSERT INTO [dbo].[LoginInfo] ([Email],[FirstName],[Password],[LastLogin],[Role]) VALUES (@Email,@FirstName,@Password,@LastLogin,@Role)", connection);
-
-                cmd.Parameters.AddWithValue("@Email", customer.Email.ToLower());
-                cmd.Parameters.AddWithValue("@FirstName", customer.FirstName);
-                cmd.Parameters.AddWithValue("@Password", customer.Password.ToLower());
-                cmd.Parameters.AddWithValue("@Role", (int)customer.Role);
-                cmd.Parameters.AddWithValue("@LastLogin", date);
-                ret = cmd.ExecuteNonQuery();
-                if (ret == 1)
-                {
-                    result = "00";
-                }
-
-
-
-            }
-            catch (SqlException e)
-            {
-                Console.WriteLine(e.ToString());
-            }
-            finally
-            {
-                if (connection.State != ConnectionState.Closed)
-                {
-                    connection.Close();
-
-                }
-            }
-
-            //Console.WriteLine("\nDone. Press enter.");
-            //Console.ReadLine();
-
-
-
-            return result;
-        }
-
+        
         internal static User GetUserUsingEmail(string email)
         {
             var res = new User();
