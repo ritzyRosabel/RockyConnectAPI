@@ -10,7 +10,7 @@ using RockyConnectBackend.Services;
 
 namespace RockyConnectBackend.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("/")]
     public class TripController : Controller
     {
 
