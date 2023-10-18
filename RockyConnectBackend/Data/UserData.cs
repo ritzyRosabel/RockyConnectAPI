@@ -7,73 +7,7 @@ namespace RockyConnectBackend.Data
 {
 	public class UserData
 	{
-		public UserData()
-		{
-		}
-        public static LoginUser LoginData(string value)
-        {
-            var result = new LoginUser();
 
-
-            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
-
-            builder.DataSource = "rosabeldbserver.database.windows.net";
-            builder.UserID = "rosabelDB";
-            builder.Password = "Mololuwa@14";
-            builder.InitialCatalog = "RockyConnectDB";
-
-            SqlConnection connection = new SqlConnection(builder.ConnectionString);
-
-            Console.WriteLine("\nQuery data example:");
-            Console.WriteLine("=========================================\n");
-            int role = 0;
-            connection.Open();
-            try
-            {
-
-                using (SqlCommand command = new SqlCommand($"SELECT FirstName,Password,Email,Role FROM[dbo].[LoginInfo] where Email = '{value.ToLower()}'", connection))
-                {
-                    using (SqlDataReader reader = command.ExecuteReader())
-                    {
-
-                        while (reader.Read())
-                        {
-
-                            //  result.UserID = int.Parse(reader["UserID"]);
-                            result.Email = reader["Email"].ToString().Trim();
-                            result.FirstName = reader["FirstName"].ToString().Trim();
-                            result.Password = reader["Password"].ToString().Trim();
-                            role= Convert.ToInt32(reader.GetOrdinal("Role"));
-                            result.Role = (Role)role;
-
-
-                        }
-
-                    }
-                }
-
-
-            }
-            catch (SqlException e)
-            {
-                Console.WriteLine(e.ToString());
-            }
-            finally
-            {
-                if (connection.State != ConnectionState.Closed)
-                {
-                    connection.Close();
-
-                }
-            }
-
-            //Console.WriteLine("\nDone. Press enter.");
-            //Console.ReadLine();
-
-
-
-            return result;
-        }
         internal static string CreateCustomerData(User customer)
         {
             //  var result = new User   ();
@@ -239,8 +173,10 @@ namespace RockyConnectBackend.Data
             try
             {
                 DateTime date = DateTime.Now;
-                SqlCommand cmd = new SqlCommand($"Update [dbo].[Customer] set [AccountVerified]=@AccountVerified, [DateVerified] =@DateVerify where  [Email]='{user.Email}'", connection);
+                SqlCommand cmd = new SqlCommand($"VerifyAccount", connection);
+                cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@AccountVerified", user.AccountVerified);
+                cmd.Parameters.AddWithValue("@Email", user.Email);
                 cmd.Parameters.AddWithValue("@DateVerify", user.Date_Verified);
 
 
@@ -297,7 +233,11 @@ namespace RockyConnectBackend.Data
             {
                 DateTime date = DateTime.Now;
 
-                SqlCommand cmd = new SqlCommand($"Update [dbo].[Customer] set [FirstName]=@FirstName, [LastName] = @LastName,[PhoneNumber]=@PhoneNumber,[Password]=@Password,[DateUpdated] = @DateUpdated where  Email='{customer.Email}'", connection);
+                SqlCommand cmd = new SqlCommand("dbo.UpdateCustomer", connection);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@Email", customer.Email);
+
                 cmd.Parameters.AddWithValue("@FirstName", customer.FirstName);
                 cmd.Parameters.AddWithValue("@LastName", customer.LastName);
                 cmd.Parameters.AddWithValue("@PhoneNumber", customer.PhoneNumber);
@@ -356,8 +296,12 @@ namespace RockyConnectBackend.Data
             try
             {
 
-                using (SqlCommand command = new SqlCommand($"  SELECT  ID, Code, Email, Status, DateCreated FROM OTPVerify  where Email = '{email}' and Code='{code}'", connection))
+                using (SqlCommand command = new SqlCommand($"GetUserOtp", connection))
                 {
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.Parameters.AddWithValue("@Email", email);
+                    command.Parameters.AddWithValue("@Code", code);
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
                         if (reader is not null)
@@ -368,7 +312,7 @@ namespace RockyConnectBackend.Data
                                 res.Code = reader["Code"].ToString().Trim();
                                 res.Email = reader["Email"].ToString().Trim();
                                 res.Status = reader["Status"].ToString().Trim();
-                                res.DateCreated = (DateTime)reader.GetDateTime("DateCreated");
+                                res.DateCreated = (DateTime)reader.GetDateTime("DateCreate");
 
                            }
                         }
