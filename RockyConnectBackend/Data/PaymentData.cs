@@ -93,14 +93,9 @@ namespace RockyConnectBackend.Data
             {
                 DateTime date = DateTime.Now;
                 DateTime defaultVerified = new DateTime(1900, 01, 01);
-                SqlCommand cmd = new SqlCommand($"Update [dbo].[CRockyconnect] set [CardAlias]=@CardAlias,[CardType] = @CardType,[Code]=@Code,[ExpiryDate]= @ExpiryDate,[DateCreated]=@DateCreated,[DateUpdated]=@DateUpdated,[FullName]=@FullName where Email ={card.Email} and CardAlias={card.OldCardAlias}", connection);
+                SqlCommand cmd = new SqlCommand($"Update [dbo].[CRockyconnect] set [CardAlias]=@CardAlias,[DateUpdated]=@DateUpdated where Email ={card.Email} and CardAlias={card.OldCardAlias}", connection);
 
                 cmd.Parameters.AddWithValue("@CardAlias", card.CardAlias);
-                cmd.Parameters.AddWithValue("@CardType", card.CardType);
-                cmd.Parameters.AddWithValue("@Code", card.Code);
-                cmd.Parameters.AddWithValue("@ExpiryDate", card.ExpiryDate);
-                cmd.Parameters.AddWithValue("@FullName", card.FullName);
-                cmd.Parameters.AddWithValue("@DateCreated", card.Date_Created).Value = date;
                 cmd.Parameters.AddWithValue("@DateUpdated", card.Date_Updated).Value = date;
 
                 ret = cmd.ExecuteNonQuery();
@@ -368,5 +363,71 @@ namespace RockyConnectBackend.Data
 
             return result;
         }
+
+        internal static Payment GetPayment(string pay)
+        {
+
+            var result = new Payment();
+
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+
+            builder.DataSource = "rosabeldbserver.database.windows.net";
+            builder.UserID = "rosabelDB";
+            builder.Password = "Mololuwa@14";
+            builder.InitialCatalog = "RockyConnectDB";
+
+            SqlConnection connection = new SqlConnection(builder.ConnectionString);
+
+            Console.WriteLine("\nQuery data example:");
+            Console.WriteLine("=========================================\n");
+            connection.Open();
+            try
+            {
+                DateTime date = DateTime.Now;
+                DateTime defaultVerified = new DateTime(1900, 01, 01);
+                using (SqlCommand cmd = new SqlCommand($"Select * from [dbo].[Payment] Where  ID ={pay}", connection))
+                {
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+
+                        while (reader.Read())
+                        {
+
+                             result.ID = reader["ID"].ToString().Trim();
+                            result.RidRentEmail = reader["RidRentEmail"].ToString().Trim();
+                            result.Bill = reader["Bill"].ToString().Trim();
+                            result.DriOwnEmail = reader["DriOwnEmail"].ToString().Trim();
+                            result.PaymentType = reader["PaymentType"].ToString().Trim();
+                            result.PaymentStatus = reader["PaymentStatus"].ToString().Trim();
+                            result.PaymentDate = Convert.ToDateTime(reader.GetDateTime("PaymentDate"));
+                            result.TripID = reader["TripID"].ToString().Trim();
+
+                        }
+
+                    }
+                }
+
+
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+                }
+            }
+            return result;
+        }
+
+
+        internal static string MakeRefund(Refund refund)
+        {
+            throw new NotImplementedException();
+        }
     }
-}
+    }
+

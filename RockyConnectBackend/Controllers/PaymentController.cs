@@ -22,7 +22,7 @@ namespace RockyConnectBackend.Controllers
         public IActionResult CreateCard([FromBody] PaymentCard customer)
         {
             if(customer.Email is not null)
-            if (!UtilityService.IsValidEmail(customer.Email))
+            if (!UtilityService.IsValidEmail(customer.Email)|| customer.Pan.Length>16||customer.Pan.Length<16)
             {
                 return BadRequest("email invalid");
             }
@@ -181,6 +181,38 @@ namespace RockyConnectBackend.Controllers
             return Ok(response);
 
         }
+            [HttpPost]
+            [Route("RequestRefund")]
+            [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
+            [ProducesResponseType(StatusCodes.Status404NotFound)]
+            [ProducesResponseType(StatusCodes.Status400BadRequest)]
+            public IActionResult CreateCard([FromBody] RefundRequest customer)
+            {
+                if (customer.RidRentEmail is not null)
+                    if (!UtilityService.IsValidEmail(customer.RidRentEmail))
+                    {
+                        return BadRequest("email invalid");
+                    }
+                try
+                {
+                    Response response = PaymentService.Refund(customer);
+                    if (response.statusCode == "00")
+                    {
+                        return Ok(response);
+                    }
+                    else
+                    {
+                        return StatusCode(500, response);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return StatusCode(500, ex.Message);
+                }
+
+
+            }
+        }
         // [HttpGet]
         //        [Route("GetTransactionRecordListCustomer")]
         //        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
@@ -243,4 +275,3 @@ namespace RockyConnectBackend.Controllers
         //        }
     }
 
-}

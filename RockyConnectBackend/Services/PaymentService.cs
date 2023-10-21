@@ -199,6 +199,36 @@ namespace RockyConnectBackend.Services
             }
             return status;
         }
+
+        internal static Response Refund(RefundRequest customer)
+        {
+
+            var status = new Response();
+            Refund refund = new Refund()
+            {
+                RefundStatus = "successful",
+                RefundDate = DateTime.Now,
+                Bill = customer.Bill,
+                Rider = customer.RidRentEmail,
+                Driver = customer.DrivOwnEmail,
+                paymentMethod = customer.RefundType,
+                TransactionID = customer.PaymentID
+
+
+            };
+            Payment result = PaymentData.GetPayment(customer.PaymentID);
+            if (result.ID is not null){
+
+                
+              string result2 = PaymentData.MakeRefund(refund);
+
+            }
+            else
+            {
+
+            }
+            throw new NotImplementedException();
+        }
     }
 
 }

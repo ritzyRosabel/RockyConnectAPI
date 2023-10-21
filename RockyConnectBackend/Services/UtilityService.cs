@@ -27,11 +27,11 @@ namespace RockyConnectBackend.Services
                 string regex = @"^[a-zA-Z0-9._%+-]+(@wiu\.edu)$";
 
                bool val =  Regex.IsMatch(email, regex, RegexOptions.IgnoreCase);
-                if (!val)
-                {
-                    return false;
+                //if (!val)
+                //{
+                //    return false;
 
-                }
+                //}
                 return addr.Address == trimmedEmail;
             }
             catch
