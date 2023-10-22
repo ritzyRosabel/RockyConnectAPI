@@ -8,7 +8,7 @@ namespace RockyConnectBackend.Data
 {
     public class TripData
     {
-        internal static string CreateTripData(string id, CreateTripRequest trip)
+        internal static string CreateTripData( Trip trip)
         {
             //  var result = new User   ();
             string result = "01";
@@ -30,23 +30,28 @@ namespace RockyConnectBackend.Data
             {
                 DateTime date = DateTime.Now;
                 DateTime defaultVerified = new DateTime(1900, 01, 01);
-                SqlCommand cmd = new SqlCommand($"INSERT INTO [dbo].[TripRequest] ([ID],[TripDistance],[TripType],[SourceLocation],[SourceLatitude],[Email],[DateCreated],[DateUpdated],[SourceLongitude],[DestinationLat],[DestinationLong],[Destination]) VALUES (@ID,@TripDistance, @TripType,@SourceLocation,@SourceLatitude,@Email,@DateCreated,@DateUpdated,@SourceLongitude,@DestinationLat,@DestinationLong,@Destination)", connection);
-                cmd.Parameters.AddWithValue("@ID", id); ;
+                SqlCommand cmd = new SqlCommand("ScheduleTrip", connection);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@ID", trip.ID); ;
                 cmd.Parameters.AddWithValue("@TripDistance", trip.TripDistance); ;
-                cmd.Parameters.AddWithValue("@TripType", trip.TripType);
+                cmd.Parameters.AddWithValue("@TripInitiator", trip.TripInitiator);
                 cmd.Parameters.AddWithValue("@SourceLocation", trip.SourceLocation);
-                cmd.Parameters.AddWithValue("@Email", trip.Email);
+                cmd.Parameters.AddWithValue("@TripCost", trip.TripCost);
+                cmd.Parameters.AddWithValue("@TripStatus", trip.TripStatus);
+                cmd.Parameters.AddWithValue("@CustomerEmail", trip.CustomerEmail);
+                cmd.Parameters.AddWithValue("@DriverEmail", trip.DriverEmail);
+                cmd.Parameters.AddWithValue("@PaymentID", trip.PaymentID);
                 cmd.Parameters.AddWithValue("@SourceLatitude", trip.SourceLatitude);
                 cmd.Parameters.AddWithValue("@SourceLongitude", trip.SourceLongitude);
                 cmd.Parameters.AddWithValue("@DestinationLat", trip.DestinationLat);
                 cmd.Parameters.AddWithValue("@DestinationLong", trip.DestinationLong);
-                cmd.Parameters.AddWithValue("@SourceLongitude", trip.Destination);
+                cmd.Parameters.AddWithValue("@Destination", trip.Destination);
                 cmd.Parameters.AddWithValue("@TripDate", trip.TripDate);
                 cmd.Parameters.AddWithValue("@DateCreated", date);
                 cmd.Parameters.AddWithValue("@DateUpdated", date);
 
                 ret = cmd.ExecuteNonQuery();
-                if (ret == 1)
+                if (ret == -1)
                 {
                     result = "00";
                 }
@@ -74,7 +79,7 @@ namespace RockyConnectBackend.Data
 
             return result;
         }
-        internal static string UpdateTripData(TripDataInfo trip)
+        internal static string UpdateTripData(string pay,Trip trip)
         {
             //  var result = new User   ();
             string result = "01";
@@ -96,25 +101,18 @@ namespace RockyConnectBackend.Data
             {
                 DateTime date = DateTime.Now;
                 DateTime defaultVerified = new DateTime(1900, 01, 01);
-                SqlCommand cmd = new SqlCommand($"Update [dbo].[TripRequest] set [TripDistance]=@TripDistance,[TripType] = @TripType,[SourceLatitude]=@SourceLatitude,[SourceLocation]= @SourceLocation,[DateCreated]=@DateCreated,[DateUpdated]=@DateUpdated,[SourceLongitude]=@SourceLongitude,[DestinationLat]=@DestinationLat,[DestinationLong]=@DestinationLong,[TripDate]=@TripDate where ID ={trip.ID}", connection);
+                SqlCommand cmd = new SqlCommand("UpdateASchedule", connection);
 
-                cmd.Parameters.AddWithValue("@TripDistance", trip.TripDistance); ;
-                cmd.Parameters.AddWithValue("@TripType", trip.TripType);
-                cmd.Parameters.AddWithValue("@SourceLocation", trip.SourceLocation);
-                cmd.Parameters.AddWithValue("@Email", trip.Email);
-                cmd.Parameters.AddWithValue("@SourceLatitude", trip.SourceLatitude);
-                cmd.Parameters.AddWithValue("@SourceLongitude", trip.SourceLongitude);
-                cmd.Parameters.AddWithValue("@DestinationLat", trip.DestinationLat);
-                cmd.Parameters.AddWithValue("@DestinationLong", trip.DestinationLong);
-                cmd.Parameters.AddWithValue("@SourceLongitude", trip.Destination);
-                cmd.Parameters.AddWithValue("@TripDate", trip.TripDate).Value = date;
-                cmd.Parameters.AddWithValue("@DateCreated", trip.Date_Created).Value = date;
-                cmd.Parameters.AddWithValue("@DateUpdated", trip.Date_Updated).Value = date;
+                cmd.Parameters.AddWithValue("@ID", trip.ID); 
+                cmd.Parameters.AddWithValue("@DriverEmail", trip.DriverEmail);
+                cmd.Parameters.AddWithValue("@CustomerEmail", trip.CustomerEmail);
+                cmd.Parameters.AddWithValue("@TripStatus", trip.TripStatus);
+                cmd.Parameters.AddWithValue("@PaymentID", pay);
+                cmd.Parameters.AddWithValue("@DateUpdated", date);
 
                 ret = cmd.ExecuteNonQuery();
 
-                ret = cmd.ExecuteNonQuery();
-                if (ret == 1)
+                if (ret == -1)
                 {
                     result = "00";
                 }
@@ -159,11 +157,13 @@ namespace RockyConnectBackend.Data
             {
                 DateTime date = DateTime.Now;
                 DateTime defaultVerified = new DateTime(1900, 01, 01);
-                SqlCommand cmd = new SqlCommand($"Delete * from [dbo].[TripRequest] Where  ID ={trip}", connection);
+                SqlCommand cmd = new SqlCommand($"DeleteATrip", connection);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@ID", trip);
 
 
                 ret = cmd.ExecuteNonQuery();
-                if (ret == 1)
+                if (ret == -1)
                 {
                     result = "00";
                 }
@@ -192,7 +192,7 @@ namespace RockyConnectBackend.Data
 
             return result;
         }
-        internal static Trip SelectTripData(TripRequest trip)
+        internal static Trip SelectTripData(string ID )
         {
             //  var result = new User   ();
             var result = new Trip();
@@ -213,8 +213,11 @@ namespace RockyConnectBackend.Data
             {
 
 
-                using (SqlCommand cmd = new SqlCommand($"Select * from [dbo].[TripRequest] Where  ID ={trip.ID}", connection))
+                using (SqlCommand cmd = new SqlCommand("SelectATrip", connection))
                 {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@ID", ID);
+
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
 
@@ -222,20 +225,25 @@ namespace RockyConnectBackend.Data
                         {
 
                             //  result.UserID = int.Parse(reader["UserID"]);
-                            result.Email = reader["Email"].ToString().Trim();
+                            result.ID = reader["ID"].ToString().Trim();
+                            result.CustomerEmail = reader["CustomerEmail"].ToString().Trim();
+                            result.DriverEmail = reader["DriverEmail"].ToString().Trim();
+                            result.TripInitiator = reader["TripInitiator"].ToString().Trim();
+                            result.TripStatus = reader["TripStatus"].ToString().Trim();
                             result.TripDistance = Convert.ToInt32(reader["TripDistance"]);
-                            result.TripType = Convert.ToInt32(reader["TripType"]);
+                            result.TripCost = Convert.ToInt32(reader["TripType"]);
                             result.SourceLocation = reader["SourceLocation"].ToString().Trim();
                             result.SourceLatitude = reader["SourceLatitude"].ToString().Trim();
                             result.SourceLongitude = reader["SourceLongitude"].ToString().Trim();
-                            result.SourceLocation = reader["DestinationLat"].ToString().Trim();
-                            result.SourceLatitude = reader["DestinationLong"].ToString().Trim();
-                            result.SourceLongitude = reader["Destination"].ToString().Trim();
+                            result.DestinationLat = reader["DestinationLat"].ToString().Trim();
+                            result.DestinationLong = reader["DestinationLong"].ToString().Trim();
+                            result.Destination = reader["Destination"].ToString().Trim();
                             result.TripDate = Convert.ToDateTime(reader.GetDateTime("TripDate"));
                             result.Date_Created = Convert.ToDateTime(reader.GetDateTime("DateCreated"));
                             result.Date_Updated = Convert.ToDateTime(reader.GetDateTime("DateUpdated"));
+                            result.PaymentID = reader["PaymentID"].ToString().Trim();
 
-                             }
+                        }
 
                     }
                 }
@@ -287,20 +295,23 @@ namespace RockyConnectBackend.Data
 
                         while (reader.Read())
                         {
-
-
-                            result.Email = reader["Email"].ToString().Trim();
+                            result.ID = reader["ID"].ToString().Trim();
+                            result.CustomerEmail = reader["CustomerEmail"].ToString().Trim();
+                            result.DriverEmail = reader["DriverEmail"].ToString().Trim();
+                            result.TripInitiator = reader["TripInitiator"].ToString().Trim();
+                            result.TripStatus = reader["TripStatus"].ToString().Trim();
                             result.TripDistance = Convert.ToInt32(reader["TripDistance"]);
-                            result.TripType = Convert.ToInt32(reader["TripType"]);
+                            result.TripCost = Convert.ToInt32(reader["TripType"]);
                             result.SourceLocation = reader["SourceLocation"].ToString().Trim();
                             result.SourceLatitude = reader["SourceLatitude"].ToString().Trim();
                             result.SourceLongitude = reader["SourceLongitude"].ToString().Trim();
-                            result.SourceLocation = reader["DestinationLat"].ToString().Trim();
-                            result.SourceLatitude = reader["DestinationLong"].ToString().Trim();
-                            result.SourceLongitude = reader["Destination"].ToString().Trim();
+                            result.DestinationLat = reader["DestinationLat"].ToString().Trim();
+                            result.DestinationLong = reader["DestinationLong"].ToString().Trim();
+                            result.Destination = reader["Destination"].ToString().Trim();
                             result.TripDate = Convert.ToDateTime(reader.GetDateTime("TripDate"));
                             result.Date_Created = Convert.ToDateTime(reader.GetDateTime("DateCreated"));
                             result.Date_Updated = Convert.ToDateTime(reader.GetDateTime("DateUpdated"));
+                            result.PaymentID = reader["PaymentID"].ToString().Trim();
                             res.Add(result);
 
                         }

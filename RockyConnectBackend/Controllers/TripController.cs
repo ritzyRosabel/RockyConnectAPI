@@ -23,13 +23,30 @@ namespace RockyConnectBackend.Controllers
         public IActionResult CreateTrip([FromBody] CreateTripRequest customer)
         {
 
-            if ( !UtilityService.IsValidEmail(customer.Email))
-            {
-                return BadRequest("phone number and email invalid");
-            }
+                Response response = TripService.CreateTrip(customer);
+                if (response.statusCode == "00")
+                {
+                    return Ok(response);
+                }
+                else
+                {
+                    return StatusCode(500, response);
+                }
+          
+
+
+        }
+        [HttpPut]
+        [Route("ScheduleDriverOrUserforATrip")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult UpdateDriverOrUserTrip([FromBody] TripDataInfo trip)
+        {
+
             try
             {
-                Response response = TripService.CreateTrip(customer);
+                Response response = TripService.UpdateTrip(trip);
                 if (response.statusCode == "00")
                 {
                     return Ok(response);
@@ -44,23 +61,44 @@ namespace RockyConnectBackend.Controllers
                 return StatusCode(500, ex.Message);
             }
 
-
         }
         [HttpPut]
-        [Route("UpdateATrip")]
+        [Route("StartATrip")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult UpdateTrip([FromBody] TripDataInfo trip)
+        public IActionResult StartATrip([FromBody] TripRequest trip)
         {
 
-            if (!UtilityService.IsValidEmail(trip.Email))
-            {
-                return BadRequest("phone number and email invalid");
-            }
             try
             {
-                Response response = TripService.UpdateTrip(trip);
+                Response response = TripService.StartTrip(trip);
+                if (response.statusCode == "00")
+                {
+                    return Ok(response);
+                }
+                else
+                {
+                    return StatusCode(500, response);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+
+        }
+        [HttpPut]
+        [Route("EndATrip")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult EndATrip([FromBody] TripRequest trip)
+        {
+
+            try
+            {
+                Response response = TripService.EndTrip(trip);
                 if (response.statusCode == "00")
                 {
                     return Ok(response);
@@ -84,10 +122,7 @@ namespace RockyConnectBackend.Controllers
         public IActionResult SelectATrip([FromBody] TripRequest trip)
         {
 
-            if (!UtilityService.IsValidEmail(trip.Email))
-            {
-                return BadRequest("email invalid");
-            }
+            
             try
             {
                 Response response = TripService.GetTrip(trip);
@@ -144,10 +179,6 @@ namespace RockyConnectBackend.Controllers
         public IActionResult DeleteTrip([FromBody] TripRequest customer)
         {
 
-            if (!UtilityService.IsValidEmail(customer.Email))
-            {
-                return BadRequest("phone number and email invalid");
-            }
             try
             {
                 Response response = TripService.DeleteTrip(customer);
