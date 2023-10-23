@@ -45,7 +45,44 @@ namespace RockyConnectBackend.Services
             }
             return status;
         }
+        internal static Response GetDriverTrips(TripSearch trip)
+        {
+            var status = new Response();
+            List<Trip> result = TripData.SelectDriverTripList(trip);
 
+            if (result.Count >= 1)
+            {
+                status.statusCode = "00";
+                status.status = "Successfull";
+                status.data = result;
+            }
+            else
+            {
+
+                status.statusCode = "01";
+                status.status = "Record not found";
+            }
+            return status;
+        }
+        internal static Response GetRiderTrips(TripSearch trip)
+        {
+            var status = new Response();
+            List<Trip> result = TripData.SelectRiderTripList(trip);
+
+            if (result.Count >= 1)
+            {
+                status.statusCode = "00";
+                status.status = "Successfull";
+                status.data = result;
+            }
+            else
+            {
+
+                status.statusCode = "01";
+                status.status = "Record not found";
+            }
+            return status;
+        }
         internal static Response GetTripHistory(TripsRequest trip)
         {
             var status = new Response();
@@ -65,10 +102,10 @@ namespace RockyConnectBackend.Services
             }
             return status;
         }
-        internal static Response GetTrip(TripRequest trip)
+        internal static Response GetTrip(string id)
         {
             var status = new Response();
-            Trip result = TripData.SelectTripData(trip.ID);
+            Trip result = TripData.SelectTripData(id);
             if (result.ID is not null)
             {
                 status.statusCode = "00";
@@ -85,34 +122,79 @@ namespace RockyConnectBackend.Services
         }
 
 
-        internal static Response UpdateTrip(TripDataInfo trip)
+        internal static Response ApproveRiderTrip(TripDataInfo trip)
         {
-            var card = new TripDataInfo();
             Trip trip1 = TripData.SelectTripData(trip.ID);
-
-            if (trip.CustomerEmail is not null)
+            var status = new Response();
+            
+            if (trip1.TripStatus!= "Approved")
             {
+
                 trip1.CustomerEmail = trip.CustomerEmail;
-                trip1.TripStatus = "Requested";
-
-            }
-            if(trip.DriverEmail is not null)
-            {
-                trip1.DriverEmail = trip.DriverEmail;
                 trip1.TripStatus = "Approved";
 
             }
-       
+            else
+            {
+
+                status.statusCode = "01";
+                status.status = "trip already approved";
+                return status;
+            }
+            if(trip1.TripInitiator == "Rider")
+            {
+                trip1.DriverEmail = trip.DriverEmail;
+
+            }
+            trip1.TripStatus = "Approved";
+
             trip1.Date_Updated = DateTime.Now;
            
-            var status = new Response();
             string result = TripData.UpdateTripData(trip1.PaymentID,trip1);
             if (result == "00")
             {
                
                     status.statusCode = "00";
                     status.status = "Successfully saved";
-              
+                status.data = trip1;
+            }
+            else
+            {
+
+                status.statusCode = "01";
+                status.status = "Record not found";
+            }
+            return status;
+        }
+        internal static Response DeclineRiderTrip(TripDataInfo trip)
+        {
+            var status = new Response();
+
+            Trip trip1 = TripData.SelectTripData(trip.ID);
+            if (trip1.TripInitiator == "Driver")
+            {
+                trip1.CustomerEmail = "";
+                trip1.TripStatus = "Created";
+
+            }
+            if (trip1.TripInitiator == "Rider")
+            {
+                status.statusCode = "01";
+                status.status = "Rider initiated trip cannot decline request";
+                status.data = trip;
+                return status;
+
+            }
+
+            trip1.Date_Updated = DateTime.Now;
+
+            string result = TripData.UpdateTripData(trip1.PaymentID, trip1);
+            if (result == "00")
+            {
+
+                status.statusCode = "00";
+                status.status = "Successfully saved";
+
             }
             else
             {
@@ -186,6 +268,45 @@ namespace RockyConnectBackend.Services
                 status.statusCode = "00";
                 status.status = "Successfully saved";
 
+            }
+            else
+            {
+
+                status.statusCode = "01";
+                status.status = "Record not found";
+            }
+            return status;
+        }
+
+        internal static Response DriverRequestTrip(TripDataInfo trip)
+        {
+            Trip trip1 = TripData.SelectTripData(trip.ID);
+            var status = new Response();
+
+            if (trip1.TripInitiator == "Driver")
+            {
+                trip1.CustomerEmail = trip.CustomerEmail;
+                trip1.TripStatus = "Requested";
+
+            }
+            else
+            {
+                status.statusCode = "01";
+                status.status = "Rider initiated trip cannot request driver";
+                status.data = trip;
+                return status;
+            }
+           
+
+            trip1.Date_Updated = DateTime.Now;
+
+            string result = TripData.UpdateTripData(trip1.PaymentID, trip1);
+            if (result == "00")
+            {
+
+                status.statusCode = "00";
+                status.status = "Successfully saved";
+                status.data = trip1;
             }
             else
             {

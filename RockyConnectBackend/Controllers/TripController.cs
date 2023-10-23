@@ -37,16 +37,16 @@ namespace RockyConnectBackend.Controllers
 
         }
         [HttpPut]
-        [Route("ScheduleDriverOrUserforATrip")]
+        [Route("SendRequestforADriverTrip")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult UpdateDriverOrUserTrip([FromBody] TripDataInfo trip)
+        public IActionResult RequestDriverforATrip([FromBody] TripDataInfo trip)
         {
 
             try
             {
-                Response response = TripService.UpdateTrip(trip);
+                Response response = TripService.DriverRequestTrip(trip);
                 if (response.statusCode == "00")
                 {
                     return Ok(response);
@@ -61,6 +61,141 @@ namespace RockyConnectBackend.Controllers
                 return StatusCode(500, ex.Message);
             }
 
+        }
+        [HttpPut]
+        [Route("ApproveUserforATrip")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult ApproveUserforATrip([FromBody] TripDataInfo trip)
+        {
+
+            try
+            {
+                Response response = TripService.ApproveRiderTrip(trip);
+                if (response.statusCode == "00")
+                {
+                    return Ok(response);
+                }
+                else
+                {
+                    return StatusCode(500, response);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+
+        }
+        [HttpPut]
+        [Route("DeclineUserforATrip")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult DeclineUserforATrip([FromBody] TripDataInfo trip)
+        {
+
+            try
+            {
+                Response response = TripService.DeclineRiderTrip(trip);
+                if (response.statusCode == "00")
+                {
+                    return Ok(response);
+                }
+                else
+                {
+                    return StatusCode(500, response);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+
+        }
+
+
+        [HttpGet]
+        [Route("SelectATrip")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult SelectATrip(string tripid)
+        {
+
+            
+            try
+            {
+                Response response = TripService.GetTrip(tripid);
+                if (response.statusCode == "00")
+                {
+                    return Ok(response);
+                }
+                else
+                {
+                    return StatusCode(500, response);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+        [HttpGet]
+        [Route("SearchTripForRider")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult TripHistory([FromBody] TripSearch trip)
+        {
+
+            try
+            {
+                Response response = TripService.GetDriverTrips(trip);
+                if (response.statusCode == "00")
+                {
+                    return Ok(response);
+                }
+                else
+                {
+                    return StatusCode(500, response);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("SelectTripHistory")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult TripHistory([FromBody] TripsRequest trip)
+        {
+
+            if (!UtilityService.IsValidEmail(trip.Email))
+            {
+                return BadRequest("email invalid");
+            }
+            try
+            {
+                Response response = TripService.GetTripHistory(trip);
+                if (response.statusCode == "00")
+                {
+                    return Ok(response);
+                }
+                else
+                {
+                    return StatusCode(500, response);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
         [HttpPut]
         [Route("StartATrip")]
@@ -114,62 +249,6 @@ namespace RockyConnectBackend.Controllers
             }
 
         }
-        [HttpGet]
-        [Route("SelectATrip")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult SelectATrip([FromBody] TripRequest trip)
-        {
-
-            
-            try
-            {
-                Response response = TripService.GetTrip(trip);
-                if (response.statusCode == "00")
-                {
-                    return Ok(response);
-                }
-                else
-                {
-                    return StatusCode(500, response);
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
-        [HttpGet]
-        [Route("SelectTripHistory")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult TripHistory([FromBody] TripsRequest trip)
-        {
-
-            if (!UtilityService.IsValidEmail(trip.Email))
-            {
-                return BadRequest("email invalid");
-            }
-            try
-            {
-                Response response = TripService.GetTripHistory(trip);
-                if (response.statusCode == "00")
-                {
-                    return Ok(response);
-                }
-                else
-                {
-                    return StatusCode(500, response);
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
-
 
         [HttpDelete]
         [Route("DeleteATrip")]
