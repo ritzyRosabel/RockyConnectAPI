@@ -48,7 +48,7 @@ namespace RockyConnectBackend.Services
         internal static Response GetDriverTrips(TripSearch trip)
         {
             var status = new Response();
-            List<Trip> result = TripData.SelectDriverTripList(trip);
+            List<Trip> result = TripData.SelectRiderTripList(trip);
 
             if (result.Count >= 1)
             {

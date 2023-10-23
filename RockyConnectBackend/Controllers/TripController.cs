@@ -142,8 +142,8 @@ namespace RockyConnectBackend.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-        [HttpGet]
-        [Route("SearchTripForRider")]
+        [HttpPost]
+        [Route("SearchTripForDrivers")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -153,6 +153,31 @@ namespace RockyConnectBackend.Controllers
             try
             {
                 Response response = TripService.GetDriverTrips(trip);
+                if (response.statusCode == "00")
+                {
+                    return Ok(response);
+                }
+                else
+                {
+                    return StatusCode(500, response);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+        [HttpPost]
+        [Route("SearchTripForPassenger")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult SearchTripForPassenger([FromBody] TripSearch trip)
+        {
+
+            try
+            {
+                Response response = TripService.GetRiderTrips(trip);
                 if (response.statusCode == "00")
                 {
                     return Ok(response);

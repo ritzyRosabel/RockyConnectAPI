@@ -359,8 +359,6 @@ namespace RockyConnectBackend.Data
                 using (SqlCommand cmd = new SqlCommand("SearchDriverTripList", connection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@CustomerEmail", trip.CustomerEmail);
-                    cmd.Parameters.AddWithValue("@DriverEmail", trip.DriverEmail);
                     cmd.Parameters.AddWithValue("@DestinationLat", trip.DestinationLat);
                     cmd.Parameters.AddWithValue("@DestinationLong", trip.DestinationLong);
                     cmd.Parameters.AddWithValue("@Destination", trip.Destination);
@@ -379,7 +377,7 @@ namespace RockyConnectBackend.Data
                             result.TripInitiator = reader["TripInitiator"].ToString().Trim();
                             result.TripStatus = reader["TripStatus"].ToString().Trim();
                             result.TripDistance = Convert.ToInt32(reader["TripDistance"]);
-                            result.TripCost = Convert.ToInt32(reader["TripType"]);
+                            result.TripCost = Convert.ToInt32(reader["TripCost"]);
                             result.SourceLocation = reader["SourceLocation"].ToString().Trim();
                             result.SourceLatitude = reader["SourceLatitude"].ToString().Trim();
                             result.SourceLongitude = reader["SourceLongitude"].ToString().Trim();
@@ -439,8 +437,6 @@ namespace RockyConnectBackend.Data
                 using (SqlCommand cmd = new SqlCommand("SearchRiderTripList", connection))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@CustomerEmail", trip.CustomerEmail);
-                    cmd.Parameters.AddWithValue("@DriverEmail", trip.DriverEmail);
                     cmd.Parameters.AddWithValue("@DestinationLat", trip.DestinationLat);
                     cmd.Parameters.AddWithValue("@DestinationLong", trip.DestinationLong);
                     cmd.Parameters.AddWithValue("@Destination", trip.Destination);
@@ -459,7 +455,7 @@ namespace RockyConnectBackend.Data
                             result.TripInitiator = reader["TripInitiator"].ToString().Trim();
                             result.TripStatus = reader["TripStatus"].ToString().Trim();
                             result.TripDistance = Convert.ToInt32(reader["TripDistance"]);
-                            result.TripCost = Convert.ToInt32(reader["TripType"]);
+                            result.TripCost = Convert.ToInt32(reader["TripCost"]);
                             result.SourceLocation = reader["SourceLocation"].ToString().Trim();
                             result.SourceLatitude = reader["SourceLatitude"].ToString().Trim();
                             result.SourceLongitude = reader["SourceLongitude"].ToString().Trim();
