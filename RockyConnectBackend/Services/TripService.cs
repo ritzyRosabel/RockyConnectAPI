@@ -338,6 +338,28 @@ namespace RockyConnectBackend.Services
             }
             return status;
         }
+
+        internal static Response UpcomingTrips(string email)
+        {
+
+            var status = new Response();
+
+            List<Trip> result = TripData.UpcomingTrips(email);
+            if (result.Count > 0)
+            {
+
+                status.statusCode = "00";
+                status.status = "Successfully saved";
+                status.data = result;
+            }
+            else
+            {
+
+                status.statusCode = "01";
+                status.status = "Record not found";
+            }
+            return status;
+        }
     }
 }
 

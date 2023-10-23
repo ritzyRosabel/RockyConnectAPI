@@ -168,7 +168,7 @@ namespace RockyConnectBackend.Controllers
             }
         }
         [HttpPost]
-        [Route("CompletedTripsFor")]
+        [Route("CompletedTrips")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -178,6 +178,31 @@ namespace RockyConnectBackend.Controllers
             try
             {
                 Response response = TripService.CompletedTrip(email);
+                if (response.statusCode == "00")
+                {
+                    return Ok(response);
+                }
+                else
+                {
+                    return StatusCode(500, response);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+        [HttpPost]
+        [Route("UpcomingTrips")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult UpcomingTrips(string email)
+        {
+
+            try
+            {
+                Response response = TripService.UpcomingTrips(email);
                 if (response.statusCode == "00")
                 {
                     return Ok(response);
