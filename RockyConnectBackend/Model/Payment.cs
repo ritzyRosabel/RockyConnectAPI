@@ -38,6 +38,17 @@ namespace RockyConnectBackend.Model
         public DateTime Date_Updated { get; set; }
 
     }
+    public class PaymentCardRequest
+    {
+        public string? Email { get; set; }
+        public string? CardAlias { get; set; }
+        public string? CardType { get; set; }
+        public string? Pan { get; set; }
+        public string? Code { get; set; }
+        public string? FullName { get; set; }
+        public DateTime ExpiryDate { get; set; }
+
+    }
     public class SavedCardsRequest
     {
         public required string Email { get; set; }
@@ -55,8 +66,6 @@ namespace RockyConnectBackend.Model
         public required string Email { get; set; }
         public required string CardAlias { get; set; }
         public required string OldCardAlias { get; set; }
-        public DateTime Date_Created { get; set; }
-        public DateTime Date_Updated { get; set; }
 
     }
     public class Transaction

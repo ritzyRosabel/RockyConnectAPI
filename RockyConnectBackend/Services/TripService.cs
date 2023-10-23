@@ -28,6 +28,14 @@ namespace RockyConnectBackend.Services
                 SourceLongitude=trip.SourceLongitude,
                 PaymentID=string.Empty
             };
+
+            if (tripD.TripInitiator == "Driver")
+            {
+                tripD.CustomerEmail = null;
+            }else
+            {
+                tripD.DriverEmail = null;
+            }
             var status = new Response();
 
             string result = TripData.CreateTripData(tripD);
@@ -173,7 +181,7 @@ namespace RockyConnectBackend.Services
             Trip trip1 = TripData.SelectTripData(trip.ID);
             if (trip1.TripInitiator == "Driver")
             {
-                trip1.CustomerEmail = "";
+                trip1.CustomerEmail = null;
                 trip1.TripStatus = "Created";
 
             }
@@ -345,6 +353,48 @@ namespace RockyConnectBackend.Services
             var status = new Response();
 
             List<Trip> result = TripData.UpcomingTrips(email);
+            if (result.Count > 0)
+            {
+
+                status.statusCode = "00";
+                status.status = "Successfully saved";
+                status.data = result;
+            }
+            else
+            {
+
+                status.statusCode = "01";
+                status.status = "Record not found";
+            }
+            return status;
+        }
+
+        internal static Response AwaitingApproval(string email)
+        {
+            var status = new Response();
+
+            List<Trip> result = TripData.AwaitingApproval(email);
+            if (result.Count > 0)
+            {
+
+                status.statusCode = "00";
+                status.status = "Successfully saved";
+                status.data = result;
+            }
+            else
+            {
+
+                status.statusCode = "01";
+                status.status = "Record not found";
+            }
+            return status;
+        }
+
+        internal static Response ApprovedTrips(string email)
+        {
+            var status = new Response();
+
+            List<Trip> result = TripData.ApprovalList(email);
             if (result.Count > 0)
             {
 

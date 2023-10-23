@@ -19,7 +19,7 @@ namespace RockyConnectBackend.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult CreateCard([FromBody] PaymentCard customer)
+        public IActionResult CreateCard([FromBody] PaymentCardRequest customer)
         {
             if(customer.Email is not null)
             if (!UtilityService.IsValidEmail(customer.Email)|| customer.Pan.Length>16||customer.Pan.Length<16)
@@ -50,7 +50,7 @@ namespace RockyConnectBackend.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult SavedPaymentCard([FromBody] SavedCardsRequest customer)
+        public IActionResult SavedPaymentCard(SavedCardsRequest customer)
         {
 
             if (!UtilityService.IsValidEmail(customer.Email))
@@ -80,7 +80,7 @@ namespace RockyConnectBackend.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult GetPaymentCard([FromBody] SavedCardRequest customer)
+        public IActionResult GetPaymentCard( SavedCardRequest customer)
         {
             if (customer.Email is not null)
                 if (!UtilityService.IsValidEmail(customer.Email))

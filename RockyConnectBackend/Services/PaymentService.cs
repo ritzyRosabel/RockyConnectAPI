@@ -11,10 +11,20 @@ namespace RockyConnectBackend.Services
         {
         }
 
-        internal static Response CreateCard(PaymentCard customer)
+        internal static Response CreateCard(PaymentCardRequest customer)
         {
             var status = new Response();
-            string result = PaymentData.CreateCardData(customer);
+            PaymentCard card = new PaymentCard()
+            {
+                CardAlias = customer.CardAlias,
+                Pan = customer.Pan,
+                CardType = customer.CardType,
+                Code = customer.Code,
+                Email = customer.Email,
+                ExpiryDate = customer.ExpiryDate,
+                FullName = customer.FullName
+            };
+            string result = PaymentData.CreateCardData(card);
             if (result == "00")
             {
                 status.statusCode = "00";
@@ -37,7 +47,9 @@ namespace RockyConnectBackend.Services
             {
                 status.statusCode = "00";
                 status.status = "Successfull";
+                status.data = result;
             }
+
             else
             {
 
@@ -70,11 +82,12 @@ namespace RockyConnectBackend.Services
         {
             var card = new SavedCardRequest();
             card.Email = customer.Email;
-            card.CardAlias = customer.CardAlias;
+            card.CardAlias = customer.OldCardAlias;
             var status = new Response();
             PaymentCard result = PaymentData.SelectCardData(card);
             if (result.CardAlias is not null)
             {
+          
                 string result2 = PaymentData.UpdateCardData(customer);
                 if (result2 == "00")
                 {
@@ -128,7 +141,8 @@ namespace RockyConnectBackend.Services
         }
 
         internal static Response MakePayment(PaymentRequest card)
-        {                string result;
+        {
+            string result;
 
             var status = new Response();
             Payment pay = new Payment()

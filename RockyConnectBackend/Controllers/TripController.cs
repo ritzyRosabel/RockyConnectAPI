@@ -218,6 +218,56 @@ namespace RockyConnectBackend.Controllers
             }
         }
         [HttpPost]
+        [Route("DriverRequestedTripsAwaitingApproval")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult AwaitingApproval(string email)
+        {
+
+            try
+            {
+                Response response = TripService.AwaitingApproval(email);
+                if (response.statusCode == "00")
+                {
+                    return Ok(response);
+                }
+                else
+                {
+                    return StatusCode(500, response);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+        [HttpPost]
+        [Route("DriverApprovedTripList")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult ApprovedTrips(string email)
+        {
+
+            try
+            {
+                Response response = TripService.ApprovedTrips(email);
+                if (response.statusCode == "00")
+                {
+                    return Ok(response);
+                }
+                else
+                {
+                    return StatusCode(500, response);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+        [HttpPost]
         [Route("SearchTripForPassenger")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using Azure.Core.GeoJson;
 namespace RockyConnectBackend.Services
-{
+{   
 	public class UtilityService
 	{
 		public UtilityService()
