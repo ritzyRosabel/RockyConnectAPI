@@ -48,7 +48,7 @@ namespace RockyConnectBackend.Services
         internal static Response GetDriverTrips(TripSearch trip)
         {
             var status = new Response();
-            List<Trip> result = TripData.SelectRiderTripList(trip);
+            List<Trip> result = TripData.SelectDriverTripList(trip);
 
             if (result.Count >= 1)
             {
@@ -307,6 +307,28 @@ namespace RockyConnectBackend.Services
                 status.statusCode = "00";
                 status.status = "Successfully saved";
                 status.data = trip1;
+            }
+            else
+            {
+
+                status.statusCode = "01";
+                status.status = "Record not found";
+            }
+            return status;
+        }
+
+        internal static Response CompletedTrip(string email)
+        {
+
+            var status = new Response();
+
+            List<Trip> result = TripData.CompletedTrip(email);
+            if (result.Count >0)
+            {
+
+                status.statusCode = "00";
+                status.status = "Successfully saved";
+                status.data = result;
             }
             else
             {

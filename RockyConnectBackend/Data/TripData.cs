@@ -489,6 +489,82 @@ namespace RockyConnectBackend.Data
             }
             return res;
         }
+
+        internal static List<Trip> CompletedTrip(string email)
+        {
+
+
+            var result = new Trip();
+            var res = new List<Trip>();
+
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+
+            builder.DataSource = "rosabeldbserver.database.windows.net";
+            builder.UserID = "rosabelDB";
+            builder.Password = "Mololuwa@14";
+            builder.InitialCatalog = "RockyConnectDB";
+
+            SqlConnection connection = new SqlConnection(builder.ConnectionString);
+
+            Console.WriteLine("\nQuery data example:");
+            Console.WriteLine("=========================================\n");
+            connection.Open();
+            try
+            {
+
+
+                using (SqlCommand cmd = new SqlCommand("CompletedTrips", connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@Email", email);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+
+                        while (reader.Read())
+                        {
+
+                            //  result.UserID = int.Parse(reader["UserID"]);
+                            result.ID = reader["ID"].ToString().Trim();
+                            result.CustomerEmail = reader["CustomerEmail"].ToString().Trim();
+                            result.DriverEmail = reader["DriverEmail"].ToString().Trim();
+                            result.TripInitiator = reader["TripInitiator"].ToString().Trim();
+                            result.TripStatus = reader["TripStatus"].ToString().Trim();
+                            result.TripDistance = Convert.ToInt32(reader["TripDistance"]);
+                            result.TripCost = Convert.ToInt32(reader["TripCost"]);
+                            result.SourceLocation = reader["SourceLocation"].ToString().Trim();
+                            result.SourceLatitude = reader["SourceLatitude"].ToString().Trim();
+                            result.SourceLongitude = reader["SourceLongitude"].ToString().Trim();
+                            result.DestinationLat = reader["DestinationLat"].ToString().Trim();
+                            result.DestinationLong = reader["DestinationLong"].ToString().Trim();
+                            result.Destination = reader["Destination"].ToString().Trim();
+                            result.TripDate = Convert.ToDateTime(reader.GetDateTime("TripDate"));
+                            result.Date_Created = Convert.ToDateTime(reader.GetDateTime("DateCreated"));
+                            result.Date_Updated = Convert.ToDateTime(reader.GetDateTime("DateUpdated"));
+                            result.PaymentID = reader["PaymentID"].ToString().Trim();
+                            res.Add(result);
+
+                        }
+
+                    }
+                }
+
+
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+
+                }
+            }
+            return res;
+        }
     }
 }
 
