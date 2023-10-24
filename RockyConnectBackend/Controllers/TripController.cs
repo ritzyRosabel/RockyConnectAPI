@@ -36,6 +36,7 @@ namespace RockyConnectBackend.Controllers
 
 
         }
+
         [HttpPut]
         [Route("SendRequestforADriverTrip")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
@@ -376,7 +377,7 @@ namespace RockyConnectBackend.Controllers
         }
 
         [HttpDelete]
-        [Route("DeleteATrip")]
+        [Route("CancelATrip")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

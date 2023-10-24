@@ -212,10 +212,45 @@ namespace RockyConnectBackend.Services
             }
             return status;
         }
-        internal static Response DeleteTrip(TripRequest trip)
+        internal static Response DeleteTrip(TripRequest usertrip)
         {
             var status = new Response();
-            string result =   TripData.DeleteTripData(trip.ID);
+            Trip trip = TripData.SelectTripData(usertrip.ID);
+            if(trip.ID is not null)
+            {
+                if (trip.TripStatus == "Created")
+                {
+                    trip.TripStatus = "Cancelled";
+                }else if (trip.TripStatus == "Requested"&& trip.TripInitiator=="Driver")
+                {
+                    trip.TripStatus = "Cancelled";
+                    trip.CustomerEmail = null;
+
+                }else if(trip.TripStatus =="Approved" && trip.PaymentID is null) {
+                    trip.TripStatus = "Cancelled";
+                }
+                else if (trip.TripStatus == "Approved" && trip.PaymentID is not null)
+                {
+                    PaymentService.Refund(trip.PaymentID);
+
+                    trip.TripStatus = "Cancelled";
+                }
+                else if (trip.TripStatus == "Completed" || trip.TripStatus == "Enroute")
+                {
+                    status.status = "Trip Cannot be Cancelled";
+                    status.statusCode = "01";
+                    return status;
+                }
+                else
+                {
+                    status.status = "SOMETHING WENT WRONG";
+                    status.statusCode = "01";
+                    return status;
+                }
+
+            }
+            trip.Date_Updated = DateTime.Now;
+            string result =   TripData.UpdateTripData(trip.PaymentID,trip);
             if (result =="00")
             {
                
@@ -409,6 +444,11 @@ namespace RockyConnectBackend.Services
                 status.status = "Record not found";
             }
             return status;
+        }
+
+        internal static Response CancelATrip(CreateTripRequest customer)
+        {
+            throw new NotImplementedException();
         }
     }
 }

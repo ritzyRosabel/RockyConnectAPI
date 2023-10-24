@@ -430,9 +430,120 @@ namespace RockyConnectBackend.Data
         }
 
 
+        internal static string UpdatePayment(Payment pay)
+        {
+            //  var result = new User   ();
+            string result = "01";
+
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+
+            builder.DataSource = "rosabeldbserver.database.windows.net";
+            builder.UserID = "rosabelDB";
+            builder.Password = "Mololuwa@14";
+            builder.InitialCatalog = "RockyConnectDB";
+
+            SqlConnection connection = new SqlConnection(builder.ConnectionString);
+
+            Console.WriteLine("\nQuery data example:");
+            Console.WriteLine("=========================================\n");
+            int ret = 6;
+            connection.Open();
+            try
+            {
+                DateTime date = DateTime.Now;
+                DateTime defaultVerified = new DateTime(1900, 01, 01);
+                SqlCommand cmd = new SqlCommand($"update [dbo].[Payment] set [PaymentStatus]=@PaymentStatus, [RefundID] = @RefundID where ID=@ID", connection);
+                cmd.Parameters.AddWithValue("@ID", pay.ID);
+                cmd.Parameters.AddWithValue("@RefundID", pay.TripID);
+                cmd.Parameters.AddWithValue("@PaymentStatus", pay.PaymentStatus);
+
+                ret = cmd.ExecuteNonQuery();
+                if (ret == 1)
+                {
+                    result = "00";
+                }
+
+
+
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+
+                }
+            }
+
+            //Console.WriteLine("\nDone. Press enter.");
+            //Console.ReadLine();
+
+
+
+            return result;
+        }
         internal static string MakeRefund(Refund refund)
         {
-            throw new NotImplementedException();
+            string result = "01";
+
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+
+            builder.DataSource = "rosabeldbserver.database.windows.net";
+            builder.UserID = "rosabelDB";
+            builder.Password = "Mololuwa@14";
+            builder.InitialCatalog = "RockyConnectDB";
+
+            SqlConnection connection = new SqlConnection(builder.ConnectionString);
+
+            Console.WriteLine("\nQuery data example:");
+            Console.WriteLine("=========================================\n");
+            int ret = 6;
+            connection.Open();
+            try
+            {
+                DateTime date = DateTime.Now;
+                DateTime defaultVerified = new DateTime(1900, 01, 01);
+                SqlCommand cmd = new SqlCommand("CreateRefund", connection);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@ID", refund.ID);
+                cmd.Parameters.AddWithValue("@Bill", refund.Bill);
+                cmd.Parameters.AddWithValue("@PaymentMethod", refund.PaymentMethod);
+                cmd.Parameters.AddWithValue("@RefundStatus", refund.RefundStatus);
+                cmd.Parameters.AddWithValue("@PaymentID", refund.PaymentID);
+                cmd.Parameters.AddWithValue("@RefundDate", refund.RefundDate).Value = date;
+
+                ret = cmd.ExecuteNonQuery();
+                if (ret == -1)
+                {
+                    result = "00";
+                }
+
+
+
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+
+                }
+            }
+
+            //Console.WriteLine("\nDone. Press enter.");
+            //Console.ReadLine();
+
+
+
+            return result;
         }
     }
     }

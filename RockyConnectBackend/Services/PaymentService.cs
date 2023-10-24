@@ -19,7 +19,7 @@ namespace RockyConnectBackend.Services
                 CardAlias = customer.CardAlias,
                 Pan = customer.Pan,
                 CardType = customer.CardType,
-                Code = customer.Code,
+                Code = UtilityService.RandomOTPGenerator(),
                 Email = customer.Email,
                 ExpiryDate = customer.ExpiryDate,
                 FullName = customer.FullName
@@ -155,9 +155,9 @@ namespace RockyConnectBackend.Services
 
             };
 
-            if (card.CardAlias == string.Empty)
+            if (card.CardAlias is not null)
             {
-                pay.PaymentType = "Card";
+                pay.PaymentType = card.Card.CardType;
                 string pan = card.Card.Pan;
                 char[] panC = pan.ToCharArray();
                
@@ -188,7 +188,7 @@ namespace RockyConnectBackend.Services
                 var res = PaymentService.GetPaymentCard(savedCard);
                 if (res.data != null) {
 
-                    PaymentCard card1 = new PaymentCard();
+                    PaymentCard card1;
 
                     card1 = (PaymentCard)res.data;
                     string pan = card1.Pan;
@@ -197,7 +197,7 @@ namespace RockyConnectBackend.Services
                     if (panC[0] == 3 & panC[15] == 1)
                     {
                         pay.PaymentStatus = "Completed";
-                        result = PaymentData.MakePayment(pay);
+                        result =PaymentData.MakePayment(pay);
                         status.statusCode = "00";
                         status.status = "Payment Successfull";
                     }
@@ -214,34 +214,53 @@ namespace RockyConnectBackend.Services
             return status;
         }
 
-        internal static Response Refund(RefundRequest customer)
+        internal static Response Refund(string ID)
         {
 
             var status = new Response();
-            Refund refund = new Refund()
-            {
-                RefundStatus = "successful",
-                RefundDate = DateTime.Now,
-                Bill = customer.Bill,
-                Rider = customer.RidRentEmail,
-                Driver = customer.DrivOwnEmail,
-                paymentMethod = customer.RefundType,
-                TransactionID = customer.PaymentID
-
-
-            };
-            Payment result = PaymentData.GetPayment(customer.PaymentID);
+          
+            Payment result = PaymentData.GetPayment(ID);
             if (result.ID is not null){
+                Refund refund = new Refund()
+                {
+                    ID=UtilityService.RandomOTPGenerator(),
+                    RefundStatus = "Successful",
+                    Bill = result.Bill,
+                    PaymentMethod = result.PaymentType,
+                    PaymentID = result.ID
 
-                
-              string result2 = PaymentData.MakeRefund(refund);
+
+                };
+                string result2 = PaymentData.MakeRefund(refund);
+                if (result2 == "00")
+                {
+                    result.RefundID = refund.ID;
+                    string result3 = PaymentData.UpdatePayment(result);
+                    if (result3 == "00")
+                    {
+                        status.status = "Successful Refund";
+                        status.statusCode = "00";
+                    }
+                    else
+                    {
+                        status.status = "Successful Refund";
+                        status.statusCode = "00";
+                    }
+                }
+                else
+                {
+
+                    status.status = "Refund Failed";
+                    status.statusCode = "01";
+                }
 
             }
             else
             {
-
+                status.status = "Refund No record Exist";
+                status.statusCode = "01";
             }
-            throw new NotImplementedException();
+            return status;
         }
     }
 

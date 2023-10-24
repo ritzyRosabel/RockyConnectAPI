@@ -11,6 +11,7 @@ namespace RockyConnectBackend.Model
         public  string Bill { get; set; }
         public string? PaymentStatus { get; set; }
         public  string TripID { get; set; }
+        public string RefundID { get; set; }
         public DateTime PaymentDate { get; set; }
 
     }
@@ -18,7 +19,7 @@ namespace RockyConnectBackend.Model
     {
         public required string DrivOwnEmail { get; set; }
         public required string RidRentEmail { get; set; }
-        public PaymentCard? Card { get; set; }
+        public PaymentCardRequest? Card { get; set; }
         public required string Bill { get; set; }
         public string? CardAlias { get; set; }
         public required string TripID { get; set; }
@@ -44,7 +45,6 @@ namespace RockyConnectBackend.Model
         public string? CardAlias { get; set; }
         public string? CardType { get; set; }
         public string? Pan { get; set; }
-        public string? Code { get; set; }
         public string? FullName { get; set; }
         public DateTime ExpiryDate { get; set; }
 
@@ -68,42 +68,18 @@ namespace RockyConnectBackend.Model
         public required string OldCardAlias { get; set; }
 
     }
-    public class Transaction
-    {
-        public int ID { get; set; }
-        public User? Driver { get; set; }
-        public User? Rider { get; set; }
-        public required string bill { get; set; }
-        public required string tripID { get; set; }
-        public PaymentMethod paymentMethod { get; set; }
-        public DateTime PaymentDate { get; set; }
-        public required string PaymentStatus { get; set; }
-    }
-    public class RefundRequest
-    {
-        public PaymentMethod RefundType { get; set; }
-        public required string DrivOwnEmail { get; set; }
-        public required string RidRentEmail { get; set; }
-        public required string Bill { get; set; }
-        public required string PaymentID { get; set; }
-    }
+
 
     public class Refund
     {
-        public string? Driver { get; set; }
-        public string? Rider { get; set; }
-        public required string Bill { get; set; }
-        public PaymentMethod paymentMethod { get; set; }
+        public string? ID { get; set; }
+        public string? PaymentID { get; set; }
+        public string? Bill { get; set; }
+        public string PaymentMethod { get; set; }
         public DateTime RefundDate { get; set; }
         public required string RefundStatus { get; set; }
-        public required string TransactionID { get; set; }
     }
 
 
-    public enum PaymentMethod
-    {
-        card = 1,
-        cash = 2,
-
-    }
+    
 }
