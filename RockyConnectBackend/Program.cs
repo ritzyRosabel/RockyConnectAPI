@@ -7,6 +7,18 @@ builder.Services.AddCors(options => options.AddPolicy("AllowAll", builder => bui
                                                                                    .AllowAnyHeader()));
 
 
+//builder.Services.AddAuthentication(jwtbea)
+//    .AddJwtBearer(options => {
+
+//        options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+//        {
+//            ValidateIssuer = true,
+//            ValidateAudience = true,
+//            ValidateLifetime = true,
+//            ValidateIssuerSigningKey = true,
+////            validate
+//        };
+//    });
 // Add services to the container.
 
 builder.Services.AddControllers();

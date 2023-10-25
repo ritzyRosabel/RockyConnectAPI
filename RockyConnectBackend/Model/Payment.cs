@@ -15,14 +15,16 @@ namespace RockyConnectBackend.Model
         public DateTime PaymentDate { get; set; }
 
     }
+    /// <summary>This is Payment Endpoints</summary>
     public class PaymentRequest
     {
         public required string DrivOwnEmail { get; set; }
         public required string RidRentEmail { get; set; }
-        public PaymentCardRequest? Card { get; set; }
+        public PayCard? Card { get; set; }
         public required string Bill { get; set; }
         public string? CardAlias { get; set; }
         public required string TripID { get; set; }
+        public bool SavedCard { get; set; }
 
     }
 
@@ -39,6 +41,7 @@ namespace RockyConnectBackend.Model
         public DateTime Date_Updated { get; set; }
 
     }
+    /// <summary>This is Payment Endpoints</summary>
     public class PaymentCardRequest
     {
         public string? Email { get; set; }
@@ -48,6 +51,13 @@ namespace RockyConnectBackend.Model
         public string? FullName { get; set; }
         public DateTime ExpiryDate { get; set; }
 
+    }
+    public class PayCard
+    {
+        public string? CardType { get; set; }
+        public string? Pan { get; set; }
+        public string? FullName { get; set; }
+        public DateTime ExpiryDate { get; set; }
     }
     public class SavedCardsRequest
     {

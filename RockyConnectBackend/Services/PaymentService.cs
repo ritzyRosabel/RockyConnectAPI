@@ -155,7 +155,7 @@ namespace RockyConnectBackend.Services
 
             };
 
-            if (card.CardAlias is not null)
+            if (card.SavedCard && card.CardAlias is not null)
             {
                 pay.PaymentType = card.Card.CardType;
                 string pan = card.Card.Pan;
