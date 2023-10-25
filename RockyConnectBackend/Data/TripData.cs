@@ -353,7 +353,7 @@ namespace RockyConnectBackend.Data
             Console.WriteLine("=========================================\n");
             connection.Open();
             try
-            {
+            { 
 
 
                 using (SqlCommand cmd = new SqlCommand("SearchDriverTripList", connection))
