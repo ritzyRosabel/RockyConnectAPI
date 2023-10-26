@@ -26,9 +26,10 @@ namespace RockyConnectBackend.Model
         public string? ID { get; set; }
 
     }
-    public class TripsRequest
+    public class RateRequest
     {
         public string? Email { get; set; }
+        public int Rate { get; set; }
 
     }
     public class TripSearch
@@ -36,6 +37,7 @@ namespace RockyConnectBackend.Model
         public string? Destination { get; set; }
         public string? DestinationLong { get; set; }
         public string? DestinationLat { get; set; }
+        public string? TripInitiator { get; set; }
         public DateTime TripDate { get; set; }
     }
     public class TripDataInfo

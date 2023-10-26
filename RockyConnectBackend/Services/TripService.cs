@@ -91,25 +91,25 @@ namespace RockyConnectBackend.Services
             }
             return status;
         }
-        internal static Response GetTripHistory(TripsRequest trip)
-        {
-            var status = new Response();
-            List<Trip> result = TripData.SelectEmailTrips(trip.Email);
+        //internal static Response GetTripHistory(TripsRequest trip)
+        //{
+        //    var status = new Response();
+        //    List<Trip> result = TripData.SelectEmailTrips(trip.Email);
 
-            if (result.Count >= 1)
-            {
-                status.statusCode = "00";
-                status.status = "Successfull";
-                status.data = result;
-            }
-            else
-            {
+        //    if (result.Count >= 1)
+        //    {
+        //        status.statusCode = "00";
+        //        status.status = "Successfull";
+        //        status.data = result;
+        //    }
+        //    else
+        //    {
 
-                status.statusCode = "01";
-                status.status = "Record not found";
-            }
-            return status;
-        }
+        //        status.statusCode = "01";
+        //        status.status = "Record not found";
+        //    }
+        //    return status;
+        //}
         internal static Response GetTrip(string id)
         {
             var status = new Response();
@@ -238,7 +238,7 @@ namespace RockyConnectBackend.Services
                 else if (trip.TripStatus == "Completed" || trip.TripStatus == "Enroute")
                 {
                     status.status = "Trip Cannot be Cancelled";
-                    status.statusCode = "01";
+                    status.statusCode = "01";                               
                     return status;
                 }
                 else
@@ -446,9 +446,49 @@ namespace RockyConnectBackend.Services
             return status;
         }
 
-        internal static Response CancelATrip(CreateTripRequest customer)
+       
+        internal static Response RateTrip(RateRequest customer)
         {
-            throw new NotImplementedException();
+            var status = new Response();
+            Driver drive = UserData.GetDriver(customer.Email);
+                if (drive.Email is not null) {
+
+                int sum = (drive.Rating + customer.Rate)/2;
+                drive.Rating = sum;
+                string driver = UserData.RateDriver(drive);
+                if (driver == "00")
+                {
+
+                    status.statusCode = "00";
+                    status.status = "Successfully saved";
+                }
+                else
+                {
+
+                    status.statusCode = "01";
+                    status.status = "Failed to rate ";
+                }
+
+            }
+            else
+            {
+                Driver driver1 = new Driver {Email =customer.Email,Rating=customer.Rate };
+                
+                string driver = UserData.RateDriver(driver1);
+                if (driver == "00")
+                {
+
+                    status.statusCode = "00";
+                    status.status = "Successfully saved";
+                }
+                else
+                {
+
+                    status.statusCode = "01";
+                    status.status = "Failed to rate ";
+                }
+            }
+            return status;
         }
     }
 }

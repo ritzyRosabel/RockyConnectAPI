@@ -168,7 +168,7 @@ namespace RockyConnectBackend.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-        [HttpPost]
+        [HttpGet]
         [Route("CompletedTrips")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -193,7 +193,7 @@ namespace RockyConnectBackend.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-        [HttpPost]
+        [HttpGet]
         [Route("UpcomingTrips")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -218,7 +218,7 @@ namespace RockyConnectBackend.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-        [HttpPost]
+        [HttpGet]
         [Route("DriverRequestedTripsAwaitingApproval")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -243,7 +243,7 @@ namespace RockyConnectBackend.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-        [HttpPost]
+        [HttpGet]
         [Route("DriverApprovedTripList")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -294,35 +294,35 @@ namespace RockyConnectBackend.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("SelectTripHistory")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult TripHistory([FromBody] TripsRequest trip)
-        {
+        //[HttpGet]
+        //[Route("SelectTripHistory")]
+        //[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
+        //[ProducesResponseType(StatusCodes.Status404NotFound)]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //public IActionResult TripHistory([FromBody] TripsRequest trip)
+        //{
 
-            if (!UtilityService.IsValidEmail(trip.Email))
-            {
-                return BadRequest("email invalid");
-            }
-            try
-            {
-                Response response = TripService.GetTripHistory(trip);
-                if (response.statusCode == "00")
-                {
-                    return Ok(response);
-                }
-                else
-                {
-                    return StatusCode(500, response);
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-        }
+        //    if (!UtilityService.IsValidEmail(trip.Email))
+        //    {
+        //        return BadRequest("email invalid");
+        //    }
+        //    try
+        //    {
+        //        Response response = TripService.GetTripHistory(trip);
+        //        if (response.statusCode == "00")
+        //        {
+        //            return Ok(response);
+        //        }
+        //        else
+        //        {
+        //            return StatusCode(500, response);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, ex.Message);
+        //    }
+        //}
         [HttpPut]
         [Route("StartATrip")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
@@ -387,6 +387,31 @@ namespace RockyConnectBackend.Controllers
             try
             {
                 Response response = TripService.DeleteTrip(customer);
+                if (response.statusCode == "00")
+                {
+                    return Ok(response);
+                }
+                else
+                {
+                    return StatusCode(500, response);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+        [HttpDelete]
+        [Route("RateADriver")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult RateATrip([FromBody] RateRequest customer)
+        {
+
+            try
+            {
+                Response response = TripService.RateTrip(customer);
                 if (response.statusCode == "00")
                 {
                     return Ok(response);

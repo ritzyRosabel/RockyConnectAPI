@@ -53,6 +53,12 @@ namespace RockyConnectBackend.Model
         public string Email { get; set; }
 
     }
+    public class Driver
+    {
+        public string Email { get; set; }
+        public int Rating { get; set; }
+
+    }
     public class LoginUserRequest
     {
         public required string Email { get; set; }

@@ -400,7 +400,27 @@ namespace RockyConnectBackend.Controllers
             }
             return status;
         }
+        internal static Response GetDriver(string email)
+        {
+            var status = new Response();
 
-    
+            Driver result = UserData.GetDriver(email);
+            if (result.Email is not null)
+            {
+                status.statusCode = "00";
+                status.status = "Successfull";
+                status.data = result;
+            }
+            else
+            {
+
+                status.statusCode = "00";
+                status.status = "Successfull";
+                status.data = null;
+            }
+            return status;
+        }
+
+
     }
     }

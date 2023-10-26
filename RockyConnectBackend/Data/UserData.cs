@@ -509,6 +509,126 @@ namespace RockyConnectBackend.Data
             return result;
         }
 
+        internal static string RateDriver(Driver driver)
+        {
+            string result = "01";
+
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+
+            builder.DataSource = "rosabeldbserver.database.windows.net";
+            builder.UserID = "rosabelDB";
+            builder.Password = "Mololuwa@14";
+            builder.InitialCatalog = "RockyConnectDB";
+
+            SqlConnection connection = new SqlConnection(builder.ConnectionString);
+
+            Console.WriteLine("\nQuery data example:");
+            Console.WriteLine("=========================================\n");
+            int ret = 6;
+            connection.Open();
+            try
+            {
+                DateTime date = DateTime.Now;
+                DateTime defaultVerified = new DateTime(1900, 01, 01);
+
+                SqlCommand cmd = new SqlCommand($"dbo.RateDriver", connection);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@Email", driver.Email.ToLower());
+                cmd.Parameters.AddWithValue("@Rating", driver.Rating);
+                ret = cmd.ExecuteNonQuery();
+                if (ret == -1)
+                {
+                    result = "00";
+                }
+
+
+
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+
+                }
+            }
+
+            //Console.WriteLine("\nDone. Press enter.");
+            //Console.ReadLine();
+
+
+
+            return result;
+        }
+        internal static Driver GetDriver(string email)
+        {
+            var res = new Driver();
+
+
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+
+            builder.DataSource = "rosabeldbserver.database.windows.net";
+            builder.UserID = "rosabelDB";
+            builder.Password = "Mololuwa@14";
+            builder.InitialCatalog = "RockyConnectDB";
+
+            SqlConnection connection = new SqlConnection(builder.ConnectionString);
+
+            Console.WriteLine("\nQuery data example:");
+            Console.WriteLine("=========================================\n");
+
+            connection.Open();
+            try
+            {
+
+                using (SqlCommand command = new SqlCommand($"GetDriver", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.Parameters.AddWithValue("@Email", email);
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader is not null)
+                        {
+                            while (reader.Read())
+                            {
+                                res.Rating = (int)reader["ID"];
+                                res.Email = reader["Email"].ToString().Trim();
+
+                            }
+                        }
+
+                    }
+                }
+
+
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+
+                }
+            }
+
+            //Console.WriteLine("\nDone. Press enter.");
+            //Console.ReadLine();
+
+
+
+            return res;
+        }
+
         //internal static object UpdateLogin(User user)
         //{
         //    string result = "01";
