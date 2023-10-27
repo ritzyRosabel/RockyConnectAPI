@@ -49,7 +49,7 @@ namespace RockyConnectBackend.Controllers
         public static Response Create(UserRequest customer)
         {
             var response = new Response();
-            string result = string.Empty;
+            string result; 
             User user = new User
             {
                 FirstName = customer.FirstName,
@@ -60,17 +60,33 @@ namespace RockyConnectBackend.Controllers
                 Role = customer.Role,
                 IsAccountActive = true
             };
-            result = UserData.CreateCustomerData(user);
+            result = "00";// UserData.CreateCustomerData(user);
+            
             if (result == "00")
             {
+                if (user.Role == Role.driver)
+                {
+                    Driver driver = new Driver() { Email=user.Email,Rating=5} ;
+                    UserData.RateDriver(driver);
 
-                    SendOTP(user, "Email Verification");
+                }
+                else
+                {
+                    UserData.SaveRider(user.Email);
+
+
+                }
+                SendOTP(user, "Email Verification");
 
                     response.statusCode = "00";
                     response.status = "OTP sent to email";
 
               
 
+            }else if(result == "-2146232060")
+            {
+                response.statusCode = "01";
+                response.status = "Account with email already exist";
             }
             else
             {

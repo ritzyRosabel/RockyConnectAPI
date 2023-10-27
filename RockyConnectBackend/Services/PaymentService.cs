@@ -154,52 +154,25 @@ namespace RockyConnectBackend.Services
                 TripID = card.TripID,
 
             };
+            Trip resultTrip =TripData.SelectTripData(card.TripID);
 
-            if (card.SavedCard && card.CardAlias is not null)
+            if (resultTrip.PaymentID is null)
             {
-                pay.PaymentType = card.Card.CardType;
-                string pan = card.Card.Pan;
-                char[] panC = pan.ToCharArray();
-               
-                if (panC[0]==3 & panC[15] == 1)
+                if (card.SavedCard && card.CardAlias is not null)
                 {
-                    pay.PaymentStatus = "Completed";
-                     result = PaymentData.MakePayment(pay);
-                
-                        status.statusCode = "00";
-                        status.status = "Payment Successfull";
-                    
-                     
-                }
-                else
-                {
-
-                    status.statusCode = "01";
-                    status.status = "Payment Failure";
-                }
-            }
-            else
-            {
-                SavedCardRequest savedCard = new SavedCardRequest()
-                {
-                    Email = card.RidRentEmail,
-                    CardAlias = card.CardAlias
-                };
-                var res = PaymentService.GetPaymentCard(savedCard);
-                if (res.data != null) {
-
-                    PaymentCard card1;
-
-                    card1 = (PaymentCard)res.data;
-                    string pan = card1.Pan;
+                    pay.PaymentType = card.Card.CardType;
+                    string pan = card.Card.Pan;
                     char[] panC = pan.ToCharArray();
 
                     if (panC[0] == 3 & panC[15] == 1)
                     {
                         pay.PaymentStatus = "Completed";
-                        result =PaymentData.MakePayment(pay);
+                        result = PaymentData.MakePayment(pay);
+
                         status.statusCode = "00";
                         status.status = "Payment Successfull";
+
+
                     }
                     else
                     {
@@ -208,8 +181,45 @@ namespace RockyConnectBackend.Services
                         status.status = "Payment Failure";
                     }
                 }
+                else
+                {
+                    SavedCardRequest savedCard = new SavedCardRequest()
+                    {
+                        Email = card.RidRentEmail,
+                        CardAlias = card.CardAlias
+                    };
+                    var res = PaymentService.GetPaymentCard(savedCard);
+                    if (res.data != null)
+                    {
+
+                        PaymentCard card1;
+
+                        card1 = (PaymentCard)res.data;
+                        string pan = card1.Pan;
+                        char[] panC = pan.ToCharArray();
+
+                        if (panC[0] == 3 & panC[15] == 1)
+                        {
+                            pay.PaymentStatus = "Completed";
+                            result = PaymentData.MakePayment(pay);
+                            status.statusCode = "00";
+                            status.status = "Payment Successfull";
+                        }
+                        else
+                        {
+
+                            status.statusCode = "01";
+                            status.status = "Payment Failure";
+                        }
+                    }
 
 
+                }
+            }
+            else
+            {
+                status.statusCode = "00";
+                status.status = "Trip Paid Before, No debit made";
             }
             return status;
         }

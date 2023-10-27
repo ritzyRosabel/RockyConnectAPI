@@ -38,9 +38,9 @@ namespace RockyConnectBackend.Data
                 cmd.Parameters.AddWithValue("@SourceLocation", trip.SourceLocation);
                 cmd.Parameters.AddWithValue("@TripCost", trip.TripCost);
                 cmd.Parameters.AddWithValue("@TripStatus", trip.TripStatus);
-                cmd.Parameters.AddWithValue("@CustomerEmail", trip.CustomerEmail);
-                cmd.Parameters.AddWithValue("@DriverEmail", trip.DriverEmail);
-                cmd.Parameters.AddWithValue("@PaymentID", trip.PaymentID);
+                cmd.Parameters.AddWithValue("@CustomerEmail", trip.CustomerEmail?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@DriverEmail", trip.DriverEmail?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@PaymentID", (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@SourceLatitude", trip.SourceLatitude);
                 cmd.Parameters.AddWithValue("@SourceLongitude", trip.SourceLongitude);
                 cmd.Parameters.AddWithValue("@DestinationLat", trip.DestinationLat);

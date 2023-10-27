@@ -11,6 +11,6 @@ namespace RockyConnectBackend.Model
             public string? status { get; set; }
             public string? statusCode { get; set; }
             public Object? data { get; set; }
-        }
+    }
     
 }
