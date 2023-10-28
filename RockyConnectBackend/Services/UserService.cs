@@ -25,7 +25,7 @@ namespace RockyConnectBackend.Controllers
 
                     // Regex.Replace(result.UserName, @"\s+", "");
                     if (result.Password is not null)
-                        if (result.Password.Trim().ToLower() == cred.Password.ToLower())
+                        if (UtilityService.CompareHashKeys(cred.Password.ToLower(),result.Password))
                         {
                             result.Password = "";
                             status.statusCode = "00";
@@ -60,7 +60,10 @@ namespace RockyConnectBackend.Controllers
                 Role = customer.Role,
                 IsAccountActive = true
             };
-            result = "00";// UserData.CreateCustomerData(user);
+            
+            string pass = UtilityService.HashKeys(user.Password.ToLower());
+            user.Password = pass;
+            result = UserData.CreateCustomerData(user);
             
             if (result == "00")
             {

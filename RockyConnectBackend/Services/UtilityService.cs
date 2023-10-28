@@ -97,6 +97,20 @@ namespace RockyConnectBackend.Services
                 return Guid.NewGuid().ToString("N");
             
         }
+        internal static string HashKeys(string key)
+        {
+            byte[] salt;
+            string passwordHash = BCrypt.Net.BCrypt.EnhancedHashPassword(key, 13);
+
+             return passwordHash;
+
+        }
+        internal static bool CompareHashKeys(string key, string hashedKey)
+        {
+            bool isValid = BCrypt.Net.BCrypt.EnhancedVerify(key, hashedKey);
+            return isValid;
+
+        }  
       
 //private async void reverseGeocodeButton_Click(object sender, RoutedEventArgs e)
 //    {

@@ -34,8 +34,7 @@ namespace RockyConnectBackend.Data
                 SqlCommand cmd = new SqlCommand($"dbo.CreateCustomer", connection);
                 cmd.CommandType = CommandType.StoredProcedure;
 
-                cmd.Parameters.AddWithValue("@UserID", customer.UserID);
-                cmd.Parameters.AddWithValue("@Password", customer.Password.ToLower());
+                cmd.Parameters.AddWithValue("@Password", customer.Password);
                 cmd.Parameters.AddWithValue("@FirstName", customer.FirstName);
                 cmd.Parameters.AddWithValue("@Role", (int)customer.Role);
                 cmd.Parameters.AddWithValue("@LastName", customer.LastName);

@@ -39,6 +39,11 @@ namespace RockyConnectBackend.Controllers
             {
                 return BadRequest("phone number and email invalid");
             }
+            if (customer.FirstName==string.Empty || customer.LastName == string.Empty || customer.Password == string.Empty )
+            {
+                return BadRequest("Some required field empty.");
+
+            }
             try
             {
             Response response = UserService.Create(customer);
