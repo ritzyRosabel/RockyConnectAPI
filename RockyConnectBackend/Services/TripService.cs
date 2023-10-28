@@ -455,7 +455,7 @@ namespace RockyConnectBackend.Services
 
                 int sum = (drive.Rating + customer.Rate)/2;
                 drive.Rating = sum;
-                string driver = UserData.RateDriver(drive);
+                string driver = UserData.UpdateDriverRating(drive);
                 if (driver == "00")
                 {
 
