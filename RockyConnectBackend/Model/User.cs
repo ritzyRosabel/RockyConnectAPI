@@ -36,7 +36,6 @@ namespace RockyConnectBackend.Model
         public  string? FirstName { get; set; }
         public  string? LastName { get; set; }
         public  string ?PhoneNumber { get; set; }
-        public  string? Password { get; set; }
         public required string Email { get; set; }
     }
         public class LoginUser
@@ -73,6 +72,10 @@ namespace RockyConnectBackend.Model
     {
         public required string UserEmail { get; set; }
         public int? Otptype  { get; set; }
+    }    public class VerifyOTP
+    {
+        public required string Email { get; set; }
+        public string? Code  { get; set; }
     }
     public class PasswordResetRequest
     {

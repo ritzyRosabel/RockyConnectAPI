@@ -111,15 +111,15 @@ namespace RockyConnectBackend.Data
                         {
                             while (reader.Read())
                             {
-                              //  res.Year = reader["Year"].ToString().Trim();
-                               // res.UserID = Convert.ToInt32(reader.GetOrdinal("UserID"));
+                                //  res.Year = reader["Year"].ToString().Trim();(int)reader["ID"];
+                                res.Role = (Role)reader["Role"];
                                 res.FirstName = reader["FirstName"].ToString().Trim();
                                 res.LastName = reader["LastName"].ToString().Trim();
                                 res.Email = reader["Email"].ToString().Trim();
                                 res.PhoneNumber = reader["PhoneNumber"].ToString().Trim();
                                 res.Password = reader["Password"].ToString().Trim();
                                 // res.CompanyCertificate = reader["CompanyCertificate"].ToString().Trim();
-                                res.AccountVerified = Convert.ToInt32(reader.GetOrdinal("AccountVerified"));
+                                res.AccountVerified = (int)reader["AccountVerified"];
                                 res.Date_Created = Convert.ToDateTime(reader.GetDateTime("DateCreated"));
                                res.Date_Updated = Convert.ToDateTime(reader.GetDateTime("DateUpdated"));
                                 res.Date_Verified = Convert.ToDateTime(reader.GetDateTime("DateVerified"));
@@ -182,7 +182,7 @@ namespace RockyConnectBackend.Data
 
 
                 ret = cmd.ExecuteNonQuery();
-                if (ret == 1)
+                if (ret == -1)
                 {
                     result = "00";
                 }
@@ -366,14 +366,14 @@ namespace RockyConnectBackend.Data
             {
                 DateTime date = DateTime.Now;
 
-                SqlCommand cmd = new SqlCommand($"INSERT INTO [dbo].[OTPVerify] ([Email],[Code],[DateCreate],[Status]) VALUES (@Email,@Code,@DateCreate,@Status)", connection);
-
+                SqlCommand cmd = new SqlCommand("SaveOtp", connection);
+                cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@Email", email);
                 cmd.Parameters.AddWithValue("@Code", otp);
                 cmd.Parameters.AddWithValue("@DateCreate", date);
                 cmd.Parameters.AddWithValue("@Status", "Pending");
                 ret = cmd.ExecuteNonQuery();
-                if (ret == 1)
+                if (ret == -1)
                 {
                     result = "00";
                 }
@@ -475,13 +475,13 @@ namespace RockyConnectBackend.Data
             try
             {
                 DateTime date = DateTime.Now;
-                SqlCommand cmd = new SqlCommand($"Update [dbo].[Customer] set [IsAccountActive]=@IsAccountActive, [DateUpdated] =@Date_Updated where  [Email]='{user.Email}'", connection);
-                cmd.Parameters.AddWithValue("@IsAccountActive", user.IsAccountActive);
-                cmd.Parameters.AddWithValue("@Date_Updated", user.Date_Updated);
+                SqlCommand cmd = new SqlCommand("DeleteAccount", connection);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Email", user.Email);
 
 
                 ret = cmd.ExecuteNonQuery();
-                if (ret == 1)
+                if (ret == -1)
                 {
                     result = "00";
                 }

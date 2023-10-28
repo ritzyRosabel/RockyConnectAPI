@@ -128,7 +128,7 @@ namespace RockyConnectBackend.Controllers
             return send;
         }
 
-        internal static Response ValidateAccount(string email)
+        internal static Response ValidateAccount(string code, string email)
         {
             var response = new Response();
             string result = string.Empty;
@@ -137,39 +137,46 @@ namespace RockyConnectBackend.Controllers
             if (user.Email == string.Empty)
             {
                 response.statusCode = "01";
-                response.status = "request was  unsuccessful. User not found";
+                response.status = "request was unsuccessful. User not found";
                 return response;
             }
-
-            user.Email = email;
-            user.AccountVerified = 0;
-            user.Date_Verified = DateTime.Now;
-
-            result = UserData.VerifyAccount(user);
-            if (result == "00")
+            Response res = ValidateOTP(code, email);
+            if (res.statusCode == "00")
             {
-                string MessageBody = "<p> Hi, </p> <p> Your account has been successfully verified. No further action is needed from your end.</p>";
-                string send = UtilityService.SendEmail(MessageBody, user.Email, "Account Verification");
-                if (send == "00")
-                {
-                    response.status = "Account Successfully Verified";
-                    response.statusCode = "00";
+                user.Email = email;
+                user.AccountVerified = 0;
+                user.Date_Verified = DateTime.Now;
 
+                result = UserData.VerifyAccount(user);
+                if (result == "00")
+                {
+                    string MessageBody = "<p> Hi, </p> <p> Your account has been successfully verified. No further action is needed from your end.</p>";
+                    string send = UtilityService.SendEmail(MessageBody, user.Email, "Account Verification");
+                    if (send == "00")
+                    {
+                        response.status = "Account Successfully Verified";
+                        response.statusCode = "00";
+
+
+                    }
+                    else
+                    {
+                        response.status = "Account verification was successful, but email was unsuccessfully sent.";
+                        response.statusCode = "01";
+
+
+                    }
 
                 }
                 else
                 {
-                    response.status = "Account verification was successful, but email was unsuccessfully sent. ";
                     response.statusCode = "01";
-
-
+                    response.status = "request was unsuccessful";
                 }
-
             }
             else
             {
-                response.statusCode = "01";
-                response.status = "request was  unsuccessful";
+                return res;
             }
             return response;
         }
@@ -200,19 +207,18 @@ namespace RockyConnectBackend.Controllers
         {
             Response response = new Response();
             OTP result = UserData.GetUserOtp(code, email);
-            {
+            
                 if (result.ID != 0)
                 {
                     TimeSpan time = DateTime.Now - result.DateCreated;
-                    if (time.TotalMinutes >= 5)
+                    if (time.TotalMinutes >= 15)
                     {
                         result.Status = "Expired";
 
                         string result2 = UserData.UpdateOTP(result.Email, result.Code, result.Status);
-
                         response.statusCode = "01";
                         response.status = "Expired otp";
-                        response.data = result;
+                        response.data = null;
 
                     }
                     else
@@ -223,13 +229,13 @@ namespace RockyConnectBackend.Controllers
                         {
                             response.statusCode = "00";
                             response.status = "Verified otp";
-                            response.data = result;
+                            response.data = null;
                         }
                         else
                         {
-                            response.statusCode = "02";
+                            response.statusCode = "01";
                             response.status = "unable to verify otp try again";
-                            response.data = result;
+                            response.data = null;
                         }
                     }
 
@@ -237,12 +243,12 @@ namespace RockyConnectBackend.Controllers
                 else
                 {
                     response.statusCode = "01";
-                    response.status = "Invalid otp";
+                    response.status = "request was unsuccessful. User not found";
                     response.data = email;
                 }
 
 
-            }
+            
             return response;
         }
 
@@ -295,13 +301,10 @@ namespace RockyConnectBackend.Controllers
             if (user.Email == string.Empty)
             {
                 response.statusCode = "01";
-                response.status = "request was  unsuccessful. User not found";
+                response.status = "request was unsuccessful. User not found";
                 return response;
             }
 
-            user.Email = email;
-            user.IsAccountActive = false;
-            user.Date_Updated = DateTime.Now;
 
             result = UserData.DeleteAccount(user);
             if (result == "00")
@@ -317,7 +320,7 @@ namespace RockyConnectBackend.Controllers
                 }
                 else
                 {
-                    response.status = "Account Deletion was successful, but email was unsuccessfully sent. ";
+                    response.status = "Account Deletion was successful, but email was unsuccessfully sent.";
                     response.statusCode = "01";
 
 
@@ -327,7 +330,7 @@ namespace RockyConnectBackend.Controllers
             else
             {
                 response.statusCode = "01";
-                response.status = "request was  unsuccessful";
+                response.status = "request was unsuccessful.";
             }
             return response;
         }
@@ -355,7 +358,7 @@ namespace RockyConnectBackend.Controllers
                 else
                 {
                     response.statusCode = "01";
-                    response.status = "Profile update was  unsuccessful";
+                    response.status = "Profile update was unsuccessful";
                 }
             }
             else {
@@ -375,7 +378,9 @@ namespace RockyConnectBackend.Controllers
             User user = UserData.GetUserUsingEmail(request.Email);
             if (user.Email is not null)
             {
-                user.Password = request.Password;
+                string pass = UtilityService.HashKeys(request.Password.ToLower());
+                user.Password = pass;
+
 
                 result = UserData.UpdateData(user);
                 if (result == "00")
@@ -387,13 +392,13 @@ namespace RockyConnectBackend.Controllers
                 else
                 {
                     response.statusCode = "01";
-                    response.status = "Password Reset Failed was ";
+                    response.status = "Password Reset Failed";
                 }
             }
             else
             {
                 response.statusCode = "01";
-                response.status = "User account not found";
+                response.status = "request was unsuccessful. User not found";
             }
             return response;
 
@@ -413,8 +418,8 @@ namespace RockyConnectBackend.Controllers
             else
             {
 
-                status.statusCode = "00";
-                status.status = "Successfull";
+                status.statusCode = "01";
+                status.status = "No User Account with that email exist";
                 status.data = null;
             }
             return status;
@@ -440,6 +445,9 @@ namespace RockyConnectBackend.Controllers
             return status;
         }
 
-
+        internal static Response VerifyOtp(VerifyOTP request)
+        {
+            throw new NotImplementedException();
+        }
     }
     }

@@ -37,7 +37,7 @@ namespace RockyConnectBackend.Controllers
 
             if (!UtilityService.IsPhoneNbr(customer.PhoneNumber) && !UtilityService.IsValidEmail(customer.Email))
             {
-                return BadRequest("phone number and email invalid");
+                return BadRequest("phone number or email invalid");
             }
             if (customer.FirstName==string.Empty || customer.LastName == string.Empty || customer.Password == string.Empty )
             {
@@ -72,7 +72,7 @@ namespace RockyConnectBackend.Controllers
         {
             if (  !UtilityService.IsValidEmail(cred.Email))
             {
-                return BadRequest("phone number and email invalid");
+                return BadRequest("phone number or email invalid");
             }
             try
             {
@@ -129,7 +129,7 @@ namespace RockyConnectBackend.Controllers
 
             if (!UtilityService.IsValidEmail(cred.Email))
             {
-                return BadRequest("phone number and email invalid");
+                return BadRequest("phone number or email invalid");
             }
             if (cred.Code.Length > 6 || cred.Code.Length < 6)
             {
@@ -138,7 +138,7 @@ namespace RockyConnectBackend.Controllers
             }
             try
             {
-                Response response = UserService.ValidateOTP(cred.Code, cred.Email);
+                Response response = UserService.ValidateAccount(cred.Code, cred.Email);
                 if (response.statusCode == "00")
                 {
                     return Ok(response);
@@ -154,36 +154,7 @@ namespace RockyConnectBackend.Controllers
             }
 
         }
-        [HttpPost]
-        [Route("VerifyAccount")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult VerifyAccount([FromBody] Email email)
-        {
 
-            if (!UtilityService.IsValidEmail(email.UserEmail))
-            {
-                return BadRequest("phone number and email invalid");
-            }
-            try
-            {
-                Response response = UserService.ValidateAccount(email.UserEmail);
-                if (response.statusCode == "00")
-                {
-                    return Ok(response);
-                }
-                else
-                {
-                    return StatusCode(500, response);
-                }
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-
-        }
         [HttpGet]
         [Route("GetUserAccount")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
@@ -194,7 +165,7 @@ namespace RockyConnectBackend.Controllers
 
             if (!UtilityService.IsValidEmail(email))
             {
-                return BadRequest("phone number and email invalid");
+                return BadRequest("phone number or email invalid");
             }
             try
             {
@@ -224,7 +195,7 @@ namespace RockyConnectBackend.Controllers
 
             if (!UtilityService.IsValidEmail(request.Email))
             {
-                return BadRequest("phone number and email invalid");
+                return BadRequest("phone number or email invalid");
             }
 
             try
@@ -251,17 +222,17 @@ namespace RockyConnectBackend.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult DeleteAccount([FromBody] Email email)
+        public IActionResult DeleteAccount(string email)
         {
 
-            if (!UtilityService.IsValidEmail(email.UserEmail))
+            if (!UtilityService.IsValidEmail(email))
             {
-                return BadRequest("phone number and email invalid");
+                return BadRequest("phone number or email invalid");
             }
 
             try
             {
-                Response response = UserService.DeleteAccount(email.UserEmail);
+                Response response = UserService.DeleteAccount(email);
                 if (response.statusCode == "00")
                 {
                     return Ok(response);
@@ -287,6 +258,7 @@ namespace RockyConnectBackend.Controllers
         {
             try
             {
+                
                 Response response = UserService.ForgotPassword(request);
                 if (response.statusCode == "00")
                 {
@@ -303,6 +275,38 @@ namespace RockyConnectBackend.Controllers
             }
 
         }
+        [HttpPost]
+        [Route("VerifyOtp")]
+
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult VerifyOtp([FromBody] VerifyOTP request)
+        {
+            try
+            {
+                if (request.Code.Length > 6 || request.Code.Length < 6)
+                {
+                    return BadRequest("Verification code is a six digit number");
+
+                }
+                Response response = UserService.ValidateOTP(request.Code,request.Email);
+                if (response.statusCode == "00")
+                {
+                    return Ok(response);
+                }
+                else
+                {   
+                    return StatusCode(500, response);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+
+        }
+
         [HttpPost]
         [Route("ResetPassword")]
 
