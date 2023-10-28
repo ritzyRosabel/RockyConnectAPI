@@ -103,7 +103,7 @@ namespace RockyConnectBackend.Data
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@ID", trip.ID); 
                 cmd.Parameters.AddWithValue("@DriverEmail", trip.DriverEmail);
-                cmd.Parameters.AddWithValue("@CustomerEmail", trip.CustomerEmail);
+                cmd.Parameters.AddWithValue("@CustomerEmail", trip.CustomerEmail ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@TripStatus", trip.TripStatus);
                 cmd.Parameters.AddWithValue("@PaymentID", pay);
                 cmd.Parameters.AddWithValue("@DateUpdated", trip.Date_Updated);
