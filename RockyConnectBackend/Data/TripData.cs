@@ -105,7 +105,7 @@ namespace RockyConnectBackend.Data
                 cmd.Parameters.AddWithValue("@DriverEmail", trip.DriverEmail);
                 cmd.Parameters.AddWithValue("@CustomerEmail", trip.CustomerEmail ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@TripStatus", trip.TripStatus);
-                cmd.Parameters.AddWithValue("@PaymentID", pay);
+                cmd.Parameters.AddWithValue("@PaymentID", pay ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@DateUpdated", trip.Date_Updated);
 
                 ret = cmd.ExecuteNonQuery();
@@ -224,8 +224,9 @@ namespace RockyConnectBackend.Data
 
                             //  result.UserID = int.Parse(reader["UserID"]);
                             result.ID = reader["ID"].ToString().Trim();
-                            result.CustomerEmail = reader["CustomerEmail"].ToString().Trim();
-                            result.DriverEmail = reader["DriverEmail"].ToString().Trim();
+                            result.CustomerEmail = reader.IsDBNull("CustomerEmail") ? null: reader["CustomerEmail"].ToString().Trim();
+                            result.DriverEmail = reader.IsDBNull("DriverEmail") ? null: reader["DriverEmail"].ToString().Trim();
+                            result.PaymentID = reader.IsDBNull("PaymentID") ? null : reader["PaymentID"].ToString().Trim();
                             result.TripInitiator = reader["TripInitiator"].ToString().Trim();
                             result.TripStatus = reader["TripStatus"].ToString().Trim();
                             result.TripDistance = Convert.ToInt32(reader["TripDistance"]);
@@ -239,7 +240,6 @@ namespace RockyConnectBackend.Data
                             result.TripDate = Convert.ToDateTime(reader.GetDateTime("TripDate"));
                             result.Date_Created = Convert.ToDateTime(reader.GetDateTime("DateCreated"));
                             result.Date_Updated = Convert.ToDateTime(reader.GetDateTime("DateUpdated"));
-                            result.PaymentID = reader["PaymentID"].ToString().Trim();
 
                         }
 
@@ -295,8 +295,6 @@ namespace RockyConnectBackend.Data
                             var result = new Trip();
 
                             result.ID = reader["ID"].ToString().Trim();
-                            result.CustomerEmail = reader["CustomerEmail"].ToString().Trim();
-                            result.DriverEmail = reader["DriverEmail"].ToString().Trim();
                             result.TripInitiator = reader["TripInitiator"].ToString().Trim();
                             result.TripStatus = reader["TripStatus"].ToString().Trim();
                             result.TripDistance = Convert.ToInt32(reader["TripDistance"]);
@@ -310,8 +308,9 @@ namespace RockyConnectBackend.Data
                             result.TripDate = Convert.ToDateTime(reader.GetDateTime("TripDate"));
                             result.Date_Created = Convert.ToDateTime(reader.GetDateTime("DateCreated"));
                             result.Date_Updated = Convert.ToDateTime(reader.GetDateTime("DateUpdated"));
-                            result.PaymentID = reader["PaymentID"].ToString().Trim();
-                            res.Add(result);
+                            result.CustomerEmail = reader.IsDBNull("CustomerEmail") ? null : reader["CustomerEmail"].ToString().Trim();
+                            result.DriverEmail = reader.IsDBNull("DriverEmail") ? null : reader["DriverEmail"].ToString().Trim();
+                            result.PaymentID = reader.IsDBNull("PaymentID") ? null : reader["PaymentID"].ToString().Trim(); res.Add(result);
 
                         }
 
@@ -374,8 +373,6 @@ namespace RockyConnectBackend.Data
 
                             //  result.UserID = int.Parse(reader["UserID"]);
                             result.ID = reader["ID"].ToString().Trim();
-                            result.CustomerEmail = reader["CustomerEmail"].ToString().Trim();
-                            result.DriverEmail = reader["DriverEmail"].ToString().Trim();
                             result.TripInitiator = reader["TripInitiator"].ToString().Trim();
                             result.TripStatus = reader["TripStatus"].ToString().Trim();
                             result.TripDistance = Convert.ToInt32(reader["TripDistance"]);
@@ -389,8 +386,9 @@ namespace RockyConnectBackend.Data
                             result.TripDate = Convert.ToDateTime(reader.GetDateTime("TripDate"));
                             result.Date_Created = Convert.ToDateTime(reader.GetDateTime("DateCreated"));
                             result.Date_Updated = Convert.ToDateTime(reader.GetDateTime("DateUpdated"));
-                            result.PaymentID = reader["PaymentID"].ToString().Trim();
-                            res.Add(result);
+                            result.CustomerEmail = reader.IsDBNull("CustomerEmail") ? null : reader["CustomerEmail"].ToString().Trim();
+                            result.DriverEmail = reader.IsDBNull("DriverEmail") ? null : reader["DriverEmail"].ToString().Trim();
+                            result.PaymentID = reader.IsDBNull("PaymentID") ? null : reader["PaymentID"].ToString().Trim(); res.Add(result);
 
                         }
 
@@ -452,8 +450,6 @@ namespace RockyConnectBackend.Data
 
                             //  result.UserID = int.Parse(reader["UserID"]);
                             result.ID = reader["ID"].ToString().Trim();
-                            result.CustomerEmail = reader["CustomerEmail"].ToString().Trim();
-                            result.DriverEmail = reader["DriverEmail"].ToString().Trim();
                             result.TripInitiator = reader["TripInitiator"].ToString().Trim();
                             result.TripStatus = reader["TripStatus"].ToString().Trim();
                             result.TripDistance = Convert.ToInt32(reader["TripDistance"]);
@@ -467,8 +463,9 @@ namespace RockyConnectBackend.Data
                             result.TripDate = Convert.ToDateTime(reader.GetDateTime("TripDate"));
                             result.Date_Created = Convert.ToDateTime(reader.GetDateTime("DateCreated"));
                             result.Date_Updated = Convert.ToDateTime(reader.GetDateTime("DateUpdated"));
-                            result.PaymentID = reader["PaymentID"].ToString().Trim();
-                            res.Add(result);
+                            result.CustomerEmail = reader.IsDBNull("CustomerEmail") ? null : reader["CustomerEmail"].ToString().Trim();
+                            result.DriverEmail = reader.IsDBNull("DriverEmail") ? null : reader["DriverEmail"].ToString().Trim();
+                            result.PaymentID = reader.IsDBNull("PaymentID") ? null : reader["PaymentID"].ToString().Trim(); res.Add(result);
 
                         }
 
@@ -528,8 +525,6 @@ namespace RockyConnectBackend.Data
 
                             //  result.UserID = int.Parse(reader["UserID"]);
                             result.ID = reader["ID"].ToString().Trim();
-                            result.CustomerEmail = reader["CustomerEmail"].ToString().Trim();
-                            result.DriverEmail = reader["DriverEmail"].ToString().Trim();
                             result.TripInitiator = reader["TripInitiator"].ToString().Trim();
                             result.TripStatus = reader["TripStatus"].ToString().Trim();
                             result.TripDistance = Convert.ToInt32(reader["TripDistance"]);
@@ -543,8 +538,9 @@ namespace RockyConnectBackend.Data
                             result.TripDate = Convert.ToDateTime(reader.GetDateTime("TripDate"));
                             result.Date_Created = Convert.ToDateTime(reader.GetDateTime("DateCreated"));
                             result.Date_Updated = Convert.ToDateTime(reader.GetDateTime("DateUpdated"));
-                            result.PaymentID = reader["PaymentID"].ToString().Trim();
-                            res.Add(result);
+                            result.CustomerEmail = reader.IsDBNull("CustomerEmail") ? null : reader["CustomerEmail"].ToString().Trim();
+                            result.DriverEmail = reader.IsDBNull("DriverEmail") ? null : reader["DriverEmail"].ToString().Trim();
+                            result.PaymentID = reader.IsDBNull("PaymentID") ? null : reader["PaymentID"].ToString().Trim(); res.Add(result);
 
                         }
 
@@ -607,8 +603,6 @@ namespace RockyConnectBackend.Data
 
                             //  result.UserID = int.Parse(reader["UserID"]);
                             result.ID = reader["ID"].ToString().Trim();
-                            result.CustomerEmail = reader["CustomerEmail"].ToString().Trim();
-                            result.DriverEmail = reader["DriverEmail"].ToString().Trim();
                             result.TripInitiator = reader["TripInitiator"].ToString().Trim();
                             result.TripStatus = reader["TripStatus"].ToString().Trim();
                             result.TripDistance = Convert.ToInt32(reader["TripDistance"]);
@@ -622,8 +616,9 @@ namespace RockyConnectBackend.Data
                             result.TripDate = Convert.ToDateTime(reader.GetDateTime("TripDate"));
                             result.Date_Created = Convert.ToDateTime(reader.GetDateTime("DateCreated"));
                             result.Date_Updated = Convert.ToDateTime(reader.GetDateTime("DateUpdated"));
-                            result.PaymentID = reader["PaymentID"].ToString().Trim();
-                            res.Add(result);
+                            result.CustomerEmail = reader.IsDBNull("CustomerEmail") ? null : reader["CustomerEmail"].ToString().Trim();
+                            result.DriverEmail = reader.IsDBNull("DriverEmail") ? null : reader["DriverEmail"].ToString().Trim();
+                            result.PaymentID = reader.IsDBNull("PaymentID") ? null : reader["PaymentID"].ToString().Trim(); res.Add(result);
 
                         }
 
@@ -684,8 +679,6 @@ namespace RockyConnectBackend.Data
 
                             //  result.UserID = int.Parse(reader["UserID"]);
                             result.ID = reader["ID"].ToString().Trim();
-                            result.CustomerEmail = reader["CustomerEmail"].ToString().Trim();
-                            result.DriverEmail = reader["DriverEmail"].ToString().Trim();
                             result.TripInitiator = reader["TripInitiator"].ToString().Trim();
                             result.TripStatus = reader["TripStatus"].ToString().Trim();
                             result.TripDistance = Convert.ToInt32(reader["TripDistance"]);
@@ -699,8 +692,9 @@ namespace RockyConnectBackend.Data
                             result.TripDate = Convert.ToDateTime(reader.GetDateTime("TripDate"));
                             result.Date_Created = Convert.ToDateTime(reader.GetDateTime("DateCreated"));
                             result.Date_Updated = Convert.ToDateTime(reader.GetDateTime("DateUpdated"));
-                            result.PaymentID = reader["PaymentID"].ToString().Trim();
-                            res.Add(result);
+                            result.CustomerEmail = reader.IsDBNull("CustomerEmail") ? null : reader["CustomerEmail"].ToString().Trim();
+                            result.DriverEmail = reader.IsDBNull("DriverEmail") ? null : reader["DriverEmail"].ToString().Trim();
+                            result.PaymentID = reader.IsDBNull("PaymentID") ? null : reader["PaymentID"].ToString().Trim(); res.Add(result);
 
                         }
 
@@ -761,8 +755,6 @@ namespace RockyConnectBackend.Data
 
                             //  result.UserID = int.Parse(reader["UserID"]);
                             result.ID = reader["ID"].ToString().Trim();
-                            result.CustomerEmail = reader["CustomerEmail"].ToString().Trim();
-                            result.DriverEmail = reader["DriverEmail"].ToString().Trim();
                             result.TripInitiator = reader["TripInitiator"].ToString().Trim();
                             result.TripStatus = reader["TripStatus"].ToString().Trim();
                             result.TripDistance = Convert.ToInt32(reader["TripDistance"]);
@@ -776,8 +768,9 @@ namespace RockyConnectBackend.Data
                             result.TripDate = Convert.ToDateTime(reader.GetDateTime("TripDate"));
                             result.Date_Created = Convert.ToDateTime(reader.GetDateTime("DateCreated"));
                             result.Date_Updated = Convert.ToDateTime(reader.GetDateTime("DateUpdated"));
-                            result.PaymentID = reader["PaymentID"].ToString().Trim();
-                            res.Add(result);
+                            result.CustomerEmail = reader.IsDBNull("CustomerEmail") ? null : reader["CustomerEmail"].ToString().Trim();
+                            result.DriverEmail = reader.IsDBNull("DriverEmail") ? null : reader["DriverEmail"].ToString().Trim();
+                            result.PaymentID = reader.IsDBNull("PaymentID") ? null : reader["PaymentID"].ToString().Trim(); res.Add(result);
 
                         }
 

@@ -44,9 +44,13 @@ namespace RockyConnectBackend.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult RequestDriverforATrip([FromBody] TripDataInfo trip)
         {
-
+            if (trip.CustomerEmail.ToLower() == trip.DriverEmail.ToLower())
+            {
+                return BadRequest("A Rockyconnect profile cannot be a Customer and Driver on same trip ");
+            }
             try
             {
+                
                 Response response = TripService.DriverRequestTrip(trip);
                 if (response.statusCode == "00")
                 {
@@ -70,7 +74,10 @@ namespace RockyConnectBackend.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult ApproveUserforATrip([FromBody] TripDataInfo trip)
         {
-
+            if (trip.CustomerEmail.ToLower() == trip.DriverEmail.ToLower())
+            {
+                return BadRequest("A Rockyconnect profile cannot be a Customer and Driver on same trip ");
+            }
             try
             {
                 Response response = TripService.ApproveRiderTrip(trip);
