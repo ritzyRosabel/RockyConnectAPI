@@ -35,7 +35,7 @@ namespace RockyConnectBackend.Services
             {
 
                 status.statusCode = "01";
-                status.status = "Failed to add Card";
+                status.status = "Failed to add Car";
             }
             return status;
         }
@@ -54,7 +54,7 @@ namespace RockyConnectBackend.Services
             {
 
                 status.statusCode = "01";
-                status.status = "No card saved with this name on this account";
+                status.status = "No car is tied to this account";
             }
             return status;
         }
@@ -93,7 +93,7 @@ namespace RockyConnectBackend.Services
             {
 
                 status.statusCode = "01";
-                status.status = "No Card exist with that Alias on this account";
+                status.status = "No Car is tied to this account";
             }
             return status;
         }

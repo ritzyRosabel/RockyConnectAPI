@@ -18,7 +18,6 @@ namespace RockyConnectBackend.Model
     }
     public class CarRequest
     {
-        public string ID { get; set; }
         public string Email { get; set; }
         public string CarMake { get; set; }
         public string CarModel { get; set; }
