@@ -30,6 +30,7 @@ namespace RockyConnectBackend.Services
                 SourceLongitude=trip.SourceLongitude,
                 PaymentID=null,
                 TotalTime = trip.TotalTime,
+                DestinationState = trip.DestinationState,
                 CancelReason = null
               
             };
