@@ -12,6 +12,7 @@ namespace RockyConnectBackend.Model
         public string? SourceLatitude { get; set; }
         public string? DestinationLong { get; set; }
         public string? DestinationLat { get; set; }
+        public string? DestinationState { get; set; }
         public int TripDistance { get; set; }
         public int TripCost { get; set; }
         public string? TripInitiator { get; set; }
@@ -43,7 +44,7 @@ namespace RockyConnectBackend.Model
     }
     public class TripSearch
     { 
-        public string? Destination { get; set; }
+        public string? DestinationState { get; set; }
         public string? DestinationLong { get; set; }
         public string? DestinationLat { get; set; }
         public string? TripInitiator { get; set; }
@@ -68,10 +69,12 @@ namespace RockyConnectBackend.Model
         public string? Destination { get; set; }
         public string? DestinationLong { get; set; }
         public string? DestinationLat { get; set; }
+        public string? DestinationState { get; set; }
         public int TripDistance { get; set; }
         public double TotalTime { get; set; }
         public string? TripInitiator { get; set; }
         public DateTime TripDate { get; set; }
+
 
     }
 }

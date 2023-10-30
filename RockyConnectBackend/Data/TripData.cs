@@ -47,6 +47,7 @@ namespace RockyConnectBackend.Data
                 cmd.Parameters.AddWithValue("@DestinationLat", trip.DestinationLat);
                 cmd.Parameters.AddWithValue("@DestinationLong", trip.DestinationLong);
                 cmd.Parameters.AddWithValue("@Destination", trip.Destination);
+                cmd.Parameters.AddWithValue("@DestinationState", trip.DestinationState);
                 cmd.Parameters.AddWithValue("@TripDate", trip.TripDate);
                 cmd.Parameters.AddWithValue("@TotalTime", trip.TotalTime);
                 cmd.Parameters.AddWithValue("@DateCreated", date);
@@ -367,7 +368,7 @@ namespace RockyConnectBackend.Data
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@DestinationLat", trip.DestinationLat);
                     cmd.Parameters.AddWithValue("@DestinationLong", trip.DestinationLong);
-                    cmd.Parameters.AddWithValue("@Destination", trip.Destination);
+                    cmd.Parameters.AddWithValue("@DestinationState", trip.DestinationState);
                     cmd.Parameters.AddWithValue("@TripDate", trip.TripDate);
 
                     using (SqlDataReader reader = cmd.ExecuteReader())
@@ -447,7 +448,7 @@ namespace RockyConnectBackend.Data
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@DestinationLat", trip.DestinationLat);
                     cmd.Parameters.AddWithValue("@DestinationLong", trip.DestinationLong);
-                    cmd.Parameters.AddWithValue("@Destination", trip.Destination);
+                    cmd.Parameters.AddWithValue("@DestinationState", trip.DestinationState);
                     cmd.Parameters.AddWithValue("@TripDate", trip.TripDate);
 
                     using (SqlDataReader reader = cmd.ExecuteReader())

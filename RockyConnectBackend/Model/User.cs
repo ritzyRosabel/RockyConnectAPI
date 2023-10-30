@@ -1,7 +1,8 @@
 ﻿using System;
 namespace RockyConnectBackend.Model
 {
-	public class User
+   
+    public class User
 	{
         public  string? FirstName { get; set; }
         public  string? LastName { get; set; }
@@ -18,6 +19,12 @@ namespace RockyConnectBackend.Model
         // public DateTime Date_Created { get; set; }
         //public DateTime Date_Updated { get; set; }
     }
+    public class AppUser
+    {
+        public string AppID { get; set; }
+        public string AppSecret { get; set; }
+    }
+
     public class UserRequest
     {
         public required string FirstName { get; set; }

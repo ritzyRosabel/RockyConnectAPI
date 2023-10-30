@@ -344,6 +344,72 @@ namespace RockyConnectBackend.Data
             return res;
         }
 
+
+        internal static AppUser GetAppUser(string appID,string secret)
+        {
+            var res = new AppUser();
+
+
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+
+            builder.DataSource = "rosabeldbserver.database.windows.net";
+            builder.UserID = "rosabelDB";
+            builder.Password = "Mololuwa@14";
+            builder.InitialCatalog = "RockyConnectDB";
+
+            SqlConnection connection = new SqlConnection(builder.ConnectionString);
+
+            Console.WriteLine("\nQuery data example:");
+            Console.WriteLine("=========================================\n");
+
+            connection.Open();
+            try
+            {
+
+                using (SqlCommand command = new SqlCommand($"AppUSer", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+
+                    command.Parameters.AddWithValue("@AppID", appID);
+                    command.Parameters.AddWithValue("@AppSecret", secret);
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader is not null)
+                        {
+                            while (reader.Read())
+                            {
+                                 res.AppID= reader["AppID"].ToString().Trim();
+                                res.AppSecret = reader["AppSecret"].ToString().Trim();
+                               
+                           }
+                        }
+
+                    }
+                }
+
+
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+
+                }
+            }
+
+            //Console.WriteLine("\nDone. Press enter.");
+            //Console.ReadLine();
+
+
+
+            return res;
+        }
+
         internal static string SaveOTP(object email, object otp)
         {
             //  var result = new User   ();
