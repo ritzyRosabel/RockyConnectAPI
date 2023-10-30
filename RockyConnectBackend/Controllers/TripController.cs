@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RockyConnectBackend.Model;
 using RockyConnectBackend.Services;
@@ -10,6 +11,7 @@ using RockyConnectBackend.Services;
 
 namespace RockyConnectBackend.Controllers
 {
+   // [Authorize]
     [Route("/")]
     public class TripController : Controller
     {

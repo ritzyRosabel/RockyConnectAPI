@@ -14,11 +14,10 @@ namespace RockyConnectBackend.Controllers
         public IConfiguration _configuration;
         //  private readonly DatabaseContext _context;
 
-        //public TokenController(IConfiguration config, DatabaseContext context)
-        //{
-        //    _configuration = config;
-        //    _context = context;
-        //}
+        public TokenController(IConfiguration config)
+        {
+            _configuration = config;
+        }
 
         [HttpPost]
         public async Task<IActionResult> Post(AppUser use)
@@ -32,11 +31,11 @@ namespace RockyConnectBackend.Controllers
                 {
                     //create claims details based on the user information
                     var claims = new[] {
-                        new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
-                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                        new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-                        new Claim("AppID", user.AppID),
-                        new Claim("AppSecret", user.AppSecret)
+                      new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
+                      new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                      new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
+                      new Claim("AppID", user.AppID),
+                      new Claim("AppSecret", user.AppSecret)
                     };
 
                     var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
@@ -45,7 +44,7 @@ namespace RockyConnectBackend.Controllers
                         _configuration["Jwt:Issuer"],
                         _configuration["Jwt:Audience"],
                         claims,
-                        expires: DateTime.UtcNow.AddMinutes(10),
+                        expires: DateTime.UtcNow.AddMinutes(120),
                         signingCredentials: signIn);
 
                     return Ok(new JwtSecurityTokenHandler().WriteToken(token));

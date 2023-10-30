@@ -1,5 +1,6 @@
 ﻿//using Azure;
 using Azure.Core;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RockyConnectBackend.Model;
 using RockyConnectBackend.Services;
@@ -8,6 +9,7 @@ using RockyConnectBackend.Services;
 
 namespace RockyConnectBackend.Controllers
 {
+   // [Authorize]
     [Route("/")]
     public class UserAccountController : Controller
     {
