@@ -17,10 +17,19 @@ namespace RockyConnectBackend.Model
         public string? TripInitiator { get; set; }
         public string? PaymentID { get; set; }
         public string? TripStatus { get; set; }
+        public string? CancelReason { get; set; }
+        public double TotalTime { get; set; }
         public DateTime TripDate { get; set; }
         public DateTime Date_Created { get; set; }
         public DateTime Date_Updated { get; set; }
     }
+    public class CancelRequest
+    {
+        public string? ID { get; set; }
+        public string? ReasonForCancel { get; set; }
+
+    }
+
     public class TripRequest
     {
         public string? ID { get; set; }
@@ -46,6 +55,8 @@ namespace RockyConnectBackend.Model
         public string? ID { get; set; }
         public string? CustomerEmail { get; set; }
         public string? DriverEmail { get; set; }
+        public string? CancelReason { get; set; }
+
     }
     public class CreateTripRequest
     {
@@ -58,6 +69,7 @@ namespace RockyConnectBackend.Model
         public string? DestinationLong { get; set; }
         public string? DestinationLat { get; set; }
         public int TripDistance { get; set; }
+        public double TotalTime { get; set; }
         public string? TripInitiator { get; set; }
         public DateTime TripDate { get; set; }
 

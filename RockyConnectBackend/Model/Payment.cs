@@ -8,7 +8,7 @@ namespace RockyConnectBackend.Model
         public  string DriOwnEmail { get; set; }
         public  string RidRentEmail { get; set; }
         public string? PaymentType { get; set; }
-        public  string Bill { get; set; }
+        public  int Bill { get; set; }
         public string? PaymentStatus { get; set; }
         public  string TripID { get; set; }
         public string RefundID { get; set; }
@@ -21,7 +21,7 @@ namespace RockyConnectBackend.Model
         public required string DrivOwnEmail { get; set; }
         public required string RidRentEmail { get; set; }
         public PayCard? Card { get; set; }
-        public required string Bill { get; set; }
+        public required int Bill { get; set; }
         public string? CardAlias { get; set; }
         public required string TripID { get; set; }
         public bool SavedCard { get; set; }
@@ -84,7 +84,7 @@ namespace RockyConnectBackend.Model
     {
         public string? ID { get; set; }
         public string? PaymentID { get; set; }
-        public string? Bill { get; set; }
+        public int? Bill { get; set; }
         public string PaymentMethod { get; set; }
         public DateTime RefundDate { get; set; }
         public required string RefundStatus { get; set; }

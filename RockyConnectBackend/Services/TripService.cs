@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.NetworkInformation;
 using RockyConnectBackend.Controllers;
 using RockyConnectBackend.Data;
 using RockyConnectBackend.Model;
@@ -27,7 +28,10 @@ namespace RockyConnectBackend.Services
                 TripDate=trip.TripDate,
                 TripDistance = trip.TripDistance,
                 SourceLongitude=trip.SourceLongitude,
-                PaymentID=null
+                PaymentID=null,
+                TotalTime = trip.TotalTime,
+                CancelReason = null
+              
             };
 
             if (tripD.TripInitiator == "Driver")
@@ -43,14 +47,14 @@ namespace RockyConnectBackend.Services
             if (result == "00")
             {
                 status.statusCode = "00";
-                status.status = "Successfull";
+                status.status = "Successfully Created";
                 status.data = tripD;
             }
             else
             {
 
                 status.statusCode = "01";
-                status.status = "UnSuccessfull";
+                status.status = "Failed to Create";
             }
             return status;
         }
@@ -68,8 +72,8 @@ namespace RockyConnectBackend.Services
             else
             {
 
-                status.statusCode = "01";
-                status.status = "Record not found";
+                status.statusCode = "00";
+                status.status = "No trip available for your chosen field. Modify trip details or create a new trip";
             }
             return status;
         }
@@ -88,7 +92,7 @@ namespace RockyConnectBackend.Services
             {
 
                 status.statusCode = "01";
-                status.status = "Record not found";
+                status.status = "No trip available for your chosen field. Modify trip details or create a new trip";
             }
             return status;
         }
@@ -212,32 +216,26 @@ namespace RockyConnectBackend.Services
             {
 
                 status.statusCode = "01";
-                status.status = "unsuccessful update on trip, try again ";
+                status.status = "unsuccessful update on trip, try again";
             }
             return status;
         }
-        internal static Response DeleteTrip(TripRequest usertrip)
+        internal static Response DeleteTrip(CancelRequest usertrip)
         {
             var status = new Response();
             Trip trip = TripData.SelectTripData(usertrip.ID);
             if(trip.ID is not null)
             {
-                if (trip.TripStatus == "Created")
+                if (trip.TripStatus == "Cancelled")
                 {
-                    trip.TripStatus = "Cancelled";
-                }else if (trip.TripStatus == "Requested"&& trip.TripInitiator=="Driver")
-                {
-                    trip.TripStatus = "Cancelled";
-                    trip.CustomerEmail = null;
-
-                }else if(trip.TripStatus =="Approved" && trip.PaymentID is null) {
-                    trip.TripStatus = "Cancelled";
+                    status.status = "Trip already Cancelled";
+                    status.statusCode = "00";
+                    return status;
                 }
                 else if (trip.TripStatus == "Approved" && trip.PaymentID is not null)
                 {
                     PaymentService.Refund(trip.PaymentID);
 
-                    trip.TripStatus = "Cancelled";
                 }
                 else if (trip.TripStatus == "Completed" || trip.TripStatus == "Enroute")
                 {
@@ -245,83 +243,109 @@ namespace RockyConnectBackend.Services
                     status.statusCode = "01";                               
                     return status;
                 }
-                else
-                {
-                    status.status = "SOMETHING WENT WRONG";
-                    status.statusCode = "01";
-                    return status;
-                }
+                trip.TripStatus = "Cancelled";
 
             }
+            else {
+                status.statusCode = "01";
+                status.status = "Trip does't exist";
+                return status;
+            }
+
+            trip.CancelReason = usertrip.ReasonForCancel;
             trip.Date_Updated = DateTime.Now;
             string result =   TripData.UpdateTripData(trip.PaymentID,trip);
             if (result =="00")
             {
                
                     status.statusCode = "00";
-                status.status = "Successfully deleted";
+                status.status = "Successfully Cancelled";
             }
             else
             {
 
                 status.statusCode = "01";
-                status.status = "Record not found";
+                status.status = "Trip does't exist";
             }
             return status;
         }
 
         internal static Response StartTrip(TripRequest trip)
-        {
+        {   var status = new Response();
 
             Trip trip1 = TripData.SelectTripData(trip.ID);
+            if (trip1.TripStatus == "Approved" && trip1.PaymentID is not null)
+            {
 
                 trip1.TripStatus = "Enroute";
 
-            
-            trip1.Date_Updated = DateTime.Now;
 
-            var status = new Response();
-            string result = TripData.UpdateTripData(trip1.PaymentID, trip1);
-            if (result == "00")
-            {
+                trip1.Date_Updated = DateTime.Now;
 
-                status.statusCode = "00";
-                status.status = "Successfully saved";
+             
+                string result = TripData.UpdateTripData(trip1.PaymentID, trip1);
+                if (result == "00")
+                {
 
+                    User user = UserData.GetUserUsingEmail(trip1.CustomerEmail);
+                    string message = $"Hi {user.FirstName}, Your trip with ID = {trip1.ID} just started, More info available on the app.";
+                    UtilityService.SendEmail(message, trip1.CustomerEmail, "RockyConnect Trip Update");
+
+                    status.statusCode = "00";
+                    status.status = "You started a Trip";
+
+                }
+                else
+                {
+
+                    status.statusCode = "01";
+                    status.status = " Failed to start the trip";
+                }
             }
             else
             {
-
                 status.statusCode = "01";
-                status.status = "Record not found";
+                status.status = "Trip has to be approved and paid for before started";
             }
             return status;
         }
 
         internal static Response EndTrip(TripRequest trip)
         {
+                           var status = new Response();
             Trip trip1 = TripData.SelectTripData(trip.ID);
-
-            trip1.TripStatus = "Completed";
-
-
-            trip1.Date_Updated = DateTime.Now;
-
-            var status = new Response();
-            string result = TripData.UpdateTripData(trip1.PaymentID, trip1);
-            if (result == "00")
+            if (trip1.TripStatus != "Enroute" && trip1.PaymentID is  null)
             {
 
-                status.statusCode = "00";
-                status.status = "Successfully saved";
+                trip1.TripStatus = "Completed";
 
+
+                trip1.Date_Updated = DateTime.Now;
+
+                string result = TripData.UpdateTripData(trip1.PaymentID, trip1);
+                if (result == "00")
+                {
+                    User user = UserData.GetUserUsingEmail(trip1.CustomerEmail);
+                    string message = $"Hi {user.FirstName},Your trip with ID = {trip1.ID} just ended, Login and give your driver a rating" ;
+                    UtilityService.SendEmail(message, trip1.CustomerEmail, "RockyConnect Trip Update");
+
+
+                    status.statusCode = "00";
+                    status.status = "You ended a trip";
+
+                }
+                else
+                {
+
+                    status.statusCode = "01";
+                    status.status = " Failed to stop the trip";
+                }
             }
-            else
-            {
-
+            else {
                 status.statusCode = "01";
-                status.status = "Record not found";
+                status.status = "Only Trip started can be stopped";
             }
+
             return status;
         }
 
@@ -346,7 +370,7 @@ namespace RockyConnectBackend.Services
             else
             {
                 status.statusCode = "01";
-                status.status = "No available trip is exist with this record, trying requesting another";
+                status.status = "No available trip exist with this record, try requesting another";
 
             }
 
@@ -376,7 +400,7 @@ namespace RockyConnectBackend.Services
             else
             {
                 status.statusCode = "01";
-                status.status = "No available trip is exist with this record, trying requesting another";
+                status.status = "No available trip exist with this record, try to request another";
             }
             return status;
         }
@@ -391,14 +415,14 @@ namespace RockyConnectBackend.Services
             {
 
                 status.statusCode = "00";
-                status.status = "Successfully saved";
+                status.status = "Successfully fetched";
                 status.data = result;
             }
             else
             {
 
-                status.statusCode = "01";
-                status.status = "Record not found";
+                status.statusCode = "00";
+                status.status = "No completed trip for this user";
             }
             return status;
         }
@@ -413,14 +437,14 @@ namespace RockyConnectBackend.Services
             {
 
                 status.statusCode = "00";
-                status.status = "Successfully saved";
+                status.status = "Successfully fetched";
                 status.data = result;
             }
             else
             {
 
-                status.statusCode = "01";
-                status.status = "Record not found";
+                status.statusCode = "00";
+                status.status = "No upcoming trip for this user";
             }
             return status;
         }
@@ -434,14 +458,14 @@ namespace RockyConnectBackend.Services
             {
 
                 status.statusCode = "00";
-                status.status = "Successfully saved";
+                status.status = "Successfully fetched";
                 status.data = result;
             }
             else
             {
 
-                status.statusCode = "01";
-                status.status = "Record not found";
+                status.statusCode = "00";
+                status.status = "No trip awaiting approval for this user";
             }
             return status;
         }
@@ -455,14 +479,14 @@ namespace RockyConnectBackend.Services
             {
 
                 status.statusCode = "00";
-                status.status = "Successfully saved";
+                status.status = "Successfully fetched";
                 status.data = result;
             }
             else
             {
 
                 status.statusCode = "01";
-                status.status = "Record not found";
+                status.status = "No approved trip for this user";
             }
             return status;
         }
@@ -471,6 +495,21 @@ namespace RockyConnectBackend.Services
         internal static Response RateTrip(RateRequest customer)
         {
             var status = new Response();
+            User user = UserData.GetUserUsingEmail(customer.Email);
+            if (user.Email is null)
+            {
+
+                status.statusCode = "01";
+                status.status = "Failed to rate, Driver not found";
+                return status;
+            }
+            if (user.Role != Role.driver)
+            {
+
+                status.statusCode = "01";
+                status.status = "Failed to rate, User is not a driver";
+                return status;
+            }
             Driver drive = UserData.GetDriver(customer.Email);
                 if (drive.Email is not null) {
 
@@ -494,19 +533,19 @@ namespace RockyConnectBackend.Services
             else
             {
                 Driver driver1 = new Driver {Email =customer.Email,Rating=customer.Rate };
-                
+            
                 string driver = UserData.RateDriver(driver1);
                 if (driver == "00")
                 {
 
                     status.statusCode = "00";
-                    status.status = "Successfully saved";
+                    status.status = "Thank you for your Rating";
                 }
                 else
                 {
 
                     status.statusCode = "01";
-                    status.status = "Failed to rate ";
+                    status.status = "Failed to rate";
                 }
             }
             return status;

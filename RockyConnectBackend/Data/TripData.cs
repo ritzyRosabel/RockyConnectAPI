@@ -41,12 +41,14 @@ namespace RockyConnectBackend.Data
                 cmd.Parameters.AddWithValue("@CustomerEmail", trip.CustomerEmail?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@DriverEmail", trip.DriverEmail?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@PaymentID", (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@CancelReason", (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@SourceLatitude", trip.SourceLatitude);
                 cmd.Parameters.AddWithValue("@SourceLongitude", trip.SourceLongitude);
                 cmd.Parameters.AddWithValue("@DestinationLat", trip.DestinationLat);
                 cmd.Parameters.AddWithValue("@DestinationLong", trip.DestinationLong);
                 cmd.Parameters.AddWithValue("@Destination", trip.Destination);
                 cmd.Parameters.AddWithValue("@TripDate", trip.TripDate);
+                cmd.Parameters.AddWithValue("@TotalTime", trip.TotalTime);
                 cmd.Parameters.AddWithValue("@DateCreated", date);
                 cmd.Parameters.AddWithValue("@DateUpdated", date);
 
@@ -106,6 +108,7 @@ namespace RockyConnectBackend.Data
                 cmd.Parameters.AddWithValue("@CustomerEmail", trip.CustomerEmail ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@TripStatus", trip.TripStatus);
                 cmd.Parameters.AddWithValue("@PaymentID", pay ?? (object)DBNull.Value);
+                cmd.Parameters.AddWithValue("@CancelReason", trip.CancelReason ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@DateUpdated", trip.Date_Updated);
 
                 ret = cmd.ExecuteNonQuery();
@@ -237,6 +240,8 @@ namespace RockyConnectBackend.Data
                             result.DestinationLat = reader["DestinationLat"].ToString().Trim();
                             result.DestinationLong = reader["DestinationLong"].ToString().Trim();
                             result.Destination = reader["Destination"].ToString().Trim();
+                            result.TotalTime = (double) reader["TotalTime"];
+                            result.CancelReason = reader["CancelReason"].ToString().Trim();
                             result.TripDate = Convert.ToDateTime(reader.GetDateTime("TripDate"));
                             result.Date_Created = Convert.ToDateTime(reader.GetDateTime("DateCreated"));
                             result.Date_Updated = Convert.ToDateTime(reader.GetDateTime("DateUpdated"));
@@ -311,6 +316,8 @@ namespace RockyConnectBackend.Data
                             result.CustomerEmail = reader.IsDBNull("CustomerEmail") ? null : reader["CustomerEmail"].ToString().Trim();
                             result.DriverEmail = reader.IsDBNull("DriverEmail") ? null : reader["DriverEmail"].ToString().Trim();
                             result.PaymentID = reader.IsDBNull("PaymentID") ? null : reader["PaymentID"].ToString().Trim(); res.Add(result);
+                            result.TotalTime = (double)reader["TotalTime"];
+                            result.CancelReason = reader["CancelReason"].ToString().Trim();
 
                         }
 
@@ -389,6 +396,8 @@ namespace RockyConnectBackend.Data
                             result.CustomerEmail = reader.IsDBNull("CustomerEmail") ? null : reader["CustomerEmail"].ToString().Trim();
                             result.DriverEmail = reader.IsDBNull("DriverEmail") ? null : reader["DriverEmail"].ToString().Trim();
                             result.PaymentID = reader.IsDBNull("PaymentID") ? null : reader["PaymentID"].ToString().Trim(); res.Add(result);
+                            result.TotalTime = (double)reader["TotalTime"];
+                            result.CancelReason = reader["CancelReason"].ToString().Trim();
 
                         }
 
@@ -466,6 +475,8 @@ namespace RockyConnectBackend.Data
                             result.CustomerEmail = reader.IsDBNull("CustomerEmail") ? null : reader["CustomerEmail"].ToString().Trim();
                             result.DriverEmail = reader.IsDBNull("DriverEmail") ? null : reader["DriverEmail"].ToString().Trim();
                             result.PaymentID = reader.IsDBNull("PaymentID") ? null : reader["PaymentID"].ToString().Trim(); res.Add(result);
+                            result.TotalTime = (double)reader["TotalTime"];
+                            result.CancelReason = reader["CancelReason"].ToString().Trim();
 
                         }
 
@@ -541,6 +552,8 @@ namespace RockyConnectBackend.Data
                             result.CustomerEmail = reader.IsDBNull("CustomerEmail") ? null : reader["CustomerEmail"].ToString().Trim();
                             result.DriverEmail = reader.IsDBNull("DriverEmail") ? null : reader["DriverEmail"].ToString().Trim();
                             result.PaymentID = reader.IsDBNull("PaymentID") ? null : reader["PaymentID"].ToString().Trim(); res.Add(result);
+                            result.TotalTime = (double)reader["TotalTime"];
+                            result.CancelReason = reader["CancelReason"].ToString().Trim();
 
                         }
 
@@ -619,6 +632,8 @@ namespace RockyConnectBackend.Data
                             result.CustomerEmail = reader.IsDBNull("CustomerEmail") ? null : reader["CustomerEmail"].ToString().Trim();
                             result.DriverEmail = reader.IsDBNull("DriverEmail") ? null : reader["DriverEmail"].ToString().Trim();
                             result.PaymentID = reader.IsDBNull("PaymentID") ? null : reader["PaymentID"].ToString().Trim(); res.Add(result);
+                            result.TotalTime = (double)reader["TotalTime"];
+                            result.CancelReason = reader["CancelReason"].ToString().Trim();
 
                         }
 
@@ -695,6 +710,8 @@ namespace RockyConnectBackend.Data
                             result.CustomerEmail = reader.IsDBNull("CustomerEmail") ? null : reader["CustomerEmail"].ToString().Trim();
                             result.DriverEmail = reader.IsDBNull("DriverEmail") ? null : reader["DriverEmail"].ToString().Trim();
                             result.PaymentID = reader.IsDBNull("PaymentID") ? null : reader["PaymentID"].ToString().Trim(); res.Add(result);
+                            result.TotalTime = (double)reader["TotalTime"];
+                            result.CancelReason = reader["CancelReason"].ToString().Trim();
 
                         }
 
@@ -771,6 +788,8 @@ namespace RockyConnectBackend.Data
                             result.CustomerEmail = reader.IsDBNull("CustomerEmail") ? null : reader["CustomerEmail"].ToString().Trim();
                             result.DriverEmail = reader.IsDBNull("DriverEmail") ? null : reader["DriverEmail"].ToString().Trim();
                             result.PaymentID = reader.IsDBNull("PaymentID") ? null : reader["PaymentID"].ToString().Trim(); res.Add(result);
+                            result.TotalTime = (double)reader["TotalTime"];
+                            result.CancelReason = reader["CancelReason"].ToString().Trim();
 
                         }
 

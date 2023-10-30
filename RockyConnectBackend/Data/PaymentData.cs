@@ -147,11 +147,14 @@ namespace RockyConnectBackend.Data
                 {
                     DateTime date = DateTime.Now;
                     DateTime defaultVerified = new DateTime(1900, 01, 01);
-                    SqlCommand cmd = new SqlCommand($"Delete * from [dbo].[CRockyconnect] Where  Email ={card.Email} and CardAlias ={card.CardAlias}", connection);
-
-
+                    SqlCommand cmd = new SqlCommand("DeleteCard", connection);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@CardAlias", card.CardAlias);
+                cmd.Parameters.AddWithValue("@Email", card.Email);
+                
                     ret = cmd.ExecuteNonQuery();
-                    if (ret == 1)
+                    if (ret == -1)
                     {
                         result = "00";
                     }
@@ -401,7 +404,7 @@ namespace RockyConnectBackend.Data
 
                              result.ID = reader["ID"].ToString().Trim();
                             result.RidRentEmail = reader["RidRentEmail"].ToString().Trim();
-                            result.Bill = reader["Bill"].ToString().Trim();
+                            result.Bill = (int)reader["Bill"];
                             result.DriOwnEmail = reader["DriOwnEmail"].ToString().Trim();
                             result.PaymentType = reader["PaymentType"].ToString().Trim();
                             result.PaymentStatus = reader["PaymentStatus"].ToString().Trim();

@@ -28,13 +28,13 @@ namespace RockyConnectBackend.Services
             if (result == "00")
             {
                 status.statusCode = "00";
-                status.status = "Successfull";
+                status.status = "Successfully Added";
             }
             else
             {
 
                 status.statusCode = "01";
-                status.status = "UnSuccessfull";
+                status.status = "Failed to add Card";
             }
             return status;
         }
@@ -54,7 +54,7 @@ namespace RockyConnectBackend.Services
             {
 
                 status.statusCode = "01";
-                status.status = "Record not found";
+                status.status = "No card saved in this account";
             }
             return status;
         }
@@ -72,7 +72,7 @@ namespace RockyConnectBackend.Services
             {
 
                 status.statusCode = "01";
-                status.status = "Record not found";
+                status.status = "No card saved with this name on this account";
             }
             return status;
         }
@@ -105,7 +105,7 @@ namespace RockyConnectBackend.Services
             {
 
                 status.statusCode = "01";
-                status.status = "Record not found";
+                status.status = "No Card exist with that Alias on this account";
             }
             return status;
         }
@@ -128,47 +128,55 @@ namespace RockyConnectBackend.Services
                 {
 
                     status.statusCode = "01";
-                    status.status = "UnSuccessfully deleted";
+                    status.status = "Failed to delete Card, Try again";
                 }
             }
             else
             {
 
                 status.statusCode = "01";
-                status.status = "Record not found";
+                status.status = "No Card exist with that Alias on this account";
             }
             return status;
         }
 
         internal static Response MakePayment(PaymentRequest card)
-        {
+        {    var status = new Response();
+
             string result;
-
-            var status = new Response();
-            Payment pay = new Payment()
-            {
-                ID = UtilityService.UniqueIDGenerator(),
-                DriOwnEmail = card.DrivOwnEmail,
-                RidRentEmail = card.RidRentEmail,
-                Bill = card.Bill,
-                TripID = card.TripID,
-
-            };
             Trip resultTrip =TripData.SelectTripData(card.TripID);
+              if (resultTrip.PaymentID is null)
+                {
+                if (resultTrip.TripCost != card.Bill)
+                {
+                    status.statusCode = "01";
+                    status.status = "Payment Failure, Please pay exact amount on your bill";
+                    return status;
+                }
+                    Payment pay = new Payment()
+                    {
+                        ID = UtilityService.UniqueIDGenerator(),
+                        DriOwnEmail = card.DrivOwnEmail,
+                        RidRentEmail = card.RidRentEmail,
+                        Bill = card.Bill,
+                        TripID = card.TripID,
 
-            if (resultTrip.PaymentID is null)
-            {
-                if (card.SavedCard && card.CardAlias is not null)
+                    };
+
+          
+                if (!card.SavedCard)
                 {
                     pay.PaymentType = card.Card.CardType;
                     string pan = card.Card.Pan;
-                    char[] panC = pan.ToCharArray();
-
-                    if (panC[0] == 3 & panC[15] == 1)
+                    string f = pan[0].ToString();
+                    string l = pan[15].ToString();
+                    //string[] panC = pan.Split().Split();
+                    if (f == "3" && l== "1")
                     {
                         pay.PaymentStatus = "Completed";
                         result = PaymentData.MakePayment(pay);
-
+                        resultTrip.PaymentID = pay.ID;
+                        TripData.UpdateTripData(pay.ID, resultTrip);
                         status.statusCode = "00";
                         status.status = "Payment Successfull";
 
@@ -178,7 +186,7 @@ namespace RockyConnectBackend.Services
                     {
 
                         status.statusCode = "01";
-                        status.status = "Payment Failure";
+                        status.status = "Invalid Card Details";
                     }
                 }
                 else
@@ -196,20 +204,23 @@ namespace RockyConnectBackend.Services
 
                         card1 = (PaymentCard)res.data;
                         string pan = card1.Pan;
-                        char[] panC = pan.ToCharArray();
-
-                        if (panC[0] == 3 & panC[15] == 1)
+                        string f = pan[0].ToString();
+                        string l = pan[15].ToString();
+                        //string[] panC = pan.Split().Split();
+                        if (f == "3" && l == "1")
                         {
                             pay.PaymentStatus = "Completed";
                             result = PaymentData.MakePayment(pay);
+                            resultTrip.PaymentID = pay.ID;
+                            TripData.UpdateTripData(pay.ID, resultTrip);
                             status.statusCode = "00";
-                            status.status = "Payment Successfull";
+                            status.status = "Payment Successful";
                         }
                         else
                         {
 
                             status.statusCode = "01";
-                            status.status = "Payment Failure";
+                            status.status = "Invalid Card Details";
                         }
                     }
 
@@ -219,7 +230,7 @@ namespace RockyConnectBackend.Services
             else
             {
                 status.statusCode = "00";
-                status.status = "Trip Paid Before, No debit made";
+                status.status = "Trip is already Paid.";
             }
             return status;
         }

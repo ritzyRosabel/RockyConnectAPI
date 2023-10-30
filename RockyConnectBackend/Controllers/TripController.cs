@@ -103,7 +103,10 @@ namespace RockyConnectBackend.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult DeclineUserforATrip([FromBody] TripDataInfo trip)
         {
-
+            if (trip.CustomerEmail.ToLower() == trip.DriverEmail.ToLower())
+            {
+                return BadRequest("A Rockyconnect profile cannot be a Customer and Driver on same trip.");
+            }
             try
             {
                 Response response = TripService.DeclineRiderTrip(trip);
@@ -388,7 +391,7 @@ namespace RockyConnectBackend.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult DeleteTrip([FromBody] TripRequest customer)
+        public IActionResult DeleteTrip([FromBody] CancelRequest customer)
         {
 
             try

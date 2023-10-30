@@ -22,8 +22,7 @@ namespace RockyConnectBackend.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult CreateCard([FromBody]PaymentCardRequest customer)
         {
-            if(customer.Email is not null)
-            if (!UtilityService.IsValidEmail(customer.Email)|| customer.Pan.Length>16||customer.Pan.Length<16)
+            if (!UtilityService.IsValidEmail(customer.Email)|| customer.Pan.Length!=16)
             {
                 return BadRequest("email invalid");
             }
@@ -174,13 +173,23 @@ namespace RockyConnectBackend.Controllers
         public IActionResult MakePayment([FromBody] PaymentRequest card)
         {
 
-            if (!!UtilityService.IsValidEmail(card.DrivOwnEmail) && !UtilityService.IsValidEmail(card.RidRentEmail))
+            if (!UtilityService.IsValidEmail(card.DrivOwnEmail) || !UtilityService.IsValidEmail(card.RidRentEmail))
             {
                 return BadRequest("phone number and email invalid");
             }
+            if ( card.Card.Pan =="string" || card.Card.Pan.Length != 16)
+            {
+                return BadRequest("incorrect card details, Please try again");
+            }
             Response response = PaymentService.MakePayment(card);
-            return Ok(response);
-
+            if (response.statusCode == "00")
+            {
+                return Ok(response);
+            }
+            else
+            {
+                return StatusCode(500, response);
+            }
         }
 
        
