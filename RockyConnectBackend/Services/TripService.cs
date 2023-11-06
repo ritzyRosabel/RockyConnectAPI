@@ -62,10 +62,11 @@ namespace RockyConnectBackend.Services
         internal static Response GetDriverTrips(TripSearch trip)
         {
             var status = new Response();
-            List<Trip> result = TripData.SelectDriverTripList(trip);
+            List<SuperTrip> result = TripData.SelectDriverTripList(trip);
 
             if (result.Count >= 1)
             {
+               
                 status.statusCode = "00";
                 status.status = "Successfull";
                 status.data = result;
@@ -81,7 +82,7 @@ namespace RockyConnectBackend.Services
         internal static Response GetRiderTrips(TripSearch trip)
         {
             var status = new Response();
-            List<Trip> result = TripData.SelectRiderTripList(trip);
+            List<SuperTrip> result = TripData.SelectRiderTripList(trip);
 
             if (result.Count >= 1)
             {
@@ -411,7 +412,7 @@ namespace RockyConnectBackend.Services
 
             var status = new Response();
 
-            List<Trip> result = TripData.CompletedTrip(email);
+            List<SuperTrip> result = TripData.CompletedTrip(email);
             if (result.Count >0)
             {
 
@@ -433,7 +434,7 @@ namespace RockyConnectBackend.Services
 
             var status = new Response();
 
-            List<Trip> result = TripData.UpcomingTrips(email);
+            List<SuperTrip> result = TripData.UpcomingTrips(email);
             if (result.Count > 0)
             {
 
@@ -454,7 +455,7 @@ namespace RockyConnectBackend.Services
         {
             var status = new Response();
 
-            List<Trip> result = TripData.AwaitingApproval(email);
+            List<SuperTrip> result = TripData.AwaitingApproval(email);
             if (result.Count > 0)
             {
 
@@ -475,7 +476,7 @@ namespace RockyConnectBackend.Services
         {
             var status = new Response();
 
-            List<Trip> result = TripData.ApprovalList(email);
+            List<SuperTrip> result = TripData.ApprovalList(email);
             if (result.Count > 0)
             {
 

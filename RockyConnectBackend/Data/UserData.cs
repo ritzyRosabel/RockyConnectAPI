@@ -602,7 +602,7 @@ namespace RockyConnectBackend.Data
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 cmd.Parameters.AddWithValue("@Email", driver.Email.ToLower());
-                cmd.Parameters.AddWithValue("@Rati", driver.Rating);
+                cmd.Parameters.AddWithValue("@Rating", driver.Rating);
                 ret = cmd.ExecuteNonQuery();
                 if (ret == -1)
                 {
@@ -666,6 +666,7 @@ namespace RockyConnectBackend.Data
                             {
                                 res.Rating = (int)reader["Rating"];
                                 res.Email = reader["Email"].ToString().Trim();
+                                res.CarID = reader.IsDBNull("CarID") ? null : reader["CarID"].ToString().Trim();
 
                             }
                         }
@@ -778,6 +779,8 @@ namespace RockyConnectBackend.Data
 
                 cmd.Parameters.AddWithValue("@Email", driver.Email.ToLower());
                 cmd.Parameters.AddWithValue("@Rating", driver.Rating);
+                cmd.Parameters.AddWithValue("@CarID", driver.CarID ?? (object)DBNull.Value);
+
                 ret = cmd.ExecuteNonQuery();
                 if (ret == -1)
                 {

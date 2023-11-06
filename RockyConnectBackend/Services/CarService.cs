@@ -28,6 +28,14 @@ namespace RockyConnectBackend.Services
             string result = CarData.CreateCarData(car);
             if (result == "00")
             {
+                Driver res = UserData.GetDriver(carR.Email);
+                if (res.Email is not null)
+                {
+                    res.CarID = car.ID;
+                    UserData.UpdateDriverRating(res);
+
+                }
+
                 status.statusCode = "00";
                 status.status = "Successfully Added";
             }
