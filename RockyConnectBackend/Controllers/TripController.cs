@@ -387,6 +387,32 @@ namespace RockyConnectBackend.Controllers
             }
 
         }
+        [HttpPut]
+        [Route("UpdateATrip")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult UpdateATrip([FromBody] UpdateTripRequest trip)
+        {
+
+            try
+            {
+                Response response = TripService.UpdateATrip(trip);
+                if (response.statusCode == "00")
+                {
+                    return Ok(response);
+                }
+                else
+                {
+                    return StatusCode(500, response);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+
+        }
 
         [HttpDelete]
         [Route("CancelATrip")]

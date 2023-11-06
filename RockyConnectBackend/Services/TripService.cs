@@ -45,11 +45,14 @@ namespace RockyConnectBackend.Services
             var status = new Response();
 
             string result = TripData.CreateTripData(tripD);
+            SuperTrip user = TripData.SelectSuperTripData(tripD.ID);
+
             if (result == "00")
             {
+
                 status.statusCode = "00";
                 status.status = "Successfully Created";
-                status.data = tripD;
+                status.data = user;
             }
             else
             {
@@ -146,7 +149,6 @@ namespace RockyConnectBackend.Services
             {
                 status.statusCode = "00";
                 status.status = "trip already approved";
-                status.data = trip1;
                 return status;
             }
             if(trip1.TripInitiator == "Rider")
@@ -165,12 +167,12 @@ namespace RockyConnectBackend.Services
             string result = TripData.UpdateTripData(trip1.PaymentID,trip1);
             if (result == "00")
             {
-                User user2 = UserData.GetUserUsingEmail(trip1.CustomerEmail);
-                string message2 = $"Hi {user2.FirstName}, Your Trip request has been approved, Login to view Driver's Details.";
+                SuperTrip user2 = TripData.SelectSuperTripData(trip.ID);
+                string message2 = $"Hi {user2.RiderFirstName}, Your Trip request has been approved, Login to view Driver's Details.";
                 UtilityService.SendEmail(message2, trip1.CustomerEmail, "RockyConnect Trip Update");
                 status.statusCode = "00";
                 status.status = "Successfully saved";
-                status.data = trip1;
+                status.data = user2;
             }
             else
             {
@@ -196,7 +198,6 @@ namespace RockyConnectBackend.Services
             {
                 status.statusCode = "01";
                 status.status = "Rider initiated trip cannot decline request";
-                status.data = trip;
                 return status;
 
             }
@@ -206,12 +207,12 @@ namespace RockyConnectBackend.Services
             string result = TripData.UpdateTripData(trip1.PaymentID, trip1);
             if (result == "00")
             {
-                User user2 = UserData.GetUserUsingEmail(trip.CustomerEmail);
-                string message2 = $"Hi {user2.FirstName}, Your Trip request has been Declined, Login to Request a new Driver";
+                SuperTrip user2 = TripData.SelectSuperTripData(trip.ID);
+                string message2 = $"Hi {user2.RiderFirstName}, Your Trip request has been Declined, Login to Request a new Driver";
                 UtilityService.SendEmail(message2, trip.CustomerEmail, "RockyConnect Trip Update");
                 status.statusCode = "00";
                 status.status = "Successfully saved";
-                status.data = trip1;
+                status.data = user2;
 
             }
             else
@@ -289,13 +290,13 @@ namespace RockyConnectBackend.Services
                 if (result == "00")
                 {
 
-                    User user = UserData.GetUserUsingEmail(trip1.CustomerEmail);
-                    string message = $"Hi {user.FirstName}, Your trip with ID = {trip1.ID} just started, More info available on the app.";
+                    SuperTrip user = TripData.SelectSuperTripData(trip.ID);
+                    string message = $"Hi {user.RiderFirstName}, Your trip with ID = {trip1.ID} just started, More info available on the app.";
                     UtilityService.SendEmail(message, trip1.CustomerEmail, "RockyConnect Trip Update");
 
                     status.statusCode = "00";
                     status.status = "You started a Trip";
-
+                    status.data = user;
                 }
                 else
                 {
@@ -327,8 +328,8 @@ namespace RockyConnectBackend.Services
                 string result = TripData.UpdateTripData(trip1.PaymentID, trip1);
                 if (result == "00")
                 {
-                    User user = UserData.GetUserUsingEmail(trip1.CustomerEmail);
-                    string message = $"Hi {user.FirstName},Your trip with ID = {trip1.ID} just ended, Login and give your driver a rating" ;
+                    SuperTrip user= TripData.SelectSuperTripData(trip.ID);
+                    string message = $"Hi {user.RiderFirstName},Your trip with ID = {trip1.ID} just ended, Login and give your driver a rating" ;
                     UtilityService.SendEmail(message, trip1.CustomerEmail, "RockyConnect Trip Update");
 
 
@@ -366,7 +367,6 @@ namespace RockyConnectBackend.Services
             {
                 status.statusCode = "01";
                 status.status = "Rider initiated trip cannot request driver";
-                status.data = trip;
                 return status;
             }
             else
@@ -380,24 +380,23 @@ namespace RockyConnectBackend.Services
             trip1.Date_Updated = DateTime.Now;
 
             string result = TripData.UpdateTripData(trip1.PaymentID, trip1);
+            SuperTrip user = TripData.SelectSuperTripData(trip.ID);
             if (result == "00")
             {
                 try {
-                    User user = UserData.GetUserUsingEmail(trip1.DriverEmail);
-                    User user2 = UserData.GetUserUsingEmail(trip1.CustomerEmail);
-                    string message = $"Hi {user.FirstName}, A Customer just requested to join your trip, Login to review and approve or decline the request";
+                    string message = $"Hi {user.DriverFirstName}, A Customer just requested to join your trip, Login to review and approve or decline the request";
                     UtilityService.SendEmail(message, trip1.DriverEmail, "Trip Request From RockyConnect");
-                    string message2 = $"Hi {user2.FirstName}, Your Trip request was successfully sent, awaiting Approval decision from your requested driver.";
+                    string message2 = $"Hi {user.RiderFirstName}, Your Trip request was successfully sent, awaiting Approval decision from your requested driver.";
                     UtilityService.SendEmail(message2, trip1.CustomerEmail, "RockyConnect Trip Update");
                 } catch (Exception e)
                 {
                     status.statusCode = "00";
                     status.status = "Successfully saved";
-                    status.data = trip1;
+                    status.data = user;
                 }
                 status.statusCode = "00";
                 status.status = "Successfully saved";
-                status.data = trip1;
+                status.data = user;
             }
             else
             {
@@ -552,6 +551,57 @@ namespace RockyConnectBackend.Services
             }
             return status;
         }
+
+        internal static Response UpdateATrip(UpdateTripRequest trip)
+        {
+            Trip trip1 = TripData.SelectTripData(trip.ID);
+
+            trip1.SourceLatitude = trip.SourceLatitude;
+            trip1.SourceLocation = trip.SourceLocation;
+            trip1.Destination = trip.Destination;
+         
+            trip1.DestinationLat = trip.DestinationLat;
+            trip1.DestinationLong = trip.DestinationLong;
+            trip1.TripStatus = "Created";
+            trip1.TripCost = trip.TripDistance * 10;
+            trip1.Date_Updated = DateTime.Now;
+            trip1.TripDate = trip.TripDate;
+            trip1.TripDistance = trip.TripDistance;
+            trip1.SourceLongitude = trip.SourceLongitude;
+            trip1.PaymentID = null;
+            trip1.TotalTime = trip.TotalTime;
+            trip1.DestinationState = trip.DestinationState;
+
+            if (trip.TripInitiator == "Driver")
+            {
+                trip1.CustomerEmail = null;
+                trip1.DriverEmail = trip.DriverEmail;
+            }
+            else
+            {
+                trip1.DriverEmail = null;
+                trip1.CustomerEmail = trip.CustomerEmail;
+            }
+            var status = new Response();
+
+            string result = TripData.UpdateTripData(trip1.PaymentID,trip1);
+            SuperTrip user = TripData.SelectSuperTripData(trip1.ID);
+
+            if (result == "00")
+            {
+
+                status.statusCode = "00";
+                status.status = "Successfully Updated";
+                status.data = user;
+            }
+            else
+            {
+
+                status.statusCode = "01";
+                status.status = "Failed to Update";
+            }
+            return status;
+         }
     }
 }
 
