@@ -11,7 +11,7 @@ using RockyConnectBackend.Services;
 
 namespace RockyConnectBackend.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("/")]
     public class PaymentController : Controller
     {
