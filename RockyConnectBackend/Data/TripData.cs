@@ -120,7 +120,7 @@ namespace RockyConnectBackend.Data
                 cmd.Parameters.AddWithValue("@DestinationLat", trip.DestinationLat);
                 cmd.Parameters.AddWithValue("@DestinationLong", trip.DestinationLong);
                 cmd.Parameters.AddWithValue("@Destination", trip.Destination);
-                cmd.Parameters.AddWithValue("@DestinationState", trip.DestinationState);
+                cmd.Parameters.AddWithValue("@DestinationState", trip.DestinationState ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@TripDate", trip.TripDate);
                 cmd.Parameters.AddWithValue("@TotalTime", trip.TotalTime);
 
