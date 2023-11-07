@@ -605,6 +605,28 @@ namespace RockyConnectBackend.Services
             }
             return status;
          }
+
+        internal static Response UnrequestedTrips(string email)
+        {
+
+            var status = new Response();
+
+            List<SuperTrip> result = TripData.UnrequestedTrips(email);
+            if (result.Count > 0)
+            {
+
+                status.statusCode = "00";
+                status.status = "Successfully fetched";
+                status.data = result;
+            }
+            else
+            {
+
+                status.statusCode = "00";
+                status.status = "No unrequested trip for this user";
+            }
+            return status;
+        }
     }
 }
 

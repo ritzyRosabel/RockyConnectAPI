@@ -1004,6 +1004,98 @@ namespace RockyConnectBackend.Data
             }
             return res;
         }
+
+        internal static List<SuperTrip> UnrequestedTrips(string email)
+        {
+
+            var res = new List<SuperTrip>();
+
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+
+            builder.DataSource = "rosabeldbserver.database.windows.net";
+            builder.UserID = "rosabelDB";
+            builder.Password = "Mololuwa@14";
+            builder.InitialCatalog = "RockyConnectDB";
+
+            SqlConnection connection = new SqlConnection(builder.ConnectionString);
+
+            Console.WriteLine("\nQuery data example:");
+            Console.WriteLine("=========================================\n");
+            connection.Open();
+            try
+            {
+
+
+                using (SqlCommand cmd = new SqlCommand("UnrequestedTrips", connection))
+                {
+                    DateTime date = DateTime.Now;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@Email", email);
+
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+
+                        while (reader.Read())
+                        {
+                            var result = new SuperTrip();
+
+                            result.ID = reader["ID"].ToString().Trim();
+                            result.TripInitiator = reader["TripInitiator"].ToString().Trim();
+                            result.TripStatus = reader["TripStatus"].ToString().Trim();
+                            result.TripDistance = Convert.ToInt32(reader["TripDistance"]);
+                            result.TripCost = Convert.ToInt32(reader["TripCost"]);
+                            result.SourceLocation = reader["SourceLocation"].ToString().Trim();
+                            result.SourceLatitude = reader["SourceLatitude"].ToString().Trim();
+                            result.SourceLongitude = reader["SourceLongitude"].ToString().Trim();
+                            result.DestinationLat = reader["DestinationLat"].ToString().Trim();
+                            result.DestinationLong = reader["DestinationLong"].ToString().Trim();
+                            result.Destination = reader["Destination"].ToString().Trim();
+                            result.TripDate = Convert.ToDateTime(reader.GetDateTime("TripDate"));
+                            result.CustomerEmail = reader.IsDBNull("CustomerEmail") ? null : reader["CustomerEmail"].ToString().Trim();
+                            result.DriverEmail = reader.IsDBNull("DriverEmail") ? null : reader["DriverEmail"].ToString().Trim();
+                            result.PaymentID = reader.IsDBNull("PaymentID") ? null : reader["PaymentID"].ToString().Trim();
+                            result.TotalTime = (double)reader["TotalTime"];
+                            result.CancelReason = reader.IsDBNull("CancelReason") ? null : reader["CancelReason"].ToString().Trim();
+                            result.DriverFirstName = reader.IsDBNull("DriverFirstName") ? null : reader["DriverFirstName"].ToString().Trim();
+                            result.DriverLastName = reader.IsDBNull("DriverLastName") ? null : reader["DriverLastName"].ToString().Trim();
+                            result.DriverPhoneNumber = reader.IsDBNull("DriverPhoneNumber") ? null : reader["DriverPhoneNumber"].ToString().Trim();
+                            result.RiderFirstName = reader.IsDBNull("RiderFirstName") ? null : reader["RiderFirstName"].ToString().Trim();
+                            result.RiderLastName = reader.IsDBNull("RiderLastName") ? null : reader["RiderLastName"].ToString().Trim();
+                            result.RiderPhoneNumber = reader.IsDBNull("RiderPhoneNumber") ? null : reader["RiderPhoneNumber"].ToString().Trim();
+                            result.Rating = reader.IsDBNull("Rating") ? null : (int)reader["Rating"];
+                            result.NoOfRides = reader.IsDBNull("NoOfRides") ? null : (int)reader["NoOfRides"];
+                            result.CarMake = reader.IsDBNull("CarMake") ? null : reader["CarMake"].ToString().Trim();
+                            result.CarModel = reader.IsDBNull("CarModel") ? null : reader["CarModel"].ToString().Trim();
+                            result.CarColor = reader.IsDBNull("CarColor") ? null : reader["CarColor"].ToString().Trim();
+                            result.TypeOfVehicle = reader.IsDBNull("TypeOfVehicle") ? null : reader["DriverFirstName"].ToString().Trim();
+                            result.DriverLiscense = reader.IsDBNull("DriverLiscense") ? null : reader["DriverLiscense"].ToString().Trim();
+                            result.CarPreferences = reader.IsDBNull("CarPreferences") ? null : reader["CarPreferences"].ToString().Trim();
+                            result.DestinationState = reader.IsDBNull("DestinationState") ? null : reader["DestinationState"].ToString().Trim();
+                            result.PlateNumber = reader.IsDBNull("PlateNumber") ? null : reader["PlateNumber"].ToString().Trim();
+                            res.Add(result);
+
+                        }
+
+                    }
+                }
+
+
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+
+                }
+            }
+            return res;
+        }
     }
 }
 

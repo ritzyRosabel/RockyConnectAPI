@@ -231,6 +231,31 @@ namespace RockyConnectBackend.Controllers
             }
         }
         [HttpGet]
+        [Route("DriverUnRequestedTrips")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult UnrequestedTrips(string email)
+        {
+
+            try
+            {
+                Response response = TripService.UnrequestedTrips(email);
+                if (response.statusCode == "00")
+                {
+                    return Ok(response);
+                }
+                else
+                {
+                    return StatusCode(500, response);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+        [HttpGet]
         [Route("DriverRequestedTripsAwaitingApproval")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
