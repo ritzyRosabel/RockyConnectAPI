@@ -110,7 +110,6 @@ namespace RockyConnectBackend.Model
         public string? ID { get; set; }
         public string? CustomerEmail { get; set; }
         public string? DriverEmail { get; set; }
-        public string? CancelReason { get; set; }
 
     }
     public class CreateTripRequest
