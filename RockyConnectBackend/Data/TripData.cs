@@ -270,7 +270,7 @@ namespace RockyConnectBackend.Data
                             result.DriverLiscense = reader.IsDBNull("DriverLiscense") ? null : reader["DriverLiscense"].ToString().Trim();
                             result.CarPreferences = reader.IsDBNull("CarPreferences") ? null : reader["CarPreferences"].ToString().Trim();
                             result.DestinationState = reader.IsDBNull("DestinationState") ? null : reader["DestinationState"].ToString().Trim();
-                            result.PlateNumber = reader.IsDBNull("DriverLiscense") ? null : reader["DriverLiscense"].ToString().Trim();
+                            result.PlateNumber = reader.IsDBNull("PlateNumber") ? null : reader["PlateNumber"].ToString().Trim();
 
 
                         }
@@ -512,7 +512,7 @@ namespace RockyConnectBackend.Data
                             result.DriverLiscense = reader.IsDBNull("DriverLiscense") ? null : reader["DriverLiscense"].ToString().Trim();
                             result.CarPreferences = reader.IsDBNull("CarPreferences") ? null : reader["CarPreferences"].ToString().Trim();
                             result.DestinationState = reader.IsDBNull("DestinationState") ? null : reader["DestinationState"].ToString().Trim();
-                            result.PlateNumber = reader.IsDBNull("DriverLiscense") ? null : reader["DriverLiscense"].ToString().Trim();
+                            result.PlateNumber = reader.IsDBNull("PlateNumber") ? null : reader["PlateNumber"].ToString().Trim();
                             res.Add(result);
                         }
 
@@ -605,7 +605,7 @@ namespace RockyConnectBackend.Data
                             result.DriverLiscense = reader.IsDBNull("DriverLiscense") ? null : reader["DriverLiscense"].ToString().Trim();
                             result.CarPreferences = reader.IsDBNull("CarPreferences") ? null : reader["CarPreferences"].ToString().Trim();
                             result.DestinationState = reader.IsDBNull("DestinationState") ? null : reader["DestinationState"].ToString().Trim();
-                            result.PlateNumber = reader.IsDBNull("DriverLiscense") ? null : reader["DriverLiscense"].ToString().Trim();
+                            result.PlateNumber = reader.IsDBNull("PlateNumber") ? null : reader["PlateNumber"].ToString().Trim();
                             res.Add(result);
 
                         }
@@ -698,8 +698,8 @@ namespace RockyConnectBackend.Data
                                 result.DriverLiscense = reader.IsDBNull("DriverLiscense") ? null : reader["DriverLiscense"].ToString().Trim();
                                 result.CarPreferences = reader.IsDBNull("CarPreferences") ? null : reader["CarPreferences"].ToString().Trim();
                                 result.DestinationState = reader.IsDBNull("DestinationState") ? null : reader["DestinationState"].ToString().Trim();
-                                result.PlateNumber = reader.IsDBNull("DriverLiscense") ? null : reader["DriverLiscense"].ToString().Trim();
-                                res.Add(result);
+                                result.PlateNumber = reader.IsDBNull("PlateNumber") ? null : reader["PlateNumber"].ToString().Trim();
+                            res.Add(result);
 
                             
 
@@ -794,8 +794,8 @@ namespace RockyConnectBackend.Data
                                 result.DriverLiscense = reader.IsDBNull("DriverLiscense") ? null : reader["DriverLiscense"].ToString().Trim();
                                 result.CarPreferences = reader.IsDBNull("CarPreferences") ? null : reader["CarPreferences"].ToString().Trim();
                                 result.DestinationState = reader.IsDBNull("DestinationState") ? null : reader["DestinationState"].ToString().Trim();
-                                result.PlateNumber = reader.IsDBNull("DriverLiscense") ? null : reader["DriverLiscense"].ToString().Trim();
-                                res.Add(result);
+                                result.PlateNumber = reader.IsDBNull("PlateNumber") ? null : reader["PlateNumber"].ToString().Trim();
+                            res.Add(result);
 
                             }
 
@@ -887,7 +887,7 @@ namespace RockyConnectBackend.Data
                             result.DriverLiscense = reader.IsDBNull("DriverLiscense") ? null : reader["DriverLiscense"].ToString().Trim();
                             result.CarPreferences = reader.IsDBNull("CarPreferences") ? null : reader["CarPreferences"].ToString().Trim();
                             result.DestinationState = reader.IsDBNull("DestinationState") ? null : reader["DestinationState"].ToString().Trim();
-                            result.PlateNumber = reader.IsDBNull("DriverLiscense") ? null : reader["DriverLiscense"].ToString().Trim();
+                            result.PlateNumber = reader.IsDBNull("PlateNumber") ? null : reader["PlateNumber"].ToString().Trim();
                             res.Add(result);
 
                         }
@@ -980,7 +980,7 @@ namespace RockyConnectBackend.Data
                             result.DriverLiscense = reader.IsDBNull("DriverLiscense") ? null : reader["DriverLiscense"].ToString().Trim();
                             result.CarPreferences = reader.IsDBNull("CarPreferences") ? null : reader["CarPreferences"].ToString().Trim();
                             result.DestinationState = reader.IsDBNull("DestinationState") ? null : reader["DestinationState"].ToString().Trim();
-                            result.PlateNumber = reader.IsDBNull("DriverLiscense") ? null : reader["DriverLiscense"].ToString().Trim();
+                            result.PlateNumber = reader.IsDBNull("PlateNumber") ? null : reader["PlateNumber"].ToString().Trim();
                             res.Add(result);
 
                         }
