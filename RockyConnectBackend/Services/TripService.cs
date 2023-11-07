@@ -317,7 +317,7 @@ namespace RockyConnectBackend.Services
         {
                            var status = new Response();
             Trip trip1 = TripData.SelectTripData(trip.ID);
-            if (trip1.TripStatus != "Enroute" && trip1.PaymentID is  null)
+            if (trip1.TripStatus == "Enroute" && trip1.PaymentID is  not null)
             {
 
                 trip1.TripStatus = "Completed";
