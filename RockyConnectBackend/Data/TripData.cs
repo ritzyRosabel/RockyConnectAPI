@@ -262,6 +262,7 @@ namespace RockyConnectBackend.Data
                             result.RiderLastName = reader.IsDBNull("RiderLastName") ? null : reader["RiderLastName"].ToString().Trim();
                             result.RiderPhoneNumber = reader.IsDBNull("RiderPhoneNumber") ? null : reader["RiderPhoneNumber"].ToString().Trim();
                             result.Rating = reader.IsDBNull("Rating") ? null : (int)reader["Rating"];
+                            result.NoOfRides = reader.IsDBNull("NoOfRides") ? null : (int)reader["NoOfRides"];
                             result.CarMake = reader.IsDBNull("CarMake") ? null : reader["CarMake"].ToString().Trim();
                             result.CarModel = reader.IsDBNull("CarModel") ? null : reader["CarModel"].ToString().Trim();
                             result.CarColor = reader.IsDBNull("CarColor") ? null : reader["CarColor"].ToString().Trim();
@@ -503,6 +504,7 @@ namespace RockyConnectBackend.Data
                             result.RiderLastName = reader.IsDBNull("RiderLastName") ? null : reader["RiderLastName"].ToString().Trim();
                             result.RiderPhoneNumber = reader.IsDBNull("RiderPhoneNumber") ? null : reader["RiderPhoneNumber"].ToString().Trim();
                             result.Rating = reader.IsDBNull("Rating") ? null : (int)reader["Rating"];
+                            result.NoOfRides = reader.IsDBNull("NoOfRides") ? null : (int)reader["NoOfRides"];
                             result.CarMake = reader.IsDBNull("CarMake") ? null : reader["CarMake"].ToString().Trim();
                             result.CarModel = reader.IsDBNull("CarModel") ? null : reader["CarModel"].ToString().Trim();
                             result.CarColor = reader.IsDBNull("CarColor") ? null : reader["CarColor"].ToString().Trim();
@@ -595,6 +597,7 @@ namespace RockyConnectBackend.Data
                             result.RiderLastName = reader.IsDBNull("RiderLastName") ? null : reader["RiderLastName"].ToString().Trim();
                             result.RiderPhoneNumber = reader.IsDBNull("RiderPhoneNumber") ? null : reader["RiderPhoneNumber"].ToString().Trim();
                             result.Rating = reader.IsDBNull("Rating") ? null : (int)reader["Rating"];
+                            result.NoOfRides = reader.IsDBNull("NoOfRides") ? null : (int)reader["NoOfRides"];
                             result.CarMake = reader.IsDBNull("CarMake") ? null : reader["CarMake"].ToString().Trim();
                             result.CarModel = reader.IsDBNull("CarModel") ? null : reader["CarModel"].ToString().Trim();
                             result.CarColor = reader.IsDBNull("CarColor") ? null : reader["CarColor"].ToString().Trim();
@@ -687,6 +690,7 @@ namespace RockyConnectBackend.Data
                                 result.RiderLastName = reader.IsDBNull("RiderLastName") ? null : reader["RiderLastName"].ToString().Trim();
                                 result.RiderPhoneNumber = reader.IsDBNull("RiderPhoneNumber") ? null : reader["RiderPhoneNumber"].ToString().Trim();
                                 result.Rating = reader.IsDBNull("Rating") ? null : (int)reader["Rating"];
+                                result.NoOfRides = reader.IsDBNull("NoOfRides") ? null : (int)reader["NoOfRides"];
                                 result.CarMake = reader.IsDBNull("CarMake") ? null : reader["CarMake"].ToString().Trim();
                                 result.CarModel = reader.IsDBNull("CarModel") ? null : reader["CarModel"].ToString().Trim();
                                 result.CarColor = reader.IsDBNull("CarColor") ? null : reader["CarColor"].ToString().Trim();
@@ -782,6 +786,7 @@ namespace RockyConnectBackend.Data
                                 result.RiderLastName = reader.IsDBNull("RiderLastName") ? null : reader["RiderLastName"].ToString().Trim();
                                 result.RiderPhoneNumber = reader.IsDBNull("RiderPhoneNumber") ? null : reader["RiderPhoneNumber"].ToString().Trim();
                                 result.Rating = reader.IsDBNull("Rating") ? null : (int)reader["Rating"];
+                                result.NoOfRides = reader.IsDBNull("NoOfRides") ? null : (int)reader["NoOfRides"];
                                 result.CarMake = reader.IsDBNull("CarMake") ? null : reader["CarMake"].ToString().Trim();
                                 result.CarModel = reader.IsDBNull("CarModel") ? null : reader["CarModel"].ToString().Trim();
                                 result.CarColor = reader.IsDBNull("CarColor") ? null : reader["CarColor"].ToString().Trim();
@@ -874,6 +879,7 @@ namespace RockyConnectBackend.Data
                             result.RiderLastName = reader.IsDBNull("RiderLastName") ? null : reader["RiderLastName"].ToString().Trim();
                             result.RiderPhoneNumber = reader.IsDBNull("RiderPhoneNumber") ? null : reader["RiderPhoneNumber"].ToString().Trim();
                             result.Rating = reader.IsDBNull("Rating") ? null : (int)reader["Rating"];
+                            result.NoOfRides = reader.IsDBNull("NoOfRides") ? null : (int)reader["NoOfRides"];
                             result.CarMake = reader.IsDBNull("CarMake") ? null : reader["CarMake"].ToString().Trim();
                             result.CarModel = reader.IsDBNull("CarModel") ? null : reader["CarModel"].ToString().Trim();
                             result.CarColor = reader.IsDBNull("CarColor") ? null : reader["CarColor"].ToString().Trim();
@@ -965,7 +971,8 @@ namespace RockyConnectBackend.Data
                             result.RiderFirstName = reader.IsDBNull("RiderFirstName") ? null : reader["RiderFirstName"].ToString().Trim();
                             result.RiderLastName = reader.IsDBNull("RiderLastName") ? null : reader["RiderLastName"].ToString().Trim();
                             result.RiderPhoneNumber = reader.IsDBNull("RiderPhoneNumber") ? null : reader["RiderPhoneNumber"].ToString().Trim();
-                            result.Rating = (int)reader["Rating"];
+                            result.Rating = reader.IsDBNull("Rating") ? null : (int)reader["Rating"];
+                            result.NoOfRides = reader.IsDBNull("NoOfRides") ? null : (int)reader["NoOfRides"];
                             result.CarMake = reader.IsDBNull("CarMake") ? null : reader["CarMake"].ToString().Trim();
                             result.CarModel = reader.IsDBNull("CarModel") ? null : reader["CarModel"].ToString().Trim();
                             result.CarColor = reader.IsDBNull("CarColor") ? null : reader["CarColor"].ToString().Trim();

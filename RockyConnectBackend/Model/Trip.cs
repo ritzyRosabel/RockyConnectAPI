@@ -51,6 +51,7 @@ namespace RockyConnectBackend.Model
         public string? RiderLastName { get; set; }
         public string? RiderPhoneNumber { get; set; }
         public int? Rating{ get; set; }
+        public int? NoOfRides { get; set; }
         public string? CarMake { get; set; }
         public string? CarModel { get; set; }
         public string? CarColor { get; set; }
