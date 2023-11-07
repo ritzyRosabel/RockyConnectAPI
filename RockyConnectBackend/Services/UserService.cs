@@ -69,8 +69,8 @@ namespace RockyConnectBackend.Controllers
             {
                 if (user.Role == Role.driver)
                 {
-                    Driver driver = new Driver() { Email=user.Email,Rating=5} ;
-                    UserData.RateDriver(driver);
+                    Driver driver = new Driver() { Email=user.Email,Rating=5,NoOfRides=0} ;
+                    UserData.CreateDriver(driver);
 
                 }
                 else

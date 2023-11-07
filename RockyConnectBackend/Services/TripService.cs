@@ -328,6 +328,9 @@ namespace RockyConnectBackend.Services
                 string result = TripData.UpdateTripData(trip1.PaymentID, trip1);
                 if (result == "00")
                 {
+                    Driver driver = UserData.GetDriver(trip1.DriverEmail);
+                    driver.NoOfRides = driver.NoOfRides + 1;
+                    UserData.UpdateDriverRating(driver);
                     SuperTrip user= TripData.SelectSuperTripData(trip.ID);
                     string message = $"Hi {user.RiderFirstName},Your trip with ID = {trip1.ID} just ended, Login and give your driver a rating" ;
                     UtilityService.SendEmail(message, trip1.CustomerEmail, "RockyConnect Trip Update");
@@ -533,9 +536,9 @@ namespace RockyConnectBackend.Services
             }
             else
             {
-                Driver driver1 = new Driver {Email =customer.Email,Rating=customer.Rate };
+                Driver driver1 = new Driver {Email =customer.Email,Rating=customer.Rate,NoOfRides=1 };
             
-                string driver = UserData.RateDriver(driver1);
+                string driver = UserData.CreateDriver(driver1);
                 if (driver == "00")
                 {
 

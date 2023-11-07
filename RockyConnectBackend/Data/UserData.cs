@@ -576,7 +576,7 @@ namespace RockyConnectBackend.Data
             return result;
         }
 
-        internal static string RateDriver(Driver driver)
+        internal static string CreateDriver(Driver driver)
         {
             string result = "01";
 
@@ -603,6 +603,7 @@ namespace RockyConnectBackend.Data
 
                 cmd.Parameters.AddWithValue("@Email", driver.Email.ToLower());
                 cmd.Parameters.AddWithValue("@Rating", driver.Rating);
+                cmd.Parameters.AddWithValue("@NoOfRides", driver.NoOfRides);
                 ret = cmd.ExecuteNonQuery();
                 if (ret == -1)
                 {
@@ -665,6 +666,7 @@ namespace RockyConnectBackend.Data
                             while (reader.Read())
                             {
                                 res.Rating = (int)reader["Rating"];
+                                res.NoOfRides = (int)reader["NoOfRides"];
                                 res.Email = reader["Email"].ToString().Trim();
                                 res.CarID = reader.IsDBNull("CarID") ? null : reader["CarID"].ToString().Trim();
 
@@ -778,6 +780,7 @@ namespace RockyConnectBackend.Data
                 cmd.CommandType = CommandType.StoredProcedure;
 
                 cmd.Parameters.AddWithValue("@Email", driver.Email.ToLower());
+                cmd.Parameters.AddWithValue("@NoOfRides", driver.NoOfRides);
                 cmd.Parameters.AddWithValue("@Rating", driver.Rating);
                 cmd.Parameters.AddWithValue("@CarID", driver.CarID ?? (object)DBNull.Value);
 
