@@ -178,10 +178,20 @@ namespace RockyConnectBackend.Controllers
             {
                 return BadRequest("phone number and email invalid");
             }
-            if ( card.Card.Pan =="string" || card.Card.Pan.Length != 16)
+            if (!card.SavedCard)
             {
-                return BadRequest("incorrect card details, Please try again");
+                if (card.Card.Pan == "string" || card.Card.Pan.Length != 16)
+                {
+                    return BadRequest("incorrect card details, Please try again");
+                }
+            } if (card.SavedCard)
+            {
+                if (card.CardAlias==string.Empty||card.CardAlias=="string"||card.CardAlias is null)
+                {
+                    return BadRequest("incorrect card Alais, Please try again");
+                }
             }
+            
             Response response = PaymentService.MakePayment(card);
             if (response.statusCode == "00")
             {
