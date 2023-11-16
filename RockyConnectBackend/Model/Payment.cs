@@ -90,6 +90,12 @@ namespace RockyConnectBackend.Model
         public required string RefundStatus { get; set; }
     }
 
+    public class Bank{
 
+        public string Email { get; set; }
+        public string AccountNumber { get; set; }
+        public string RoutingNumber { get; set; }
+        public string BankName { get; set; }
+}
     
 }
