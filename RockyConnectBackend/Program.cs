@@ -1,5 +1,10 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using CorePush.Apple;
+using CorePush.Google;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using RockyConnectBackend.Model;
+using RockyConnectBackend.Services;
 using System.Text;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -19,7 +24,7 @@ builder.Services.AddCors(options => options.AddPolicy("AllowAll", builder => bui
 //            ValidateIssuer = true,
 //            ValidateAudience = true,
 //            ValidateLifetime = true,
-//            ValidateIssuerSigningKey = true,
+//            ValidateIssuerSigningKey = true,                                          ```
 ////            validate
 //        };
 //    });
@@ -38,9 +43,17 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     };
 });
 
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddTransient<INotificationService, NotificationService>();
+builder.Services.AddHttpClient<FcmSender>();
+builder.Services.AddHttpClient<ApnSender>();
+
+// Configure strongly typed settings objects
+var appSettingsSection = builder.Configuration.GetSection("FcmNotification");
+builder.Services.Configure<FcmNotificationSetting>(appSettingsSection);
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
