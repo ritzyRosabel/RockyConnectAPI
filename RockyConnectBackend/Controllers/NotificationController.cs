@@ -17,8 +17,12 @@ namespace RockyConnectBackend.Controllers
                 _notificationService = notificationService;
             }
 
-            [Route("send")]
-            [HttpPost]
+        [HttpPost]
+        [Route("RegisterCar")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+       
             public async Task<IActionResult> SendNotification(NotificationModel notificationModel)
             {
                 var result = await _notificationService.SendNotification(notificationModel);

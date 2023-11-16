@@ -28,9 +28,7 @@ namespace RockyConnectBackend.Services
             ResponseM response = new ResponseM();
             try
             {
-                if (notificationModel.IsAndroiodDevice)
-                {
-                    /* FCM Sender (Android Device) */
+                  /* FCM Sender (Android Device) */
                     FcmSettings settings = new FcmSettings()
                     {
                         SenderId = _fcmNotificationSetting.SenderId,
@@ -68,35 +66,7 @@ namespace RockyConnectBackend.Services
                         response.Message = fcmSendResponse.Results[0].Error;
                         return response;
                     }
-                }
-                else
-                {
-                    //HttpClient httpClient = new HttpClient();
-
-                    //string authorizationKey = string.Format("keyy={0}", settings.ServerKey);
-                    //string deviceToken = notificationModel.DeviceId;
-
-                    //httpClient.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", authorizationKey);
-                    //httpClient.DefaultRequestHeaders.Accept
-                    //        .Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    ///* Code here for APN Sender (iOS Device) */
-                    //var apn = new ApnSender(ApnSettings, httpClient);
-                    //await apn.SendAsync(notification, deviceToken);
-                    //var fcmSendResponse = await apn.SendAsync(deviceToken, notification);
-
-                    //if (fcmSendResponse.IsSuccess())
-                    //{
-                    //    response.IsSuccess = true;
-                    //    response.Message = "Notification sent successfully";
-                    //    return response;
-                    //}
-                    //else
-                    //{
-                    //    response.IsSuccess = false;
-                    //    response.Message = fcmSendResponse.Results[0].Error;
-                    //    return response;
-                    //}
-                }
+      
                 return response;
             }
             catch (Exception ex)
