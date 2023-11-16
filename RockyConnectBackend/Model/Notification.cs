@@ -23,9 +23,6 @@ namespace RockyConnectBackend.Model
         [JsonProperty("deviceId")]
         public string DeviceId { get; set; }
 
-        [JsonProperty("isAndroiodDevice")]
-        public bool IsAndroiodDevice { get; set; }
-
         [JsonProperty("title")]
         public string Title { get; set; }
 
