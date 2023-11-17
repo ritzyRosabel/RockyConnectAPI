@@ -12,11 +12,11 @@ namespace RockyConnectBackend.Controllers
     {
         // GET: api/values
        
-            private readonly INotificationService _notificationService;
-            public NotificationController(INotificationService notificationService)
-            {
-                _notificationService = notificationService;
-            }
+            //private readonly INotificationService _notificationService;
+            //public NotificationController(INotificationService notificationService)
+            //{
+            //    _notificationService = notificationService;
+            //}
 
         [HttpPost]
         [Route("SendNotification")]
@@ -26,7 +26,7 @@ namespace RockyConnectBackend.Controllers
        
             public async Task<IActionResult> SendNotification(NotificationModel notificationModel)
             {
-                var result = await _notificationService.SendNotification(notificationModel);
+                var result = NotificationService.SendNotification(notificationModel);
                 return Ok(result);
             }
         [HttpGet]
