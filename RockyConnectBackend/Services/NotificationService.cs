@@ -1,7 +1,9 @@
 ﻿
 using CorePush.Apple;
 using CorePush.Google;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using RockyConnectBackend.Data;
 using RockyConnectBackend.Model;
 using System;
 using System.Net.Http;
@@ -15,15 +17,38 @@ using static RockyConnectBackend.Model.GoogleNotification;
 
 namespace RockyConnectBackend.Services
 { 
-    public class NotificationService : INotificationService
+    public   class NotificationService 
     {
-        private readonly FcmNotificationSetting _fcmNotificationSetting;
-        public NotificationService(IOptions<FcmNotificationSetting> settings)
+        private static  FcmNotificationSetting _fcmNotificationSetting;
+       
+        public   NotificationService(IOptions<FcmNotificationSetting> settings)
         {
             _fcmNotificationSetting = settings.Value;
+
         }
 
-        public async Task<ResponseM> SendNotification(NotificationModel notificationModel)
+
+        internal static Response GetNotification(string? email)
+        {
+
+            var status = new Response();
+           List <Notification> result = NotificationData.SelectNotificationData(email);
+            if (result.Count >=1)
+            {
+                status.statusCode = "00";
+                status.status = "Successfull";
+                status.data = result;
+            }
+            else
+            {
+
+                status.statusCode = "01";
+                status.status = "No Notification is tied to this account";
+            }
+            return status;
+        }
+
+        public static async Task<ResponseM> SendNotification(NotificationModel notificationModel)
         {
             ResponseM response = new ResponseM();
             try

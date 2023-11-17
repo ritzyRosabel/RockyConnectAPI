@@ -9,6 +9,7 @@ namespace RockyConnectBackend.Model
         public  string? PhoneNumber{ get; set; }
         public  string? Password { get; set; }
         public  string? Email { get; set; }
+        public  string? DeviceID { get; set; }
         public Role Role { get; set; }
         public int AccountVerified { get; set; }
         public bool IsAccountActive { get; set; }
@@ -70,7 +71,7 @@ namespace RockyConnectBackend.Model
     {
         public required string Email { get; set; }
         public required string Password { get; set; }
-        public required string DeviceID { get; set; }
+        public  string? DeviceID { get; set; }
 
     }
     public class CreateUserResponse

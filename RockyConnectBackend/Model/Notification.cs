@@ -5,12 +5,12 @@ namespace RockyConnectBackend.Model
 {
 	public class Notification
 	{
-		public Notification()
-		{
-
-
-		}
-	}
+        public string NotificationID { get; set; }
+        public string Email { get; set; }
+        public string Title { get; set; }
+        public string Body { get; set; }
+        public DateTime DateSent { get; set; }
+    }
 
     public class FcmNotificationSetting
     {
