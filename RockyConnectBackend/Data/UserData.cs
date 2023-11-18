@@ -243,7 +243,7 @@ namespace RockyConnectBackend.Data
                 cmd.Parameters.AddWithValue("@LastName", customer.LastName);
                 cmd.Parameters.AddWithValue("@PhoneNumber", customer.PhoneNumber);
                 cmd.Parameters.AddWithValue("@Password", customer.Password);
-                cmd.Parameters.AddWithValue("@DeviceID", customer.DeviceID);
+                cmd.Parameters.AddWithValue("@DeviceID", customer.DeviceID ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@DateUpdated", customer.Date_Updated).Value = date;
 
                 ret = cmd.ExecuteNonQuery();
