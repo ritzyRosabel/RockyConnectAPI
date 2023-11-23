@@ -522,6 +522,60 @@ namespace RockyConnectBackend.Data
             return result;
         }
 
+        internal static string SuspendAccount(User user)
+        {
+            string result = "01";
+
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+
+            builder.DataSource = "rosabeldbserver.database.windows.net";
+            builder.UserID = "rosabelDB";
+            builder.Password = "Mololuwa@14";
+            builder.InitialCatalog = "RockyConnectDB";
+
+            SqlConnection connection = new SqlConnection(builder.ConnectionString);
+
+            Console.WriteLine("\nQuery data example:");
+            Console.WriteLine("=========================================\n");
+            int ret = 6;
+            connection.Open();
+            try
+            {
+                DateTime date = DateTime.Now;
+                SqlCommand cmd = new SqlCommand("SuspendAccount", connection);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Email", user.Email);
+
+
+                ret = cmd.ExecuteNonQuery();
+                if (ret == -1)
+                {
+                    result = "00";
+                }
+
+
+
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+
+                }
+            }
+
+            //Console.WriteLine("\nDone. Press enter.");
+            //Console.ReadLine();
+
+
+
+            return result;
+        }
         internal static string DeleteAccount(User user)
         {
             string result = "01";

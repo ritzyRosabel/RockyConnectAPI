@@ -4,13 +4,10 @@ using RockyConnectBackend.Model;
 
 namespace RockyConnectBackend.Services
 {
-	public class CarService
+	public  static class CarService
 	{
-		public CarService()
-		{
-		}
-
-        internal static Response CreateCard(CarRequest carR)
+		
+        public static Response CreateCard(CarRequest carR)
         {
             var status = new Response();
             Car car = new Car()

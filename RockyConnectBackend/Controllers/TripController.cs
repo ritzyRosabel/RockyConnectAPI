@@ -16,6 +16,14 @@ namespace RockyConnectBackend.Controllers
     public class TripController : Controller
     {
 
+        private IConfiguration configuration;
+
+
+        public TripController(IConfiguration config)
+        {
+            configuration = config;
+
+        }
         // POST api/values
         [HttpPost]
         [Route("ScheduleATrip")]
@@ -46,6 +54,12 @@ namespace RockyConnectBackend.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult RequestDriverforATrip([FromBody] TripDataInfo trip)
         {
+            FcmNotificationSetting setting = new FcmNotificationSetting()
+            {
+                SenderId = configuration.GetSection("FcmNotification").GetSection("SenderId").Value,
+                ServerKey = configuration.GetSection("FcmNotification").GetSection("ServerKey").Value
+            };
+
             if (trip.CustomerEmail.ToLower() == trip.DriverEmail.ToLower())
             {
                 return BadRequest("A Rockyconnect profile cannot be a Customer and Driver on same trip ");
@@ -53,7 +67,7 @@ namespace RockyConnectBackend.Controllers
             try
             {
                 
-                Response response = TripService.DriverRequestTrip(trip);
+                Response response = TripService.DriverRequestTrip(trip,setting);
                 if (response.statusCode == "00")
                 {
                     return Ok(response);
@@ -76,13 +90,18 @@ namespace RockyConnectBackend.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult ApproveUserforATrip([FromBody] TripDataInfo trip)
         {
+            FcmNotificationSetting setting = new FcmNotificationSetting()
+            {
+                SenderId = configuration.GetSection("FcmNotification").GetSection("SenderId").Value,
+                ServerKey = configuration.GetSection("FcmNotification").GetSection("ServerKey").Value
+            };
             if (trip.CustomerEmail.ToLower() == trip.DriverEmail.ToLower())
             {
                 return BadRequest("A Rockyconnect profile cannot be a Customer and Driver on same trip ");
             }
             try
             {
-                Response response = TripService.ApproveRiderTrip(trip);
+                Response response = TripService.ApproveRiderTrip(trip, setting);
                 if (response.statusCode == "00")
                 {
                     return Ok(response);
@@ -105,13 +124,18 @@ namespace RockyConnectBackend.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult DeclineUserforATrip([FromBody] TripDataInfo trip)
         {
+            FcmNotificationSetting setting = new FcmNotificationSetting()
+            {
+                SenderId = configuration.GetSection("FcmNotification").GetSection("SenderId").Value,
+                ServerKey = configuration.GetSection("FcmNotification").GetSection("ServerKey").Value
+            };
             if (trip.CustomerEmail.ToLower() == trip.DriverEmail.ToLower())
             {
                 return BadRequest("A Rockyconnect profile cannot be a Customer and Driver on same trip.");
             }
             try
             {
-                Response response = TripService.DeclineRiderTrip(trip);
+                Response response = TripService.DeclineRiderTrip(trip, setting);
                 if (response.statusCode == "00")
                 {
                     return Ok(response);
@@ -367,10 +391,15 @@ namespace RockyConnectBackend.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult StartATrip([FromBody] TripRequest trip)
         {
+            FcmNotificationSetting setting = new FcmNotificationSetting()
+            {
+                SenderId = configuration.GetSection("FcmNotification").GetSection("SenderId").Value,
+                ServerKey = configuration.GetSection("FcmNotification").GetSection("ServerKey").Value
+            };
 
             try
             {
-                Response response = TripService.StartTrip(trip);
+                Response response = TripService.StartTrip(trip, setting);
                 if (response.statusCode == "00")
                 {
                     return Ok(response);
@@ -393,10 +422,14 @@ namespace RockyConnectBackend.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult EndATrip([FromBody] TripRequest trip)
         {
-
+            FcmNotificationSetting setting = new FcmNotificationSetting()
+            {
+                SenderId = configuration.GetSection("FcmNotification").GetSection("SenderId").Value,
+                ServerKey = configuration.GetSection("FcmNotification").GetSection("ServerKey").Value
+            };
             try
             {
-                Response response = TripService.EndTrip(trip);
+                Response response = TripService.EndTrip(trip,setting);
                 if (response.statusCode == "00")
                 {
                     return Ok(response);

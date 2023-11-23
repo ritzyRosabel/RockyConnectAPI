@@ -13,20 +13,29 @@ namespace RockyConnectBackend.Controllers
     [Route("/")]
     public class UserAccountController : Controller
     {
-      /*  // GET: api/values
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private IConfiguration configuration;
+
+
+        public UserAccountController(IConfiguration config)
         {
-            return new string[] { "value1", "value2" };
+            configuration = config;
+
         }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-      */
+        /*  // GET: api/values
+          [HttpGet]
+          public IEnumerable<string> Get()
+          {
+              return new string[] { "value1", "value2" };
+          }
+
+          // GET api/values/5
+          [HttpGet("{id}")]
+          public string Get(int id)
+          {
+              return "value";
+          }
+        */
         // POST api/values
         [HttpPost]
         [Route("Create")]
@@ -217,6 +226,37 @@ namespace RockyConnectBackend.Controllers
                 return StatusCode(500, ex.Message);
             }
 
+
+        }
+        [HttpDelete]
+        [Route("SuspendAccount")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult SuspendAccount(string email)
+        {
+
+            if (!UtilityService.IsValidEmail(email))
+            {
+                return BadRequest("phone number or email invalid");
+            }
+
+            try
+            {
+                Response response = UserService.SuspendAccount(email);
+                if (response.statusCode == "00")
+                {
+                    return Ok(response);
+                }
+                else
+                {
+                    return StatusCode(500, response);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
 
         }
         [HttpDelete]

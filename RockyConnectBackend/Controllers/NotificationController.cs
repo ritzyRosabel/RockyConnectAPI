@@ -7,28 +7,32 @@ using RockyConnectBackend.Services;
 
 namespace RockyConnectBackend.Controllers
 {
-    [Route("api/[controller]")]
-    public class NotificationController : Controller
+    [Route("api/controller")]
+    [ApiController]
+    public class NotificationController : ControllerBase
     {
-        // GET: api/values
-       
-            //private readonly INotificationService _notificationService;
-            //public NotificationController(INotificationService notificationService)
-            //{
-            //    _notificationService = notificationService;
-            //}
+        private readonly INotificationService _notificationService;
+        public NotificationController(INotificationService notificationService)
+        {
+            _notificationService = notificationService;
+        }
 
-        [HttpPost]
         [Route("SendNotification")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpPost]
+        public async Task<IActionResult> SendNotification(NotificationModel notificationModel)
+        {
+            var result = await _notificationService.SendNotification(notificationModel);
+            return Ok(result);
+        }
+        // GET: api/values
+
+        //private readonly INotificationService _notificationService;
+        //public NotificationController(INotificationService notificationService)
+        //{
+        //    _notificationService = notificationService;
+        //}
+
        
-            public async Task<IActionResult> SendNotification(NotificationModel notificationModel)
-            {
-                var result = NotificationService.SendNotification(notificationModel);
-                return Ok(result);
-            }
         [HttpGet]
         [Route("GetNotification")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
