@@ -7,10 +7,7 @@ namespace RockyConnectBackend.Data
 {
 	public class CarData
 	{
-		public CarData()
-		{
-		}
-
+		
         
 
         internal static Car SelectCarData(string? email)
