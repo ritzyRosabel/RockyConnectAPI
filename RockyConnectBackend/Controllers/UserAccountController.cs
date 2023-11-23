@@ -359,7 +359,7 @@ namespace RockyConnectBackend.Controllers
         {
             try
             {
-                LoginUserRequest user = new LoginUserRequest() { Email = request.Email, Password = request.OldPassword ,DeviceID= null};
+                LoginUserRequest user = new LoginUserRequest() { Email = request.Email, Password = request.OldPassword ,DeviceID= null, app=3};
                 Response response1 = UserService.Login(user);
                 if (response1.statusCode == "00")
                 {

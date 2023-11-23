@@ -22,7 +22,19 @@ namespace RockyConnectBackend.Controllers
                 }
                 else
                 {
-
+                    if(cred.app ==2 && result.Role == Role.rider)
+                    {
+                        status.statusCode = "01";
+                        status.status = "Invalid Username and Password Match";
+                        status.data = null;
+                        return status;
+                    }else if(cred.app == 1 && result.Role == Role.driver)
+                    {
+                        status.statusCode = "01";
+                        status.status = "Invalid Username and Password Match";
+                        status.data = null;
+                        return status;
+                    }
                     // Regex.Replace(result.UserName, @"\s+", "");
                     if (result.Password is not null)
                         if (UtilityService.CompareHashKeys(cred.Password.ToLower(),result.Password))

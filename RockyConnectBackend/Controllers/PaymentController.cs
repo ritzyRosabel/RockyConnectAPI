@@ -259,7 +259,7 @@ namespace RockyConnectBackend.Controllers
             }
 
         }
-        [HttpDelete]
+        [HttpPost]
         [Route("PaymentReminder")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
