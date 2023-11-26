@@ -59,7 +59,8 @@ namespace RockyConnectBackend.Model
         public string? TypeOfVehicle { get; set; }
         public string? DriverLiscense { get; set; }
         public string? CarPreferences { get; set; }
-        public string? DeviceID { get; set; }
+        public string? RiderDeviceID { get; set; }
+        public string? DriverDeviceID { get; set; }
 
     }
     public class CancelRequest

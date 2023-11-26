@@ -10,20 +10,13 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using static RockyConnectBackend.Model.GoogleNotification;
-public interface INotificationService
-{
-    Task<ResponseM> SendNotification(NotificationModel notificationModel);
-}
 
-public class NotificationService : INotificationService
-{
-    private readonly FcmNotificationSetting _fcmNotificationSetting;
-    public NotificationService(IOptions<FcmNotificationSetting> settings)
-    {
-        _fcmNotificationSetting = settings.Value;
-    }
 
-    public async Task<ResponseM> SendNotification(NotificationModel notificationModel)
+public class NotificationService 
+{
+   
+
+    public static async Task<ResponseM> SendNotification(NotificationModel notificationModel)
     {
         ResponseM response = new ResponseM();
         try
@@ -31,8 +24,8 @@ public class NotificationService : INotificationService
               /* FCM Sender (Android Device) */
                 FcmSettings settings = new FcmSettings()
                 {
-                    SenderId = _fcmNotificationSetting.SenderId,
-                    ServerKey = _fcmNotificationSetting.ServerKey
+                    SenderId = "772612027831",
+                    ServerKey = "AAAAs-ND9bc:APA91bGvL5LNEiq3Wm94mOOUTlvTabwSAE4Rqrs4lyloW3JfJVP_5GonO0mf9fV3bIBvRLKQosa-EZ7GDhMcra-b09Kn-loq8IuI38QxKLHC0W8MbZIjwdkBB-jqzvslffLLRU2i4TyJ"
                 };
                 HttpClient httpClient = new HttpClient();
 

@@ -87,7 +87,7 @@ namespace RockyConnectBackend.Data
             try
             {
 
-                SqlCommand cmd = new SqlCommand($"CreateNotification", connection);
+                SqlCommand cmd = new SqlCommand($"SaveNotification", connection);
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.Parameters.AddWithValue("@NotificationID", notify.NotificationID);
                 cmd.Parameters.AddWithValue("@Body", notify.Body);

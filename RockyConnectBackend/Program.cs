@@ -47,13 +47,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddTransient<INotificationService, NotificationService>();
+
 builder.Services.AddHttpClient<FcmSender>();
 builder.Services.AddHttpClient<ApnSender>();
 
 // Configure strongly typed settings objects
-var appSettingsSection = builder.Configuration.GetSection("FcmNotification");
-builder.Services.Configure<FcmNotificationSetting>(appSettingsSection);
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();

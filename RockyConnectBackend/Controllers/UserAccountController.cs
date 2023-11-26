@@ -13,14 +13,7 @@ namespace RockyConnectBackend.Controllers
     [Route("/")]
     public class UserAccountController : Controller
     {
-        private IConfiguration configuration;
-
-
-        public UserAccountController(IConfiguration config)
-        {
-            configuration = config;
-
-        }
+      
 
         /*  // GET: api/values
           [HttpGet]

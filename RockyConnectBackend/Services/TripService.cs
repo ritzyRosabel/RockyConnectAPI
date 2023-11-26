@@ -177,17 +177,18 @@ namespace RockyConnectBackend.Services
                     Body = notify,
                     Title = "RockyConnect",
                     Email=trip1.CustomerEmail,
-                    DateSent=DateTime.Now
+                    DateSent=DateTime.Now,
+                    NotificationID=UtilityService.UniqueIDGenerator()
 
                 };
                 NotificationModel model = new NotificationModel()
                 {
                     Body = notify,
                     Title = "RockyConnect",
-                    DeviceId=user2.DeviceID
+                    DeviceId=user2.RiderDeviceID
                 };
               //  NotificationService service;
-               // NotificationService.SendNotification(model);
+                NotificationService.SendNotification(model);
                 NotificationData.CreateNotificationData(notification);
                 status.statusCode = "00";
                 status.status = "Successfully saved";
@@ -235,16 +236,18 @@ namespace RockyConnectBackend.Services
                     Body = notify,
                     Title = "RockyConnect",
                     Email = trip1.CustomerEmail,
-                    DateSent = DateTime.Now
+                    DateSent = DateTime.Now,
+                    NotificationID = UtilityService.UniqueIDGenerator()
+
 
                 };
                 NotificationModel model = new NotificationModel()
                 {
                     Body = notify,
                     Title = "RockyConnect",
-                    DeviceId = user2.DeviceID
+                    DeviceId = user2.RiderDeviceID
                 };
-             //   NotificationService.SendNotification(model);
+               NotificationService.SendNotification(model);
                 NotificationData.CreateNotificationData(notification);
                 status.statusCode = "00";
                 status.status = "Successfully saved";
@@ -335,16 +338,18 @@ namespace RockyConnectBackend.Services
                         Body = notify,
                         Title = "RockyConnect",
                         Email = trip1.CustomerEmail,
-                        DateSent = DateTime.Now
+                        DateSent = DateTime.Now,
+                        NotificationID = UtilityService.UniqueIDGenerator()
+
 
                     };
                     NotificationModel model = new NotificationModel()
                     {
                         Body = notify,
                         Title = "RockyConnect",
-                        DeviceId = user.DeviceID
+                        DeviceId = user.RiderDeviceID
                     };
-                //    NotificationService.SendNotification(model, setting);
+                    NotificationService.SendNotification(model);
                     NotificationData.CreateNotificationData(notification);
                     status.statusCode = "00";
                     status.status = "You started a Trip";
@@ -392,16 +397,18 @@ namespace RockyConnectBackend.Services
                         Body = notify,
                         Title = "RockyConnect",
                         Email = trip1.CustomerEmail,
-                        DateSent = DateTime.Now
+                        DateSent = DateTime.Now,
+                        NotificationID = UtilityService.UniqueIDGenerator()
+
 
                     };
                     NotificationModel model = new NotificationModel()
                     {
                         Body = notify,
                         Title = "RockyConnect",
-                        DeviceId = user.DeviceID
+                        DeviceId = user.RiderDeviceID
                     };
-                 //   NotificationService.SendNotification(model, setting);
+                    NotificationService.SendNotification(model);
                     NotificationData.CreateNotificationData(notification);
 
                     status.statusCode = "00";
