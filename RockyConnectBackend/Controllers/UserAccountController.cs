@@ -341,6 +341,33 @@ namespace RockyConnectBackend.Controllers
             }
 
         }
+        [HttpGet]
+        [Route("GetDriverInfo")]
+
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult GetDriverInfo(string email)
+        {
+            try
+            {
+                
+                Response response = UserService.GetDriver(email);
+                if (response.statusCode == "00")
+                {
+                    return Ok(response);
+                }
+                else
+                {   
+                    return StatusCode(500, response);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+
+        }
 
         [HttpPost]
         [Route("ResetPassword")]
