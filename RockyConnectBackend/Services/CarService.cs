@@ -66,7 +66,6 @@ namespace RockyConnectBackend.Services
 
         internal static Response UpdateCar(CarRequest car)
         {
-            var cars = new Car();
             var status = new Response();
             Car result = CarData.SelectCarData(car.Email);
             if (result.Email is not null)
@@ -96,6 +95,38 @@ namespace RockyConnectBackend.Services
             }
             else
             {
+                Car cars = new Car()
+                {
+                    CarColor = car.CarColor,
+                    CarMake = car.CarMake,
+                    Email = car.Email,
+                    ID = UtilityService.UniqueIDGenerator(),
+                    CarModel = car.CarModel,
+                    CarPreferences = car.CarPreferences,
+                    DriverLiscense = car.DriverLiscense,
+                    PlateNumber = car.PlateNumber,
+                    TypeOfVehicle = car.TypeOfVehicle
+                };
+                string results = CarData.CreateCarData(cars);
+                if (results == "00")
+                {
+                    Driver res = UserData.GetDriver(car.Email);
+                    if (res.Email is not null)
+                    {
+                        res.CarID = cars.ID;
+                        UserData.UpdateDriverRating(res);
+
+                    }
+
+                    status.statusCode = "00";
+                    status.status = "Successfully Added";
+                }
+                else
+                {
+
+                    status.statusCode = "01";
+                    status.status = "Failed to add Car";
+                }
 
                 status.statusCode = "01";
                 status.status = "No Car is tied to this account";

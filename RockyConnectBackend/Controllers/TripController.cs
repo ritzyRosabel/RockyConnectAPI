@@ -497,7 +497,7 @@ namespace RockyConnectBackend.Controllers
                 return StatusCode(500, ex.Message);
             }
         }
-        [HttpDelete]
+        [HttpPost]
         [Route("RateADriver")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Response))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

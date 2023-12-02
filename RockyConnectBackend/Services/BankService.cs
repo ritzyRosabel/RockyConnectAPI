@@ -46,7 +46,6 @@ namespace RockyConnectBackend.Services
 
         internal static Response UpdateBank(Bank bank)
         {
-            var cars = new Car();
             var status = new Response();
             Bank result = BankData.SelectBankData(bank.Email);
             if (result.Email is not null)
@@ -72,8 +71,18 @@ namespace RockyConnectBackend.Services
             else
             {
 
-                status.statusCode = "01";
-                status.status = "No Bank Detail is tied to this account";
+                string results = BankData.CreateBankData(bank);
+                if (results == "00")
+                {
+                    status.statusCode = "00";
+                    status.status = "Successfully Added";
+                }
+                else
+                {
+
+                    status.statusCode = "01";
+                    status.status = "Failed to add Bank Detail";
+                }
             }
             return status;
         }
