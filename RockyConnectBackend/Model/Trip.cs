@@ -8,6 +8,7 @@ namespace RockyConnectBackend.Model
         public string? DriverEmail { get; set; }
         public string? Destination { get; set; }
         public string? SourceLocation { get; set; }
+        public int? IsRated { get; set; }
         public string? SourceLongitude { get; set; }
         public string? SourceLatitude { get; set; }
         public string? DestinationLong { get; set; }
@@ -61,6 +62,8 @@ namespace RockyConnectBackend.Model
         public string? CarPreferences { get; set; }
         public string? RiderDeviceID { get; set; }
         public string? DriverDeviceID { get; set; }
+        public int? IsRated { get; set; }
+
 
     }
     public class CancelRequest
@@ -95,6 +98,7 @@ namespace RockyConnectBackend.Model
     public class RateRequest
     {
         public string? Email { get; set; }
+        public string? TripID { get; set; }
         public int Rate { get; set; }
 
     }

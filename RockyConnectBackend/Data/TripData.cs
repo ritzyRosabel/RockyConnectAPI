@@ -52,6 +52,7 @@ namespace RockyConnectBackend.Data
                 cmd.Parameters.AddWithValue("@TotalTime", trip.TotalTime);
                 cmd.Parameters.AddWithValue("@DateCreated", date);
                 cmd.Parameters.AddWithValue("@DateUpdated", date);
+                cmd.Parameters.AddWithValue("@IsRated", trip.IsRated);
 
                 ret = cmd.ExecuteNonQuery();
                 if (ret == -1)
@@ -123,6 +124,8 @@ namespace RockyConnectBackend.Data
                 cmd.Parameters.AddWithValue("@DestinationState", trip.DestinationState ?? (object)DBNull.Value);
                 cmd.Parameters.AddWithValue("@TripDate", trip.TripDate);
                 cmd.Parameters.AddWithValue("@TotalTime", trip.TotalTime);
+                cmd.Parameters.AddWithValue("@IsRated", trip.IsRated);
+
 
                 ret = cmd.ExecuteNonQuery();
 
@@ -273,6 +276,7 @@ namespace RockyConnectBackend.Data
                             result.PlateNumber = reader.IsDBNull("PlateNumber") ? null : reader["PlateNumber"].ToString().Trim();
                             result.DriverDeviceID = reader.IsDBNull("DriverDeviceID") ? null : reader["DriverDeviceID"].ToString().Trim();
                             result.RiderDeviceID = reader.IsDBNull("RiderDeviceID") ? null : reader["RiderDeviceID"].ToString().Trim();
+                            result.IsRated = reader.IsDBNull("IsRated") ? null : (int)reader["IsRated"];
 
 
                         }
@@ -338,6 +342,7 @@ namespace RockyConnectBackend.Data
                             result.TripStatus = reader["TripStatus"].ToString().Trim();
                             result.TripDistance = Convert.ToInt32(reader["TripDistance"]);
                             result.TripCost = Convert.ToInt32(reader["TripCost"]);
+                            result.IsRated = reader.IsDBNull("IsRated") ? null : (int)reader["IsRated"];
                             result.SourceLocation = reader["SourceLocation"].ToString().Trim();
                             result.SourceLatitude = reader["SourceLatitude"].ToString().Trim();
                             result.SourceLongitude = reader["SourceLongitude"].ToString().Trim();
@@ -349,6 +354,7 @@ namespace RockyConnectBackend.Data
                             result.TripDate = Convert.ToDateTime(reader.GetDateTime("TripDate"));
                             result.Date_Created = Convert.ToDateTime(reader.GetDateTime("DateCreated"));
                             result.Date_Updated = Convert.ToDateTime(reader.GetDateTime("DateUpdated"));
+                            result.IsRated = reader.IsDBNull("IsRated") ? null : (int)reader["IsRated"];
 
                         }
 
@@ -414,6 +420,7 @@ namespace RockyConnectBackend.Data
                             result.DestinationLat = reader["DestinationLat"].ToString().Trim();
                             result.DestinationLong = reader["DestinationLong"].ToString().Trim();
                             result.Destination = reader["Destination"].ToString().Trim();
+                            result.IsRated = reader.IsDBNull("IsRated") ? null : (int)reader["IsRated"];
                             result.TripDate = Convert.ToDateTime(reader.GetDateTime("TripDate"));
                             result.Date_Created = Convert.ToDateTime(reader.GetDateTime("DateCreated"));
                             result.Date_Updated = Convert.ToDateTime(reader.GetDateTime("DateUpdated"));
@@ -422,6 +429,7 @@ namespace RockyConnectBackend.Data
                             result.PaymentID = reader.IsDBNull("PaymentID") ? null : reader["PaymentID"].ToString().Trim(); res.Add(result);
                             result.TotalTime = (double)reader["TotalTime"];
                             result.CancelReason = reader.IsDBNull("CancelReason") ? null : reader["CancelReason"].ToString().Trim();
+                            result.IsRated = reader.IsDBNull("IsRated") ? null : (int)reader["IsRated"];
 
                         }
 
@@ -509,6 +517,7 @@ namespace RockyConnectBackend.Data
                             result.NoOfRides = reader.IsDBNull("NoOfRides") ? null : (int)reader["NoOfRides"];
                             result.CarMake = reader.IsDBNull("CarMake") ? null : reader["CarMake"].ToString().Trim();
                             result.CarModel = reader.IsDBNull("CarModel") ? null : reader["CarModel"].ToString().Trim();
+                            result.IsRated = reader.IsDBNull("IsRated") ? null : (int)reader["IsRated"];
                             result.CarColor = reader.IsDBNull("CarColor") ? null : reader["CarColor"].ToString().Trim();
                             result.TypeOfVehicle = reader.IsDBNull("TypeOfVehicle") ? null : reader["DriverFirstName"].ToString().Trim();
                             result.DriverLiscense = reader.IsDBNull("DriverLiscense") ? null : reader["DriverLiscense"].ToString().Trim();
@@ -517,6 +526,8 @@ namespace RockyConnectBackend.Data
                             result.PlateNumber = reader.IsDBNull("PlateNumber") ? null : reader["PlateNumber"].ToString().Trim();
                             result.DriverDeviceID = reader.IsDBNull("DriverDeviceID") ? null : reader["DriverDeviceID"].ToString().Trim();
                             result.RiderDeviceID = reader.IsDBNull("RiderDeviceID") ? null : reader["RiderDeviceID"].ToString().Trim();
+                            result.IsRated = reader.IsDBNull("IsRated") ? null : (int)reader["IsRated"];
+
                             res.Add(result);
                         }
 
@@ -612,6 +623,8 @@ namespace RockyConnectBackend.Data
                             result.PlateNumber = reader.IsDBNull("PlateNumber") ? null : reader["PlateNumber"].ToString().Trim();
                             result.DriverDeviceID = reader.IsDBNull("DriverDeviceID") ? null : reader["DriverDeviceID"].ToString().Trim();
                             result.RiderDeviceID = reader.IsDBNull("RiderDeviceID") ? null : reader["RiderDeviceID"].ToString().Trim();
+                            result.IsRated = reader.IsDBNull("IsRated") ? null : (int)reader["IsRated"];
+
                             res.Add(result);
 
                         }
@@ -707,6 +720,8 @@ namespace RockyConnectBackend.Data
                                 result.PlateNumber = reader.IsDBNull("PlateNumber") ? null : reader["PlateNumber"].ToString().Trim();
                             result.DriverDeviceID = reader.IsDBNull("DriverDeviceID") ? null : reader["DriverDeviceID"].ToString().Trim();
                             result.RiderDeviceID = reader.IsDBNull("RiderDeviceID") ? null : reader["RiderDeviceID"].ToString().Trim();
+                            result.IsRated = reader.IsDBNull("IsRated") ? null : (int)reader["IsRated"];
+
                             res.Add(result);
 
                             
@@ -805,6 +820,8 @@ namespace RockyConnectBackend.Data
                                 result.PlateNumber = reader.IsDBNull("PlateNumber") ? null : reader["PlateNumber"].ToString().Trim();
                             result.DriverDeviceID = reader.IsDBNull("DriverDeviceID") ? null : reader["DriverDeviceID"].ToString().Trim();
                             result.RiderDeviceID = reader.IsDBNull("RiderDeviceID") ? null : reader["RiderDeviceID"].ToString().Trim();
+                            result.IsRated = reader.IsDBNull("IsRated") ? null : (int)reader["IsRated"];
+
                             res.Add(result);
 
                             }
@@ -900,6 +917,8 @@ namespace RockyConnectBackend.Data
                             result.PlateNumber = reader.IsDBNull("PlateNumber") ? null : reader["PlateNumber"].ToString().Trim();
                             result.DriverDeviceID = reader.IsDBNull("DriverDeviceID") ? null : reader["DriverDeviceID"].ToString().Trim();
                             result.RiderDeviceID = reader.IsDBNull("RiderDeviceID") ? null : reader["RiderDeviceID"].ToString().Trim();
+                            result.IsRated = reader.IsDBNull("IsRated") ? null : (int)reader["IsRated"];
+
                             res.Add(result);
 
                         }
@@ -995,6 +1014,8 @@ namespace RockyConnectBackend.Data
                             result.PlateNumber = reader.IsDBNull("PlateNumber") ? null : reader["PlateNumber"].ToString().Trim();
                             result.DriverDeviceID = reader.IsDBNull("DriverDeviceID") ? null : reader["DriverDeviceID"].ToString().Trim();
                             result.RiderDeviceID = reader.IsDBNull("RiderDeviceID") ? null : reader["RiderDeviceID"].ToString().Trim();
+                            result.IsRated = reader.IsDBNull("IsRated") ? null : (int)reader["IsRated"];
+
                             res.Add(result);
 
                         }
@@ -1089,6 +1110,8 @@ namespace RockyConnectBackend.Data
                             result.PlateNumber = reader.IsDBNull("PlateNumber") ? null : reader["PlateNumber"].ToString().Trim();
                             result.DriverDeviceID = reader.IsDBNull("DriverDeviceID") ? null : reader["DriverDeviceID"].ToString().Trim();
                             result.RiderDeviceID = reader.IsDBNull("RiderDeviceID") ? null : reader["RiderDeviceID"].ToString().Trim();
+                            result.IsRated = reader.IsDBNull("IsRated") ? null : (int)reader["IsRated"];
+
                             res.Add(result);
 
                         }

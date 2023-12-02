@@ -33,6 +33,7 @@ namespace RockyConnectBackend.Services
                 PaymentID=null,
                 TotalTime = trip.TotalTime,
                 DestinationState = trip.DestinationState,
+                IsRated=1,
                 CancelReason = null
               
             };
@@ -574,6 +575,7 @@ namespace RockyConnectBackend.Services
         internal static Response RateTrip(RateRequest customer)
         {
             var status = new Response();
+            Trip trip = TripData.SelectTripData(customer.TripID);
             User user = UserData.GetUserUsingEmail(customer.Email);
             if (user.Email is null)
             {
@@ -589,6 +591,8 @@ namespace RockyConnectBackend.Services
                 status.status = "Failed to rate, User is not a driver";
                 return status;
             }
+            trip.IsRated = 0;
+            string res = TripData.UpdateTripData(trip.PaymentID, trip);
             Driver drive = UserData.GetDriver(customer.Email);
                 if (drive.Email is not null) {
 
