@@ -128,8 +128,6 @@ namespace RockyConnectBackend.Services
                     status.status = "Failed to add Car";
                 }
 
-                status.statusCode = "01";
-                status.status = "No Car is tied to this account";
             }
             return status;
         }

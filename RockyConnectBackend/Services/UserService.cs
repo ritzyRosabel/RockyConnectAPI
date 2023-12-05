@@ -100,8 +100,30 @@ namespace RockyConnectBackend.Controllers
 
                     response.statusCode = "00";
                     response.status = "OTP sent to email";
-               
-            }else if(result == "-2146232060")
+                string notify = $"Welcome to Rocky Connect, Nowhere is beyond reach";
+
+                Notification notification = new Notification()
+                {
+                    Body = notify,
+                    Title = "RockyConnect",
+                    Email = user.Email,
+                    DateSent = DateTime.Now,
+                    NotificationID = UtilityService.UniqueIDGenerator()
+
+
+                };
+                NotificationModel model = new NotificationModel()
+                {
+                    Body = notify,
+                    Title = "RockyConnect",
+                    DeviceId = user.DeviceID
+                };
+                NotificationService.SendNotification(model);
+                NotificationData.CreateNotificationData(notification);
+            
+
+
+        }else if(result == "-2146232060")
             {
                 response.statusCode = "01";
                 response.status = "Account with email already exist";

@@ -70,6 +70,8 @@ namespace RockyConnectBackend.Model
     {
         public string? ID { get; set; }
         public string? ReasonForCancel { get; set; }
+      //  public Role Role { get; set; }
+
 
     }
 
