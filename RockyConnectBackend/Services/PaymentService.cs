@@ -263,25 +263,7 @@ namespace RockyConnectBackend.Services
                     {
                         string message = $"<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>Rocky Connect - Transaction Receipt</title>\n  <style>\n    body {{\n      font-family: Arial, sans-serif;\n      line-height: 1.6;\n      margin: 0;\n      padding: 20px;\n      background-color: #f4f4f4;\n    }}\n\n    .container {{\n      max-width: 600px;\n      margin: 0 auto;\n      background-color: #E5CBFF; /* Light Purple background */\n      padding: 20px;\n      border-radius: 8px;\n      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);\n      position: relative; /* Added position relative for absolute positioning */\n    }}\n\n    h1 {{\n      color: #663399; /* Purple color */\n      display: inline-block; /* Display as inline block to allow inline image */\n    }}\n\n    img {{\n      position: absolute;\n      top: 12px;\n      right: 0;\n      max-width: 400px; /* Adjust the max-width as needed */\n      height: auto;\n    }}\n\n    h2 {{\n      color: #E5CBFF; /* Light Purple color */\n    }}\n\n    p {{\n      color: #666666;\n    }}\n\n    .receipt-details {{\n      margin-top: 20px;\n      border-top: 2px solid #663399; /* Purple border */\n      padding-top: 10px;\n    }}\n\n    .thank-you {{\n      margin-top: 20px;\n      text-align: center;\n      color: #663399; /* Purple color */\n    }}\n  </style>\n</head>\n<body>\n\n  <div class=\"container\">\n    <h1>Rocky Connect</h1>\n    <img src=\"https://gllab-s3.s3.us-east-2.amazonaws.com/ride.png\" alt=\"Rocky Connect Logo\">\n    <h2>Transaction Receipt</h2>\n\n    <div class=\"receipt-details\">\n      <p><strong>Date:</strong> {refund.RefundDate}</p>\n      <p><strong>Transaction ID:</strong> {refund.PaymentID}</p>\n      <p><strong>Amount:</strong> {refund.Bill}</p>\n      <p><strong>From:</strong> {trip.SourceLocation}</p>\n      <p><strong>To:</strong> {trip.Destination}</p>\n    </div>\n\n    <div class=\"thank-you\">\n      <p>Thank you for using Rocky Connect!</p>\n      <p>Nowhere is beyond reach with Rocky Connect!</p>\n    </div>\n  </div>\n\n</body>\n</html>\n";
                         UtilityService.SendEmail(message, trip.CustomerEmail, "Trip Payment Refund");
-                        string notify = $"Your Trip Request to {trip.Destination} has been approved";
-                        Notification notification = new Notification()
-                        {
-                            Body = notify,
-                            Title = "RockyConnect",
-                            Email = trip.CustomerEmail,
-                            DateSent = DateTime.Now,
-                            NotificationID = UtilityService.UniqueIDGenerator()
-
-                        };
-                        NotificationModel model = new NotificationModel()
-                        {
-                            Body = notify,
-                            Title = "RockyConnect",
-                            DeviceId = trip.RiderDeviceID
-                        };
-                        //  NotificationService service;
-                        NotificationService.SendNotification(model);
-                        NotificationData.CreateNotificationData(notification);
+                    
                         status.status = "Successful Refund";
                         status.statusCode = "00";
                     }
