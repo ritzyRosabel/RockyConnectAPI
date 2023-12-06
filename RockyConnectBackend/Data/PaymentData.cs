@@ -392,17 +392,22 @@ namespace RockyConnectBackend.Data
             connection.Open();
             try
             {
-                DateTime date = DateTime.Now;
-                DateTime defaultVerified = new DateTime(1900, 01, 01);
-                using (SqlCommand cmd = new SqlCommand($"Select * from [dbo].[Payment] Where  ID ={pay}", connection))
+
+
+                using (SqlCommand cmd = new SqlCommand($"SelectPayment", connection))
                 {
+                    DateTime date = DateTime.Now;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@ID", pay);
+
+
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
 
                         while (reader.Read())
                         {
 
-                             result.ID = reader["ID"].ToString().Trim();
+                            result.ID = reader["ID"].ToString().Trim();
                             result.RidRentEmail = reader["RidRentEmail"].ToString().Trim();
                             result.Bill = (int)reader["Bill"];
                             result.DriOwnEmail = reader["DriOwnEmail"].ToString().Trim();
@@ -410,6 +415,7 @@ namespace RockyConnectBackend.Data
                             result.PaymentStatus = reader["PaymentStatus"].ToString().Trim();
                             result.PaymentDate = Convert.ToDateTime(reader.GetDateTime("PaymentDate"));
                             result.TripID = reader["TripID"].ToString().Trim();
+
 
                         }
 
@@ -427,11 +433,11 @@ namespace RockyConnectBackend.Data
                 if (connection.State != ConnectionState.Closed)
                 {
                     connection.Close();
+
                 }
             }
             return result;
         }
-
 
         internal static string UpdatePayment(Payment pay)
         {

@@ -269,7 +269,7 @@ namespace RockyConnectBackend.Data
                             result.CarMake = reader.IsDBNull("CarMake") ? null : reader["CarMake"].ToString().Trim();
                             result.CarModel = reader.IsDBNull("CarModel") ? null : reader["CarModel"].ToString().Trim();
                             result.CarColor = reader.IsDBNull("CarColor") ? null : reader["CarColor"].ToString().Trim();
-                            result.TypeOfVehicle = reader.IsDBNull("TypeOfVehicle") ? null : reader["DriverFirstName"].ToString().Trim();
+                            result.TypeOfVehicle = reader.IsDBNull("TypeOfVehicle") ? null : reader["TypeOfVehicle"].ToString().Trim();
                             result.DriverLiscense = reader.IsDBNull("DriverLiscense") ? null : reader["DriverLiscense"].ToString().Trim();
                             result.CarPreferences = reader.IsDBNull("CarPreferences") ? null : reader["CarPreferences"].ToString().Trim();
                             result.DestinationState = reader.IsDBNull("DestinationState") ? null : reader["DestinationState"].ToString().Trim();
@@ -301,7 +301,101 @@ namespace RockyConnectBackend.Data
             return result;
 
 
-        } internal static Trip SelectTripData(string ID )
+        }
+        internal static SuperTrip SelectSuperTripDataUsingPayment(string ID )
+        {
+            //  var result = new User   ();
+            var result = new SuperTrip();
+
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+
+            builder.DataSource = "rosabeldbserver.database.windows.net";
+            builder.UserID = "rosabelDB";
+            builder.Password = "Mololuwa@14";
+            builder.InitialCatalog = "RockyConnectDB";
+
+            SqlConnection connection = new SqlConnection(builder.ConnectionString);
+
+            Console.WriteLine("\nQuery data example:");
+            Console.WriteLine("=========================================\n");
+            connection.Open();
+            try
+            {
+
+
+                using (SqlCommand cmd = new SqlCommand("SelectASuperTripUsingPayment", connection))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@ID", ID);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+
+                        while (reader.Read())
+                        {
+
+                            result.ID = reader["ID"].ToString().Trim();
+                            result.TripInitiator = reader["TripInitiator"].ToString().Trim();
+                            result.TripStatus = reader["TripStatus"].ToString().Trim();
+                            result.TripDistance = reader.IsDBNull("TripDistance") ? null : (int)reader["TripDistance"];
+                            result.TripCost = reader.IsDBNull("TripCost") ? null : (int)reader["TripCost"];
+                            result.SourceLocation = reader["SourceLocation"].ToString().Trim();
+                            result.SourceLatitude = reader["SourceLatitude"].ToString().Trim();
+                            result.SourceLongitude = reader["SourceLongitude"].ToString().Trim();
+                            result.DestinationLat = reader["DestinationLat"].ToString().Trim();
+                            result.DestinationLong = reader["DestinationLong"].ToString().Trim();
+                            result.Destination = reader["Destination"].ToString().Trim();
+                            result.TripDate = Convert.ToDateTime(reader.GetDateTime("TripDate"));
+                            result.CustomerEmail = reader.IsDBNull("CustomerEmail") ? null : reader["CustomerEmail"].ToString().Trim();
+                            result.DriverEmail = reader.IsDBNull("DriverEmail") ? null : reader["DriverEmail"].ToString().Trim();
+                            result.PaymentID = reader.IsDBNull("PaymentID") ? null : reader["PaymentID"].ToString().Trim(); 
+                            result.TotalTime = (double)reader["TotalTime"];
+                            result.CancelReason = reader.IsDBNull("CancelReason") ? null : reader["CancelReason"].ToString().Trim();
+                            result.DriverFirstName = reader.IsDBNull("DriverFirstName") ? null : reader["DriverFirstName"].ToString().Trim();
+                            result.DriverLastName = reader.IsDBNull("DriverLastName") ? null : reader["DriverLastName"].ToString().Trim();
+                            result.DriverPhoneNumber = reader.IsDBNull("DriverPhoneNumber") ? null : reader["DriverPhoneNumber"].ToString().Trim();
+                            result.RiderFirstName = reader.IsDBNull("RiderFirstName") ? null : reader["RiderFirstName"].ToString().Trim();
+                            result.RiderLastName = reader.IsDBNull("RiderLastName") ? null : reader["RiderLastName"].ToString().Trim();
+                            result.RiderPhoneNumber = reader.IsDBNull("RiderPhoneNumber") ? null : reader["RiderPhoneNumber"].ToString().Trim();
+                            result.Rating = reader.IsDBNull("Rating") ? null : (int)reader["Rating"];
+                            result.NoOfRides = reader.IsDBNull("NoOfRides") ? null : (int)reader["NoOfRides"];
+                            result.CarMake = reader.IsDBNull("CarMake") ? null : reader["CarMake"].ToString().Trim();
+                            result.CarModel = reader.IsDBNull("CarModel") ? null : reader["CarModel"].ToString().Trim();
+                            result.CarColor = reader.IsDBNull("CarColor") ? null : reader["CarColor"].ToString().Trim();
+                            result.TypeOfVehicle = reader.IsDBNull("TypeOfVehicle") ? null : reader["TypeOfVehicle"].ToString().Trim();
+                            result.DriverLiscense = reader.IsDBNull("DriverLiscense") ? null : reader["DriverLiscense"].ToString().Trim();
+                            result.CarPreferences = reader.IsDBNull("CarPreferences") ? null : reader["CarPreferences"].ToString().Trim();
+                            result.DestinationState = reader.IsDBNull("DestinationState") ? null : reader["DestinationState"].ToString().Trim();
+                            result.PlateNumber = reader.IsDBNull("PlateNumber") ? null : reader["PlateNumber"].ToString().Trim();
+                            result.DriverDeviceID = reader.IsDBNull("DriverDeviceID") ? null : reader["DriverDeviceID"].ToString().Trim();
+                            result.RiderDeviceID = reader.IsDBNull("RiderDeviceID") ? null : reader["RiderDeviceID"].ToString().Trim();
+                            result.IsRated = reader.IsDBNull("IsRated") ? null : (int)reader["IsRated"];
+
+
+                        }
+
+                    }
+                }
+
+
+            }
+            catch (SqlException e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                {
+                    connection.Close();
+
+                }
+            }
+            return result;
+
+
+        }
+        internal static Trip SelectTripData(string ID )
         {
             //  var result = new User   ();
             var result = new Trip();
@@ -519,7 +613,7 @@ namespace RockyConnectBackend.Data
                             result.CarModel = reader.IsDBNull("CarModel") ? null : reader["CarModel"].ToString().Trim();
                             result.IsRated = reader.IsDBNull("IsRated") ? null : (int)reader["IsRated"];
                             result.CarColor = reader.IsDBNull("CarColor") ? null : reader["CarColor"].ToString().Trim();
-                            result.TypeOfVehicle = reader.IsDBNull("TypeOfVehicle") ? null : reader["DriverFirstName"].ToString().Trim();
+                            result.TypeOfVehicle = reader.IsDBNull("TypeOfVehicle") ? null : reader["TypeOfVehicle"].ToString().Trim();
                             result.DriverLiscense = reader.IsDBNull("DriverLiscense") ? null : reader["DriverLiscense"].ToString().Trim();
                             result.CarPreferences = reader.IsDBNull("CarPreferences") ? null : reader["CarPreferences"].ToString().Trim();
                             result.DestinationState = reader.IsDBNull("DestinationState") ? null : reader["DestinationState"].ToString().Trim();
@@ -616,7 +710,7 @@ namespace RockyConnectBackend.Data
                             result.CarMake = reader.IsDBNull("CarMake") ? null : reader["CarMake"].ToString().Trim();
                             result.CarModel = reader.IsDBNull("CarModel") ? null : reader["CarModel"].ToString().Trim();
                             result.CarColor = reader.IsDBNull("CarColor") ? null : reader["CarColor"].ToString().Trim();
-                            result.TypeOfVehicle = reader.IsDBNull("TypeOfVehicle") ? null : reader["DriverFirstName"].ToString().Trim();
+                            result.TypeOfVehicle = reader.IsDBNull("TypeOfVehicle") ? null : reader["TypeOfVehicle"].ToString().Trim();
                             result.DriverLiscense = reader.IsDBNull("DriverLiscense") ? null : reader["DriverLiscense"].ToString().Trim();
                             result.CarPreferences = reader.IsDBNull("CarPreferences") ? null : reader["CarPreferences"].ToString().Trim();
                             result.DestinationState = reader.IsDBNull("DestinationState") ? null : reader["DestinationState"].ToString().Trim();
@@ -713,7 +807,7 @@ namespace RockyConnectBackend.Data
                                 result.CarMake = reader.IsDBNull("CarMake") ? null : reader["CarMake"].ToString().Trim();
                                 result.CarModel = reader.IsDBNull("CarModel") ? null : reader["CarModel"].ToString().Trim();
                                 result.CarColor = reader.IsDBNull("CarColor") ? null : reader["CarColor"].ToString().Trim();
-                                result.TypeOfVehicle = reader.IsDBNull("TypeOfVehicle") ? null : reader["DriverFirstName"].ToString().Trim();
+                                result.TypeOfVehicle = reader.IsDBNull("TypeOfVehicle") ? null : reader["TypeOfVehicle"].ToString().Trim();
                                 result.DriverLiscense = reader.IsDBNull("DriverLiscense") ? null : reader["DriverLiscense"].ToString().Trim();
                                 result.CarPreferences = reader.IsDBNull("CarPreferences") ? null : reader["CarPreferences"].ToString().Trim();
                                 result.DestinationState = reader.IsDBNull("DestinationState") ? null : reader["DestinationState"].ToString().Trim();
@@ -813,7 +907,7 @@ namespace RockyConnectBackend.Data
                                 result.CarMake = reader.IsDBNull("CarMake") ? null : reader["CarMake"].ToString().Trim();
                                 result.CarModel = reader.IsDBNull("CarModel") ? null : reader["CarModel"].ToString().Trim();
                                 result.CarColor = reader.IsDBNull("CarColor") ? null : reader["CarColor"].ToString().Trim();
-                                result.TypeOfVehicle = reader.IsDBNull("TypeOfVehicle") ? null : reader["DriverFirstName"].ToString().Trim();
+                                result.TypeOfVehicle = reader.IsDBNull("TypeOfVehicle") ? null : reader["TypeOfVehicle"].ToString().Trim();
                                 result.DriverLiscense = reader.IsDBNull("DriverLiscense") ? null : reader["DriverLiscense"].ToString().Trim();
                                 result.CarPreferences = reader.IsDBNull("CarPreferences") ? null : reader["CarPreferences"].ToString().Trim();
                                 result.DestinationState = reader.IsDBNull("DestinationState") ? null : reader["DestinationState"].ToString().Trim();
@@ -910,7 +1004,7 @@ namespace RockyConnectBackend.Data
                             result.CarMake = reader.IsDBNull("CarMake") ? null : reader["CarMake"].ToString().Trim();
                             result.CarModel = reader.IsDBNull("CarModel") ? null : reader["CarModel"].ToString().Trim();
                             result.CarColor = reader.IsDBNull("CarColor") ? null : reader["CarColor"].ToString().Trim();
-                            result.TypeOfVehicle = reader.IsDBNull("TypeOfVehicle") ? null : reader["DriverFirstName"].ToString().Trim();
+                            result.TypeOfVehicle = reader.IsDBNull("TypeOfVehicle") ? null : reader["TypeOfVehicle"].ToString().Trim();
                             result.DriverLiscense = reader.IsDBNull("DriverLiscense") ? null : reader["DriverLiscense"].ToString().Trim();
                             result.CarPreferences = reader.IsDBNull("CarPreferences") ? null : reader["CarPreferences"].ToString().Trim();
                             result.DestinationState = reader.IsDBNull("DestinationState") ? null : reader["DestinationState"].ToString().Trim();
@@ -1007,7 +1101,7 @@ namespace RockyConnectBackend.Data
                             result.CarMake = reader.IsDBNull("CarMake") ? null : reader["CarMake"].ToString().Trim();
                             result.CarModel = reader.IsDBNull("CarModel") ? null : reader["CarModel"].ToString().Trim();
                             result.CarColor = reader.IsDBNull("CarColor") ? null : reader["CarColor"].ToString().Trim();
-                            result.TypeOfVehicle = reader.IsDBNull("TypeOfVehicle") ? null : reader["DriverFirstName"].ToString().Trim();
+                            result.TypeOfVehicle = reader.IsDBNull("TypeOfVehicle") ? null : reader["TypeOfVehicle"].ToString().Trim();
                             result.DriverLiscense = reader.IsDBNull("DriverLiscense") ? null : reader["DriverLiscense"].ToString().Trim();
                             result.CarPreferences = reader.IsDBNull("CarPreferences") ? null : reader["CarPreferences"].ToString().Trim();
                             result.DestinationState = reader.IsDBNull("DestinationState") ? null : reader["DestinationState"].ToString().Trim();
@@ -1103,7 +1197,7 @@ namespace RockyConnectBackend.Data
                             result.CarMake = reader.IsDBNull("CarMake") ? null : reader["CarMake"].ToString().Trim();
                             result.CarModel = reader.IsDBNull("CarModel") ? null : reader["CarModel"].ToString().Trim();
                             result.CarColor = reader.IsDBNull("CarColor") ? null : reader["CarColor"].ToString().Trim();
-                            result.TypeOfVehicle = reader.IsDBNull("TypeOfVehicle") ? null : reader["DriverFirstName"].ToString().Trim();
+                            result.TypeOfVehicle = reader.IsDBNull("TypeOfVehicle") ? null : reader["TypeOfVehicle"].ToString().Trim();
                             result.DriverLiscense = reader.IsDBNull("DriverLiscense") ? null : reader["DriverLiscense"].ToString().Trim();
                             result.CarPreferences = reader.IsDBNull("CarPreferences") ? null : reader["CarPreferences"].ToString().Trim();
                             result.DestinationState = reader.IsDBNull("DestinationState") ? null : reader["DestinationState"].ToString().Trim();

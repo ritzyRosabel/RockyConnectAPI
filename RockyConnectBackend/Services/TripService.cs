@@ -177,7 +177,7 @@ namespace RockyConnectBackend.Services
                 Notification notification = new Notification() {
                     Body = notify,
                     Title = "RockyConnect",
-                    Email=trip1.CustomerEmail,
+                    Email=user2.CustomerEmail,
                     DateSent=DateTime.Now,
                     NotificationID=UtilityService.UniqueIDGenerator()
 
@@ -206,7 +206,7 @@ namespace RockyConnectBackend.Services
         internal static Response DeclineRiderTrip(TripDataInfo trip, FcmNotificationSetting setting)
         {
             var status = new Response();
-
+            User customer = UserData.GetUserUsingEmail(trip.CustomerEmail);
             Trip trip1 = TripData.SelectTripData(trip.ID);
             if (trip1.TripStatus == "Approved")
             {
@@ -241,17 +241,18 @@ namespace RockyConnectBackend.Services
                 {
                     Body = notify,
                     Title = "RockyConnect",
-                    Email = trip1.CustomerEmail,
+                    Email = customer.Email,
                     DateSent = DateTime.Now,
                     NotificationID = UtilityService.UniqueIDGenerator()
 
 
                 };
+
                 NotificationModel model = new NotificationModel()
                 {
                     Body = notify,
                     Title = "RockyConnect",
-                    DeviceId = user2.RiderDeviceID
+                    DeviceId = customer.DeviceID
                 };
                NotificationService.SendNotification(model);
                 NotificationData.CreateNotificationData(notification);
@@ -280,10 +281,75 @@ namespace RockyConnectBackend.Services
                     status.statusCode = "00";
                     return status;
                 }
+                if (trip.TripStatus == "Created")
+                {
+                    trip.TripStatus = "Cancelled";
+
+                }
+                if (trip.TripStatus == "Requested")
+                {
+                    if (usertrip.Role == Role.driver)
+                    {
+                        trip.TripStatus = "Cancelled";
+
+                    }
+                    else {
+                        trip.TripStatus = "Created";
+                        trip.CustomerEmail = null;
+                    }
+                }
                 else if (trip.TripStatus == "Approved" && trip.PaymentID is not null)
                 {
                     PaymentService.Refund(trip.PaymentID);
+                    if (usertrip.Role == Role.driver && trip.TripInitiator=="Driver")
+                    {
+                        trip.TripStatus = "Cancelled";
 
+                    }
+                    else if (usertrip.Role==Role.rider && trip.TripInitiator=="Rider")
+                    {
+                        trip.TripStatus = "Cancelled";
+                    }
+                    else
+                    {
+                        trip.TripStatus = "Created";
+                        if (trip.TripInitiator == "Driver")
+                        {
+                            trip.CustomerEmail = null;
+                        }
+                        else
+                        {
+                            trip.DriverEmail = null;
+                        }
+
+
+                    }
+
+                }else if (trip.TripStatus == "Approved" && trip.PaymentID is null)
+                {
+                    if (usertrip.Role == Role.driver && trip.TripInitiator == "Driver")
+                    {
+                        trip.TripStatus = "Cancelled";
+
+                    }
+                    else if (usertrip.Role == Role.rider && trip.TripInitiator == "Rider")
+                    {
+                        trip.TripStatus = "Cancelled";
+                    }
+                    else
+                    {
+                        trip.TripStatus = "Created";
+                        if (trip.TripInitiator == "Driver")
+                        {
+                            trip.CustomerEmail = null;
+                        }
+                        else
+                        {
+                            trip.DriverEmail = null;
+                        }
+
+
+                    }
                 }
                 else if (trip.TripStatus == "Completed" || trip.TripStatus == "Enroute")
                 {
@@ -291,8 +357,6 @@ namespace RockyConnectBackend.Services
                     status.statusCode = "01";                               
                     return status;
                 }
-                trip.TripStatus = "Cancelled";
-                //if (trip.)
 
             }
             else {
@@ -344,7 +408,7 @@ namespace RockyConnectBackend.Services
                     {
                         Body = notify,
                         Title = "RockyConnect",
-                        Email = trip1.CustomerEmail,
+                        Email = user.CustomerEmail,
                         DateSent = DateTime.Now,
                         NotificationID = UtilityService.UniqueIDGenerator()
 
@@ -359,8 +423,11 @@ namespace RockyConnectBackend.Services
                     NotificationService.SendNotification(model);
                     NotificationData.CreateNotificationData(notification);
                     notification.Body = $"You just started a Trip to {user.Destination}.";
-                    notification.Email = trip1.DriverEmail;
+                    notification.Email = user.DriverEmail;
                     NotificationData.CreateNotificationData(notification);
+                    model.Body = $"You just started a Trip to {user.Destination}.";
+                    model.DeviceId = user.DriverDeviceID;
+                    NotificationService.SendNotification(model);
 
                     status.statusCode = "00";
                     status.status = "You started a Trip";
@@ -422,8 +489,11 @@ namespace RockyConnectBackend.Services
                     NotificationService.SendNotification(model);
                     NotificationData.CreateNotificationData(notification);
                     notification.Body = $"You just ended a Trip to {user.Destination}.";
-                    notification.Email = trip1.DriverEmail;
+                    notification.Email = user.DriverEmail;
                     NotificationData.CreateNotificationData(notification);
+                    model.Body = $"You just ended a Trip to {user.Destination}.";
+                    model.DeviceId = user.DriverDeviceID;
+                    NotificationService.SendNotification(model);
                     status.statusCode = "00";
                     status.status = "You ended a trip";
 
