@@ -208,10 +208,10 @@ namespace RockyConnectBackend.Services
             var status = new Response();
             User customer = UserData.GetUserUsingEmail(trip.CustomerEmail);
             Trip trip1 = TripData.SelectTripData(trip.ID);
-            if (trip1.TripStatus == "Approved")
+            if (trip1.TripStatus == "Declined")
             {
                 status.statusCode = "01";
-                status.status = "trip already approved";
+                status.status = "trip already Declined";
                 return status;
             }
             if (trip1.TripInitiator == "Driver")
@@ -572,6 +572,12 @@ namespace RockyConnectBackend.Services
         {   var status = new Response();
 
             Trip trip1 = TripData.SelectTripData(trip.ID);
+            if (trip1.TripStatus == "Enroute")
+            {
+                status.statusCode = "01";
+                status.status = "trip already Enroute";
+                return status;
+            }
             if (trip1.TripStatus == "Approved" && trip1.PaymentID is not null)
             {
 
@@ -628,7 +634,7 @@ namespace RockyConnectBackend.Services
             else
             {
                 status.statusCode = "01";
-                status.status = "Trip has to be approved and paid for before started";
+                status.status = "Trip has to be paid for before started";
             }
             return status;
         }
@@ -637,6 +643,18 @@ namespace RockyConnectBackend.Services
         {
                            var status = new Response();
             Trip trip1 = TripData.SelectTripData(trip.ID);
+            if (trip1.TripStatus == "Completed")
+            {
+                status.statusCode = "01";
+                status.status = "trip already Completed";
+                return status;
+            }
+            if(trip1.TripStatus != "Enroute")
+            {
+                status.statusCode = "01";
+                status.status = "Only Trip started can be stopped";
+                return status;
+            }
             if (trip1.TripStatus == "Enroute" && trip1.PaymentID is  not null)
             {
 
@@ -690,18 +708,23 @@ namespace RockyConnectBackend.Services
                     status.status = " Failed to stop the trip";
                 }
             }
-            else {
-                status.statusCode = "01";
-                status.status = "Only Trip started can be stopped";
-            }
+        
 
             return status;
         }
 
         internal static Response DriverRequestTrip(TripDataInfo trip, FcmNotificationSetting setting)
         {
+
             Trip trip1 = TripData.SelectTripData(trip.ID);
+
             var status = new Response();
+            if (trip1.TripStatus == "Requested")
+            {
+                status.statusCode = "01";
+                status.status = "trip already Requested";
+                return status;
+            }
 
             if (trip1.TripInitiator == "Driver")
             {
