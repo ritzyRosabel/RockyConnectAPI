@@ -316,10 +316,14 @@ namespace RockyConnectBackend.Services
                         if (trip.TripInitiator == "Driver")
                         {
                             trip.CustomerEmail = null;
+                            trip.PaymentID = null;
+                            trip.IsRated = 1;
                         }
                         else
                         {
                             trip.DriverEmail = null;
+                            trip.PaymentID = null;
+                            trip.IsRated = 1;
                         }
 
 
@@ -342,10 +346,14 @@ namespace RockyConnectBackend.Services
                         if (trip.TripInitiator == "Driver")
                         {
                             trip.CustomerEmail = null;
+                            trip.PaymentID = null;
+                            trip.IsRated = 1;
                         }
                         else
                         {
                             trip.DriverEmail = null;
+                            trip.PaymentID = null;
+                            trip.IsRated = 1;
                         }
 
 
