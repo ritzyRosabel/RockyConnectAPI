@@ -23,7 +23,7 @@ namespace RockyConnectBackend.Services
                 DestinationLong = trip.DestinationLong,
                 TripStatus = "Created",
                 ID = UtilityService.UniqueIDGenerator(),
-                TripCost = trip.TripDistance * 10,
+                TripCost = trip.TripDistance * 2,
                 TripInitiator=trip.TripInitiator,
                 Date_Created=DateTime.Now,
                 Date_Updated = DateTime.Now,
